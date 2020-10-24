@@ -274,6 +274,5 @@ int main() {
         window.display();
         usleep(100000);
     }
-
     return 0;
 }
