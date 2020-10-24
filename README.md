@@ -11,7 +11,7 @@ In order to build this project you first have to install:
 On a Linux Machine, you can accomplish this with the following command:  
 $ sudo apt-get install libsfml-dev
 
-(note: all code is formatted according to the cpplint style guide)
+(note: all code is formatted according to the [cpplint](https://github.com/cpplint/cpplint) style guide)
 
 
 ## Setup
