@@ -1,15 +1,15 @@
-// by Sam Dunny
-#include <SFML/Graphics.hpp>    // for sfml methods
+/* Copyright 2020 Samuel Dunny */
+
 #include <unistd.h>             // for usleep
 #include <iostream>             // for output
+#include <SFML/Graphics.hpp>    // for sfml methods
 
 #define width 64
 #define length 112
 
-#define walk_speed 15
+#define walk_speed 15   // speed of character
 
 int main() {
-
     // create window with size 800x800
     sf::RenderWindow window(sf::VideoMode(800, 800), "Walking");
     window.clear(sf::Color::White);
@@ -42,19 +42,19 @@ int main() {
     // first stage of walking
     sf::Sprite step_1;
     step_1.setTexture(text_1);
-    step_1.setOrigin(32,56);
+    step_1.setOrigin(32, 56);
     step_1.setPosition(100, 100);
 
     // second stage of walking
     sf::Sprite step_2;
     step_2.setTexture(text_2);
-    step_2.setOrigin(32,56);
+    step_2.setOrigin(32, 56);
     step_2.setPosition(100, 100);
 
     // third stage of walking
     sf::Sprite step_3;
     step_3.setTexture(text_3);
-    step_3.setOrigin(32,56);
+    step_3.setOrigin(32, 56);
     step_3.setPosition(100, 100);
 
 
@@ -86,19 +86,19 @@ int main() {
     // first stage of walking backwards
     sf::Sprite step_4;
     step_4.setTexture(text_4);
-    step_4.setOrigin(32,56);
+    step_4.setOrigin(32, 56);
     step_4.setPosition(100, 100);
 
     // second stage of walking backwards
     sf::Sprite step_5;
     step_5.setTexture(text_5);
-    step_5.setOrigin(32,56);
+    step_5.setOrigin(32, 56);
     step_5.setPosition(100, 100);
 
     // third stage of walking backwrads
     sf::Sprite step_6;
     step_6.setTexture(text_6);
-    step_6.setOrigin(32,56);
+    step_6.setOrigin(32, 56);
     step_6.setPosition(100, 100);
 
     // right_1 texture
@@ -129,19 +129,19 @@ int main() {
     // first stage of walking right
     sf::Sprite step_7;
     step_7.setTexture(text_7);
-    step_7.setOrigin(32,56);
+    step_7.setOrigin(32, 56);
     step_7.setPosition(100, 100);
 
     // second stage of walking right
     sf::Sprite step_8;
     step_8.setTexture(text_8);
-    step_8.setOrigin(32,56);
+    step_8.setOrigin(32, 56);
     step_8.setPosition(100, 100);
 
     // third stage of walking right
     sf::Sprite step_9;
     step_9.setTexture(text_9);
-    step_9.setOrigin(32,56);
+    step_9.setOrigin(32, 56);
     step_9.setPosition(100, 100);
 
     // left_1 texture
@@ -172,88 +172,85 @@ int main() {
     // first stage of walking right
     sf::Sprite step_10;
     step_10.setTexture(text_10);
-    step_10.setOrigin(32,56);
+    step_10.setOrigin(32, 56);
     step_10.setPosition(100, 100);
 
     // second stage of walking right
     sf::Sprite step_11;
     step_11.setTexture(text_11);
-    step_11.setOrigin(32,56);
+    step_11.setOrigin(32, 56);
     step_11.setPosition(100, 100);
 
     // third stage of walking right
     sf::Sprite step_12;
     step_12.setTexture(text_12);
-    step_12.setOrigin(32,56);
+    step_12.setOrigin(32, 56);
     step_12.setPosition(100, 100);
 
 
 
     // main loop
-    while (window.isOpen())
-    {
-        // creates event 
+    while (window.isOpen()) {
+        // creates event
         sf::Event event;
 
         // constantly polls window event
-        while (window.pollEvent(event))
-        {
+        while (window.pollEvent(event)) {
             // if event = closed, close window
             if (event.type == sf::Event::Closed)
                 window.close();
         }
 
         while (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-
             window.clear(sf::Color::White);
-            step_1.move(0,walk_speed);
-            step_2.move(0,walk_speed);
-            step_3.move(0,walk_speed);
-            step_4.move(0,walk_speed);
-            step_5.move(0,walk_speed);
-            step_6.move(0,walk_speed);
-            step_7.move(0,walk_speed);
-            step_8.move(0,walk_speed);
-            step_9.move(0,walk_speed);
-            step_10.move(0,walk_speed);
-            step_11.move(0,walk_speed);
-            step_12.move(0,walk_speed);
+            step_1.move(0, walk_speed);
+            step_2.move(0, walk_speed);
+            step_3.move(0, walk_speed);
+            step_4.move(0, walk_speed);
+            step_5.move(0, walk_speed);
+            step_6.move(0, walk_speed);
+            step_7.move(0, walk_speed);
+            step_8.move(0, walk_speed);
+            step_9.move(0, walk_speed);
+            step_10.move(0, walk_speed);
+            step_11.move(0, walk_speed);
+            step_12.move(0, walk_speed);
 
             window.draw(step_1);
             window.display();
             usleep(100000);
 
             window.clear(sf::Color::White);
-            step_1.move(0,walk_speed);
-            step_2.move(0,walk_speed);
-            step_3.move(0,walk_speed);
-            step_4.move(0,walk_speed);
-            step_5.move(0,walk_speed);
-            step_6.move(0,walk_speed);
-            step_7.move(0,walk_speed);
-            step_8.move(0,walk_speed);
-            step_9.move(0,walk_speed);
-            step_10.move(0,walk_speed);
-            step_11.move(0,walk_speed);
-            step_12.move(0,walk_speed);
+            step_1.move(0, walk_speed);
+            step_2.move(0, walk_speed);
+            step_3.move(0, walk_speed);
+            step_4.move(0, walk_speed);
+            step_5.move(0, walk_speed);
+            step_6.move(0, walk_speed);
+            step_7.move(0, walk_speed);
+            step_8.move(0, walk_speed);
+            step_9.move(0, walk_speed);
+            step_10.move(0, walk_speed);
+            step_11.move(0, walk_speed);
+            step_12.move(0, walk_speed);
 
             window.draw(step_2);
             window.display();
             usleep(100000);
 
             window.clear(sf::Color::White);
-            step_1.move(0,walk_speed);
-            step_2.move(0,walk_speed);
-            step_3.move(0,walk_speed);
-            step_4.move(0,walk_speed);
-            step_5.move(0,walk_speed);
-            step_6.move(0,walk_speed);
-            step_7.move(0,walk_speed);
-            step_8.move(0,walk_speed);
-            step_9.move(0,walk_speed);
-            step_10.move(0,walk_speed);
-            step_11.move(0,walk_speed);
-            step_12.move(0,walk_speed);
+            step_1.move(0, walk_speed);
+            step_2.move(0, walk_speed);
+            step_3.move(0, walk_speed);
+            step_4.move(0, walk_speed);
+            step_5.move(0, walk_speed);
+            step_6.move(0, walk_speed);
+            step_7.move(0, walk_speed);
+            step_8.move(0, walk_speed);
+            step_9.move(0, walk_speed);
+            step_10.move(0, walk_speed);
+            step_11.move(0, walk_speed);
+            step_12.move(0, walk_speed);
 
             window.draw(step_3);
             window.display();
@@ -261,56 +258,55 @@ int main() {
         }
 
         while (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-
             window.clear(sf::Color::White);
-            step_1.move(0,-walk_speed);
-            step_2.move(0,-walk_speed);
-            step_3.move(0,-walk_speed);
-            step_4.move(0,-walk_speed);
-            step_5.move(0,-walk_speed);
-            step_6.move(0,-walk_speed);
-            step_7.move(0,-walk_speed);
-            step_8.move(0,-walk_speed);
-            step_9.move(0,-walk_speed);
-            step_10.move(0,-walk_speed);
-            step_11.move(0,-walk_speed);
-            step_12.move(0,-walk_speed);
+            step_1.move(0, -walk_speed);
+            step_2.move(0, -walk_speed);
+            step_3.move(0, -walk_speed);
+            step_4.move(0, -walk_speed);
+            step_5.move(0, -walk_speed);
+            step_6.move(0, -walk_speed);
+            step_7.move(0, -walk_speed);
+            step_8.move(0, -walk_speed);
+            step_9.move(0, -walk_speed);
+            step_10.move(0, -walk_speed);
+            step_11.move(0, -walk_speed);
+            step_12.move(0, -walk_speed);
 
             window.draw(step_4);
             window.display();
             usleep(100000);
 
             window.clear(sf::Color::White);
-            step_1.move(0,-walk_speed);
-            step_2.move(0,-walk_speed);
-            step_3.move(0,-walk_speed);
-            step_4.move(0,-walk_speed);
-            step_5.move(0,-walk_speed);
-            step_6.move(0,-walk_speed);
-            step_7.move(0,-walk_speed);
-            step_8.move(0,-walk_speed);
-            step_9.move(0,-walk_speed);
-            step_10.move(0,-walk_speed);
-            step_11.move(0,-walk_speed);
-            step_12.move(0,-walk_speed);
+            step_1.move(0, -walk_speed);
+            step_2.move(0, -walk_speed);
+            step_3.move(0, -walk_speed);
+            step_4.move(0, -walk_speed);
+            step_5.move(0, -walk_speed);
+            step_6.move(0, -walk_speed);
+            step_7.move(0, -walk_speed);
+            step_8.move(0, -walk_speed);
+            step_9.move(0, -walk_speed);
+            step_10.move(0, -walk_speed);
+            step_11.move(0, -walk_speed);
+            step_12.move(0, -walk_speed);
 
             window.draw(step_5);
             window.display();
             usleep(100000);
 
             window.clear(sf::Color::White);
-            step_1.move(0,-walk_speed);
-            step_2.move(0,-walk_speed);
-            step_3.move(0,-walk_speed);
-            step_4.move(0,-walk_speed);
-            step_5.move(0,-walk_speed);
-            step_6.move(0,-walk_speed);
-            step_7.move(0,-walk_speed);
-            step_8.move(0,-walk_speed);
-            step_9.move(0,-walk_speed);
-            step_10.move(0,-walk_speed);
-            step_11.move(0,-walk_speed);
-            step_12.move(0,-walk_speed);
+            step_1.move(0, -walk_speed);
+            step_2.move(0, -walk_speed);
+            step_3.move(0, -walk_speed);
+            step_4.move(0, -walk_speed);
+            step_5.move(0, -walk_speed);
+            step_6.move(0, -walk_speed);
+            step_7.move(0, -walk_speed);
+            step_8.move(0, -walk_speed);
+            step_9.move(0, -walk_speed);
+            step_10.move(0, -walk_speed);
+            step_11.move(0, -walk_speed);
+            step_12.move(0, -walk_speed);
 
             window.draw(step_6);
             window.display();
@@ -318,56 +314,55 @@ int main() {
         }
 
         while (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-
             window.clear(sf::Color::White);
-            step_1.move(walk_speed,0);
-            step_2.move(walk_speed,0);
-            step_3.move(walk_speed,0);
-            step_4.move(walk_speed,0);
-            step_5.move(walk_speed,0);
-            step_6.move(walk_speed,0);
-            step_7.move(walk_speed,0);
-            step_8.move(walk_speed,0);
-            step_9.move(walk_speed,0);
-            step_10.move(walk_speed,0);
-            step_11.move(walk_speed,0);
-            step_12.move(walk_speed,0);
+            step_1.move(walk_speed, 0);
+            step_2.move(walk_speed, 0);
+            step_3.move(walk_speed, 0);
+            step_4.move(walk_speed, 0);
+            step_5.move(walk_speed, 0);
+            step_6.move(walk_speed, 0);
+            step_7.move(walk_speed, 0);
+            step_8.move(walk_speed, 0);
+            step_9.move(walk_speed, 0);
+            step_10.move(walk_speed, 0);
+            step_11.move(walk_speed, 0);
+            step_12.move(walk_speed, 0);
 
             window.draw(step_7);
             window.display();
             usleep(100000);
 
             window.clear(sf::Color::White);
-            step_1.move(walk_speed,0);
-            step_2.move(walk_speed,0);
-            step_3.move(walk_speed,0);
-            step_4.move(walk_speed,0);
-            step_5.move(walk_speed,0);
-            step_6.move(walk_speed,0);
-            step_7.move(walk_speed,0);
-            step_8.move(walk_speed,0);
-            step_9.move(walk_speed,0);
-            step_10.move(walk_speed,0);
-            step_11.move(walk_speed,0);
-            step_12.move(walk_speed,0);
+            step_1.move(walk_speed, 0);
+            step_2.move(walk_speed, 0);
+            step_3.move(walk_speed, 0);
+            step_4.move(walk_speed, 0);
+            step_5.move(walk_speed, 0);
+            step_6.move(walk_speed, 0);
+            step_7.move(walk_speed, 0);
+            step_8.move(walk_speed, 0);
+            step_9.move(walk_speed, 0);
+            step_10.move(walk_speed, 0);
+            step_11.move(walk_speed, 0);
+            step_12.move(walk_speed, 0);
 
             window.draw(step_8);
             window.display();
             usleep(100000);
 
             window.clear(sf::Color::White);
-            step_1.move(walk_speed,0);
-            step_2.move(walk_speed,0);
-            step_3.move(walk_speed,0);
-            step_4.move(walk_speed,0);
-            step_5.move(walk_speed,0);
-            step_6.move(walk_speed,0);
-            step_7.move(walk_speed,0);
-            step_8.move(walk_speed,0);
-            step_9.move(walk_speed,0);
-            step_10.move(walk_speed,0);
-            step_11.move(walk_speed,0);
-            step_12.move(walk_speed,0);
+            step_1.move(walk_speed, 0);
+            step_2.move(walk_speed, 0);
+            step_3.move(walk_speed, 0);
+            step_4.move(walk_speed, 0);
+            step_5.move(walk_speed, 0);
+            step_6.move(walk_speed, 0);
+            step_7.move(walk_speed, 0);
+            step_8.move(walk_speed, 0);
+            step_9.move(walk_speed, 0);
+            step_10.move(walk_speed, 0);
+            step_11.move(walk_speed, 0);
+            step_12.move(walk_speed, 0);
 
             window.draw(step_9);
             window.display();
@@ -375,56 +370,55 @@ int main() {
         }
 
         while (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-
             window.clear(sf::Color::White);
-            step_1.move(-walk_speed,0);
-            step_2.move(-walk_speed,0);
-            step_3.move(-walk_speed,0);
-            step_4.move(-walk_speed,0);
-            step_5.move(-walk_speed,0);
-            step_6.move(-walk_speed,0);
-            step_7.move(-walk_speed,0);
-            step_8.move(-walk_speed,0);
-            step_9.move(-walk_speed,0);
-            step_10.move(-walk_speed,0);
-            step_11.move(-walk_speed,0);
-            step_12.move(-walk_speed,0);
+            step_1.move(-walk_speed, 0);
+            step_2.move(-walk_speed, 0);
+            step_3.move(-walk_speed, 0);
+            step_4.move(-walk_speed, 0);
+            step_5.move(-walk_speed, 0);
+            step_6.move(-walk_speed, 0);
+            step_7.move(-walk_speed, 0);
+            step_8.move(-walk_speed, 0);
+            step_9.move(-walk_speed, 0);
+            step_10.move(-walk_speed, 0);
+            step_11.move(-walk_speed, 0);
+            step_12.move(-walk_speed, 0);
 
             window.draw(step_10);
             window.display();
             usleep(100000);
 
             window.clear(sf::Color::White);
-            step_1.move(-walk_speed,0);
-            step_2.move(-walk_speed,0);
-            step_3.move(-walk_speed,0);
-            step_4.move(-walk_speed,0);
-            step_5.move(-walk_speed,0);
-            step_6.move(-walk_speed,0);
-            step_7.move(-walk_speed,0);
-            step_8.move(-walk_speed,0);
-            step_9.move(-walk_speed,0);
-            step_10.move(-walk_speed,0);
-            step_11.move(-walk_speed,0);
-            step_12.move(-walk_speed,0);
+            step_1.move(-walk_speed, 0);
+            step_2.move(-walk_speed, 0);
+            step_3.move(-walk_speed, 0);
+            step_4.move(-walk_speed, 0);
+            step_5.move(-walk_speed, 0);
+            step_6.move(-walk_speed, 0);
+            step_7.move(-walk_speed, 0);
+            step_8.move(-walk_speed, 0);
+            step_9.move(-walk_speed, 0);
+            step_10.move(-walk_speed, 0);
+            step_11.move(-walk_speed, 0);
+            step_12.move(-walk_speed, 0);
 
             window.draw(step_11);
             window.display();
             usleep(100000);
 
             window.clear(sf::Color::White);
-            step_1.move(-walk_speed,0);
-            step_2.move(-walk_speed,0);
-            step_3.move(-walk_speed,0);
-            step_4.move(-walk_speed,0);
-            step_5.move(-walk_speed,0);
-            step_6.move(-walk_speed,0);
-            step_7.move(-walk_speed,0);
-            step_8.move(-walk_speed,0);
-            step_9.move(-walk_speed,0);
-            step_10.move(-walk_speed,0);
-            step_11.move(-walk_speed,0);
-            step_12.move(-walk_speed,0);
+            step_1.move(-walk_speed, 0);
+            step_2.move(-walk_speed, 0);
+            step_3.move(-walk_speed, 0);
+            step_4.move(-walk_speed, 0);
+            step_5.move(-walk_speed, 0);
+            step_6.move(-walk_speed, 0);
+            step_7.move(-walk_speed, 0);
+            step_8.move(-walk_speed, 0);
+            step_9.move(-walk_speed, 0);
+            step_10.move(-walk_speed, 0);
+            step_11.move(-walk_speed, 0);
+            step_12.move(-walk_speed, 0);
 
             window.draw(step_12);
             window.display();
@@ -435,7 +429,6 @@ int main() {
         window.clear(sf::Color::White);
         window.draw(step_2);
         window.display();
-        usleep(100000); 
-
+        usleep(100000);
     }
 }
