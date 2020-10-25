@@ -1,8 +1,10 @@
 /* Copyright 2020 Samuel Dunny */
+// Audio added by Kurt Walker, 2020
 
 #include <unistd.h>             // for usleep
 #include <iostream>             // for output
 #include <SFML/Graphics.hpp>    // for sfml methods
+#include <SFML/Audio.hpp>       // for audio methods
 
 #define width 64
 #define length 112
@@ -13,6 +15,16 @@ int main() {
     // create window with size 800x800
     sf::RenderWindow window(sf::VideoMode(800, 800), "Walking");
     window.clear(sf::Color::White);
+
+    // initialize music file
+    sf::Music music;
+    if (!music.openFromFile("mysterious-solitude.wav")) {
+        std::cout << "Could not find music" << std::endl;
+        return -1;
+    }
+
+    // starts music playing
+    music.play();
 
     // forward_1 texture
     sf::Texture text_1;
@@ -197,8 +209,9 @@ int main() {
         // constantly polls window event
         while (window.pollEvent(event)) {
             // if event = closed, close window
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed) {
                 window.close();
+            }
         }
 
         while (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
