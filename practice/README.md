@@ -1,3 +1,3 @@
 # Practice directory for pushing/pulling/committing  
 
-testing to see if my branch (dunny_branch) works
+editing from 'dunny_branch', pushing from 'dunny_branch'
