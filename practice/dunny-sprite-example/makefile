@@ -10,6 +10,7 @@ FLAGS += -I .        # compile with project directory on #include system path
 LIBS = -lsfml-graphics
 LIBS += -lsfml-window
 LIBS += -lsfml-system
+LIBS += -lsfml-audio
 
 COMPILE = $(CC) $(FLAGS) -c
 

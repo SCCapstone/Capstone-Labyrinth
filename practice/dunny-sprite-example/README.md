@@ -7,3 +7,6 @@ opens a window in which you can move a sprite in 8 directions. also contains ano
 **run-app:**
 
 opens a window in which you can move a sprite in 4 directions using the arrow keys. this directory contains many .png files, which are used in this program to animate the 'walking' motion
+
+added a .wav file to run-app that plays when the application is opened
+-Kurt

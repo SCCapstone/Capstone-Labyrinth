@@ -1,8 +1,10 @@
 /* Copyright 2020 Samuel Dunny */
+// Music added by Kurt Walker, 2020
 
 #include <unistd.h>             // for usleep
 #include <iostream>             // for output
 #include <SFML/Graphics.hpp>    // for sfml methods
+#include <SFML/Audio.hpp>       // for music player
 
 #define width 52    // width of image
 #define length 66   // length of image
