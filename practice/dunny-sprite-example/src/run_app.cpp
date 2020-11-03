@@ -199,8 +199,23 @@ int main() {
     step_12.setOrigin(32, 56);
     step_12.setPosition(100, 100);
 
+    /*
+    sf::View view;
+    view.setCenter(step_1.getPosition());
+    view.setCenter(step_2.getPosition());
+    view.setCenter(step_3.getPosition());
+    view.setCenter(step_4.getPosition());
+    view.setCenter(step_5.getPosition());
+    view.setCenter(step_6.getPosition());
+    view.setCenter(step_7.getPosition());
+    view.setCenter(step_8.getPosition());
+    view.setCenter(step_9.getPosition());
+    view.setCenter(step_10.getPosition());
+    view.setCenter(step_11.getPosition());
+    view.setCenter(step_12.getPosition());
+    */
 
-
+    
     // main loop
     while (window.isOpen()) {
         // creates event
@@ -214,6 +229,7 @@ int main() {
             }
         }
 
+        
         while (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
             window.clear(sf::Color::White);
             step_1.move(0, walk_speed);
