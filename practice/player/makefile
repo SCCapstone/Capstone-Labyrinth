@@ -1,0 +1,33 @@
+# by Sam Dunny
+
+CC = g++  # use g++ compiler
+
+FLAGS = -c
+FLAGS += -std=c++17  # compile with C++ 17 standard
+FLAGS += -Wall       # compile with all warnings
+FLAGS += -I .        # compile with project directory on #include system path
+
+LIBS = -lsfml-graphics
+LIBS += -lsfml-window
+LIBS += -lsfml-system
+LIBS += -lsfml-audio
+
+COMPILE = $(CC) $(FLAGS) -c
+
+# $< loads first dependancy
+# $^ loads all dependancies
+# $@ loads target
+
+player : bin/main.o bin/player.o
+	$(CC) $^ -o $@ $(LIBS)
+
+bin/main.o : src/main.cpp
+	$(COMPILE) -o $@ $^
+
+bin/player.o : src/Player.cpp
+	$(COMPILE) -o $@ $^
+
+
+# UTILITY: removes intermediary files and executables
+clean:
+	rm -f bin/* player *.o
