@@ -4,7 +4,7 @@
 #define PLAYER_H
 
 #include <SFML/Graphics.hpp>    // for sfml methods
-#include <SFML/Audio.hpp>       // for audio methods
+//#include <SFML/Audio.hpp>       // for audio methods
 #include <iostream>             // for output
 #include <string>
 

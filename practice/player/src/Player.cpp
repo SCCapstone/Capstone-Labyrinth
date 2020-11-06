@@ -1,4 +1,4 @@
-#include "Player.h"
+/*#include "Player.h"
 
 // setting origin of the sprite
 void Player::setOrigin(int text_width, int text_height) {
@@ -50,4 +50,4 @@ void Player::setTextures(sf::Texture t1, sf::Texture t2, sf::Texture t3,
     step_10.setTexture(t10);
     step_11.setTexture(t11);
     step_12.setTexture(t12);
-}
+}*/
