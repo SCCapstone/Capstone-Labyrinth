@@ -18,13 +18,10 @@ COMPILE = $(CC) $(FLAGS) -c
 # $^ loads all dependancies
 # $@ loads target
 
-player : bin/main.o bin/player.o
+player : bin/main.o
 	$(CC) $^ -o $@ $(LIBS)
 
 bin/main.o : src/main.cpp
-	$(COMPILE) -o $@ $^
-
-bin/player.o : src/Player.cpp
 	$(COMPILE) -o $@ $^
 
 
