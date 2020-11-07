@@ -1,6 +1,7 @@
 /* Copyright 2020 Samuel Dunny */
 /* Main game class */
 
+#include "Animation.h"
 #include "Player.h"
 
 using sf::RenderWindow;
@@ -42,7 +43,6 @@ int main() {
     if (!tree_text.loadFromFile("imgs/trees_chest.png")) {
         std::cout << "ERROR tree" << std::endl;
     }
-    tree_text.setSmooth(true);
 
     // creating tree sprite
     sf::Sprite tree;
