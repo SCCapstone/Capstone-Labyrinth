@@ -28,8 +28,7 @@ private:
 public:
    // default constructor and destructor
    Player() {/* default */}
-   ~Player();
-
+   
    // parameterized constructor, given filepath to .png image
    Player(string img_Directory) {
       if (!p_Texture.loadFromFile(img_Directory))
