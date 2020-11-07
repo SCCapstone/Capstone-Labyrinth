@@ -16,6 +16,7 @@ using std::endl;
 using sf::RenderWindow;
 using sf::Texture;
 using sf::Sprite;
+using sf::Vector2f;
 
 class Player {
 // private attributes
@@ -43,7 +44,12 @@ public:
 
    // move player function
    void movePlayer(char direction, float moveSpeed);
+
+   // getting players current position
+   Vector2f getPlayerPos() {return p_Sprite.getPosition(); }
+
 };
+
 
 // move player function
 void Player::movePlayer(char direction, float moveSpeed) {
