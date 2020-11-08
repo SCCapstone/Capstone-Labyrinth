@@ -1,7 +1,6 @@
 /* Copyright 2020 Samuel Dunny */
 /* Main game class */
 
-#include "Animation.h"
 #include "Player.h"
 
 using sf::RenderWindow;
@@ -13,7 +12,7 @@ using sf::Keyboard;
 using sf::View;
 
 // speed of the sprite
-#define speed 0.75
+#define speed 200
 
 // window dimensions
 #define window_width 1400
@@ -29,16 +28,14 @@ int main() {
     window.clear(sf::Color(150, 150, 150));
     //window.setPosition(centerWindow);
 
-
-    sf::RectangleShape player(Vector2f(100.0f, 150.0f));
-    player.setPosition(window_width/2, window_height/2);
-
+    // loading sprite sheet
     sf::Texture base_movement;
     base_movement.loadFromFile("imgs/base_movement.png");
-    player.setTexture(&base_movement);
+   
+   // creating player (given reference to texture, how many images to expect by row and column, animation time, and player speed)
+    Player player(&base_movement, Vector2u(4, 4), 0.25f, speed);
 
-    Animation animation(&base_movement, Vector2u(4, 4), 0.25f);
-
+    // using these so animation runs at same rate irrespective of machine
     float deltaTime = 0.0f;
     sf::Clock clock;
 
@@ -56,11 +53,9 @@ int main() {
             }
         }
 
-        animation.Update(0, deltaTime);
-        player.setTextureRect(animation.uvRect);
-
+        player.Update(deltaTime);
         window.clear(sf::Color(150, 150, 150));
-        window.draw(player);
+        player.Draw(window);
         window.display();
     }
 
