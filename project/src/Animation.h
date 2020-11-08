@@ -20,7 +20,9 @@ private:
     // attribute that stores current image
     Vector2u currentImage;
 
-    // these next variables control the animation time
+    // these next 2 variables control the animation time
+
+    // time since yo ulast changed images
     float totalTime;
 
     // how quickly the animation sprites switch
@@ -40,8 +42,11 @@ public:
     //destructor
     ~Animation(){}
 
-    // update function (takes in image and time difference)
-    void Update(int row, float deltaTime);
+    /* update function (takes in image and time difference) 
+     * bool faceRight is used to determine if the character is facing right
+     * TODO add bool up and bool down (maybe?)
+    */
+    void Update(int row, float deltaTime, bool faceRight);
 };
 
 Animation::Animation(Texture* texture, Vector2u imageCount, float switchTime) {
@@ -61,7 +66,7 @@ Animation::Animation(Texture* texture, Vector2u imageCount, float switchTime) {
     uvRect.height = texture->getSize().y / float(imageCount.y);
 }
 
-void Animation::Update(int row, float deltaTime) {
+void Animation::Update(int row, float deltaTime, bool faceRight) {
     currentImage.y = row;
     totalTime += deltaTime;
 
@@ -73,10 +78,20 @@ void Animation::Update(int row, float deltaTime) {
             currentImage.x = 0;
     }
 
-    uvRect.left = currentImage.x * uvRect.width;
+    //uvRect.left = currentImage.x * uvRect.width;
+
     uvRect.top  = currentImage.y * uvRect.height;
+
+    if (faceRight) {
+        // moving right
+        uvRect.left = currentImage.x * uvRect.width;
+        uvRect.width = abs(uvRect.width);
+    }
+    else {
+        // moving left by starting at the otherside of the image, and inversing
+        uvRect.left = (currentImage.x + 1) * abs(uvRect.width);
+        uvRect.width = -abs(uvRect.width);
+    }
 }
-
-
 
 #endif  // ANIMATION_H

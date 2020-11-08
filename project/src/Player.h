@@ -4,8 +4,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <iostream>
-#include <SFML/Graphics.hpp>
+#include "Animation.h"
 
 // from std library
 using std::string;
@@ -21,46 +20,77 @@ using sf::Vector2f;
 class Player {
 // private attributes
 private:
-   Texture p_Texture;
-   Sprite p_Sprite;
+   /* using RectangleSHape for this class instead of Sprite so we can use sprite sheets 
+      instead of a bunch of sprites with different textures */
+   sf::RectangleShape body;
+
+   // creating instance of animation (to animate body)
+   Animation animation;
+
+   // what row of the sprite sheet we are using
+   unsigned int row;
+
+   // player speed
+   float speed;
+
+   // whether the player is facing left or right (used so we dont have to create left and right animations)
+   bool faceRight;
 
 // public attributes
 public:
-   // default constructor and destructor
-   Player() {/* default */}
-   
-   // parameterized constructor, given filepath to .png image
-   Player(string img_Directory) {
-      if (!p_Texture.loadFromFile(img_Directory))
-        cout << "ERROR opening " << img_Directory << " file" << endl;
-      p_Texture.setSmooth(true);
-      p_Sprite.setTexture(p_Texture);
-   }
+   Player(Texture* texture, Vector2u imageCount, float switchTime, float speed);
+   ~Player();
 
-   // draw function
-   void drawPlayer(RenderWindow &window) {
-      window.draw(p_Sprite);
-   }
+   void Update(float deltaTime);
 
-   // move player function
-   void movePlayer(char direction, float moveSpeed);
-
-   // getting players current position
-   Vector2f getPlayerPos() {return p_Sprite.getPosition(); }
-
+   void Draw(RenderWindow& window);
 };
 
+Player::Player(Texture* texture, Vector2u imageCount, float switchTime, float speed) :
+   animation(texture, imageCount, switchTime) {
 
-// move player function
-void Player::movePlayer(char direction, float moveSpeed) {
-   if (direction == 'u')
-      p_Sprite.move(0, -moveSpeed);
-   else if (direction == 'd')
-      p_Sprite.move(0, moveSpeed);
-   else if (direction == 'l')
-      p_Sprite.move(-moveSpeed, 0);
-   else if (direction == 'r')
-      p_Sprite.move(moveSpeed, 0);
+      this->speed = speed;
+      row = 0;
+      faceRight = true;
+
+      // TODO fix magic numbers
+      body.setSize(Vector2f(100.0f, 150.0f));
+      body.setPosition(700, 350);
+      body.setTexture(texture);
+}
+
+Player::~Player(){}
+
+void Player::Update(float deltaTime) {
+   sf::Vector2f movement(0.0f, 0.0f);
+
+   // TODO add other directions
+   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+      movement.x -= speed * deltaTime;
+   }
+   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+      movement.x += speed * deltaTime;
+   }
+
+   // idle animation
+   if (movement.x == 0.0f)
+      row = 2;
+   // running animations
+   else {
+      row = 2;
+      if (movement.x > 0.0f)
+         faceRight = true;
+      else
+         faceRight = false;
+   }
+
+   animation.Update(row, deltaTime, faceRight);
+   body.setTextureRect(animation.uvRect);
+   body.move(movement);
+}
+
+void Player::Draw(sf::RenderWindow& window) {
+   window.draw(body);
 }
 
 #endif  // PLAYER_H
