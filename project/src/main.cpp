@@ -22,14 +22,64 @@ using sf::View;
 int main() {
     // instantiate window, and center coordinates
     RenderWindow window;
-    Vector2i centerWindow((VideoMode::getDesktopMode().width/2)-755, (VideoMode::getDesktopMode().height/2)-390);
+    //Vector2i centerWindow((VideoMode::getDesktopMode().width/2)-755, (VideoMode::getDesktopMode().height/2)-390);
 
     // create and center window
     window.create(VideoMode(window_width, window_height), "Game Window", sf::Style::Titlebar | sf::Style::Close);
-    window.clear(sf::Color::White);
-    window.setPosition(centerWindow);
+    window.clear(sf::Color(150, 150, 150));
+    //window.setPosition(centerWindow);
 
-    // instantiate player object
+
+    sf::RectangleShape player(Vector2f(100.0f, 150.0f));
+    player.setPosition(window_width/2, window_height/2);
+
+    sf::Texture base_movement;
+    base_movement.loadFromFile("imgs/base_movement.png");
+    player.setTexture(&base_movement);
+
+    Animation animation(&base_movement, Vector2u(4, 4), 0.25f);
+
+    float deltaTime = 0.0f;
+    sf::Clock clock;
+
+    while(window.isOpen()) {
+    
+        // used in the update function
+        deltaTime = clock.restart().asSeconds();
+
+        Event event;
+        while(window.pollEvent(event)) {
+            switch (event.type) {
+                case Event::Closed:
+                    window.close();
+                    break;
+            }
+        }
+
+        animation.Update(0, deltaTime);
+        player.setTextureRect(animation.uvRect);
+
+        window.clear(sf::Color(150, 150, 150));
+        window.draw(player);
+        window.display();
+    }
+
+
+
+
+
+
+    return 0;
+}
+
+
+
+
+
+
+/*
+
+// instantiate player object
     Player main_character("imgs/forward_1.png");
 
     // making player view (to maintain center-screen)
@@ -116,4 +166,5 @@ int main() {
         }
 
     }
-}
+
+*/

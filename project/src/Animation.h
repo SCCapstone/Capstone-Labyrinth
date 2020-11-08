@@ -20,7 +20,9 @@ private:
     // attribute that stores current image
     Vector2u currentImage;
 
-    // these next variables control the animation time
+    // these next 2 variables control the animation time
+
+    // time since yo ulast changed images
     float totalTime;
 
     // how quickly the animation sprites switch

@@ -33,8 +33,13 @@ public:
    Player(string img_Directory) {
       if (!p_Texture.loadFromFile(img_Directory))
         cout << "ERROR opening " << img_Directory << " file" << endl;
-      p_Texture.setSmooth(true);
+      //p_Texture.setSmooth(true);
       p_Sprite.setTexture(p_Texture);
+   }
+
+   //accessors
+   Texture getPlayerTexture() {
+      return p_Texture;
    }
 
    // draw function
