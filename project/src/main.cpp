@@ -1,7 +1,7 @@
 /* Copyright 2020 Samuel Dunny */
 /* Main game class */
 
-#include "Player.h"
+#include "inc/Player.h"
 
 using sf::RenderWindow;
 using sf::Event;
