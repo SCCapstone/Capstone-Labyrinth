@@ -46,7 +46,7 @@ public:
      * bool faceRight is used to determine if the character is facing right
      * TODO add bool up and bool down (maybe?)
     */
-    void Update(int row, float deltaTime, bool faceRight);
+    void Update(int row, float deltaTime, bool faceRight, bool down, bool up);
 };
 
 Animation::Animation(Texture* texture, Vector2u imageCount, float switchTime) {
@@ -66,7 +66,7 @@ Animation::Animation(Texture* texture, Vector2u imageCount, float switchTime) {
     uvRect.height = texture->getSize().y / float(imageCount.y);
 }
 
-void Animation::Update(int row, float deltaTime, bool faceRight) {
+void Animation::Update(int row, float deltaTime, bool faceRight, bool down, bool up) {
     currentImage.y = row;
     totalTime += deltaTime;
 
@@ -82,6 +82,7 @@ void Animation::Update(int row, float deltaTime, bool faceRight) {
 
     uvRect.top  = currentImage.y * uvRect.height;
 
+    // this inverts left-facing images so we can re-use animations
     if (faceRight) {
         // moving right
         uvRect.left = currentImage.x * uvRect.width;

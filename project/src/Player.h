@@ -36,6 +36,9 @@ private:
    // whether the player is facing left or right (used so we dont have to create left and right animations)
    bool faceRight;
 
+   bool movingUp;
+   bool movingDown;
+
 // public attributes
 public:
    Player(Texture* texture, Vector2u imageCount, float switchTime, float speed);
@@ -71,20 +74,42 @@ void Player::Update(float deltaTime) {
    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
       movement.x += speed * deltaTime;
    }
-
-   // idle animation
-   if (movement.x == 0.0f)
-      row = 2;
-   // running animations
-   else {
-      row = 2;
-      if (movement.x > 0.0f)
-         faceRight = true;
-      else
-         faceRight = false;
+   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+      movement.y -= speed * deltaTime;
+   }
+   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+      movement.y += speed * deltaTime;
    }
 
-   animation.Update(row, deltaTime, faceRight);
+   // idle animation
+   if (movement.x == 0.0f && movement.y == 0.0f)
+      row = 0;
+   else {
+      // running left and right animations
+      if (movement.x != 0.0f) {
+         row = 2;
+         if (movement.x > 0.0f)
+            faceRight = true;
+         else
+            faceRight = false;
+      }
+      // moving down
+      if (movement.y > 0.0f){
+         row = 0;
+         movingDown = true;
+         movingUp = false;
+      }
+      // moving up
+      if (movement.y < 0.0f){
+         row = 3;
+         movingUp = true;
+         movingDown = false;
+      }
+      // intentionally empty
+      else {}
+   }  
+
+   animation.Update(row, deltaTime, faceRight, movingDown, movingUp);
    body.setTextureRect(animation.uvRect);
    body.move(movement);
 }
