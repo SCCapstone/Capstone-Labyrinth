@@ -18,6 +18,7 @@ using sf::View;
 #define window_width 1400
 #define window_height 700
 
+
 int main() {
     // instantiate window, and center coordinates
     RenderWindow window;
