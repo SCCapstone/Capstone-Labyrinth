@@ -49,6 +49,7 @@ public:
    void Draw(RenderWindow& window);
 };
 
+// player constructor definition
 Player::Player(Texture* texture, Vector2u imageCount, float switchTime, float speed) :
    animation(texture, imageCount, switchTime) {
 
@@ -62,8 +63,10 @@ Player::Player(Texture* texture, Vector2u imageCount, float switchTime, float sp
       body.setTexture(texture);
 }
 
+// player destructor definition
 Player::~Player(){}
 
+// update function, responds to keyboard input and sets instance values accordingly
 void Player::Update(float deltaTime) {
    sf::Vector2f movement(0.0f, 0.0f);
 
@@ -109,12 +112,19 @@ void Player::Update(float deltaTime) {
       else {}
    }  
 
+   // update the animation
    animation.Update(row, deltaTime, faceRight, movingDown, movingUp);
+
+   // update the character rectangle
    body.setTextureRect(animation.uvRect);
+
+   // move the character
    body.move(movement);
 }
 
+// takes in window reference, draws player
 void Player::Draw(sf::RenderWindow& window) {
+   // draw the new movement
    window.draw(body);
 }
 
