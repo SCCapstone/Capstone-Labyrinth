@@ -16,6 +16,7 @@ using sf::RenderWindow;
 using sf::Texture;
 using sf::Sprite;
 using sf::Vector2f;
+using sf::View;
 
 class Player {
 // private attributes
@@ -47,6 +48,11 @@ public:
    void Update(float deltaTime);
 
    void Draw(RenderWindow& window);
+
+   Vector2f getPlayerPos() {
+      return body.getPosition();
+   }
+
 };
 
 // player constructor definition
@@ -59,6 +65,7 @@ Player::Player(Texture* texture, Vector2u imageCount, float switchTime, float sp
 
       // TODO fix magic numbers
       body.setSize(Vector2f(100.0f, 150.0f));
+      body.setOrigin(body.getSize() / 2.0f);
       body.setPosition(700, 350);
       body.setTexture(texture);
 }
