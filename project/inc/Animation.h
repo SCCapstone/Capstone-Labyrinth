@@ -1,5 +1,5 @@
 /* Copyright 2020 Samuel Dunny */
-/* Player class (in header file) */
+/* Animation class (in header file) */
 
 #ifndef ANIMATION_H
 #define ANIMATION_H

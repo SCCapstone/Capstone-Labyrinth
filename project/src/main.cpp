@@ -46,6 +46,7 @@ int main() {
         // used in the update function
         deltaTime = clock.restart().asSeconds();
 
+        // polls for window close event
         Event event;
         while(window.pollEvent(event)) {
             switch (event.type) {
@@ -55,8 +56,11 @@ int main() {
             }
         }
 
+        // .Update() responds to keyboard input and moves the player in the respective direction
         player.Update(deltaTime);
         window.clear(sf::Color(150, 150, 150));
+
+        // .Draw() uses this window instance to display the player
         player.Draw(window);
         window.display();
     }
