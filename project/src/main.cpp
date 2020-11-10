@@ -2,6 +2,7 @@
 /* Main game class */
 
 #include "inc/Player.h"
+#include "inc/Game_Engine.h"
 
 using sf::RenderWindow;
 using sf::Event;
@@ -59,6 +60,15 @@ int main() {
     float deltaTime = 0.0f;
     sf::Clock clock;
 
+    
+    Game_Engine game;
+    while(game.running()) {
+        game.Update();
+        game.Render();
+    }
+    
+
+    /*
     // start of game loop
     while(window.isOpen()) {
     
@@ -97,6 +107,7 @@ int main() {
         window.display();
     }
     // end of game loop
+    */
 
 
     return 0;
