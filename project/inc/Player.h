@@ -28,6 +28,9 @@ private:
    // creating instance of animation (to animate body)
    Animation animation;
 
+   // default texture
+   sf::Texture base_movement;
+
    // what row of the sprite sheet we are using
    unsigned int row;
 
@@ -71,7 +74,7 @@ Player::Player(Texture* texture, Vector2u imageCount, float switchTime, float sp
 }
 
 // player destructor definition
-Player::~Player(){}
+Player::~Player(){ /* blank, no allocation */ }
 
 // update function, responds to keyboard input and sets instance values accordingly
 void Player::Update(float deltaTime) {
