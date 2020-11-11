@@ -165,7 +165,8 @@ void Game_Engine::Update() {
     player->Update(deltaTime);
 
     // temporary wall stuff (must call after update)
-    //wall_one->GetCollider().CheckCollision(player->GetCollider(), 0.0f);
+    wall_one->ColliderCheck(player->GetCollider(), 0.8f);
+    wall_two->ColliderCheck(player->GetCollider(), 1.0f);
 
     // must call this after player.Update(), otherwise cammera stutters
     player_view.setCenter(this->player->getPlayerPos());
