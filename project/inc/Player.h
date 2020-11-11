@@ -27,9 +27,6 @@ private:
    // creating instance of animation (to animate body)
    Animation animation;
 
-   // default texture
-   Texture base_movement;
-
    // what row of the sprite sheet we are using
    unsigned int row;
 
@@ -54,12 +51,6 @@ public:
    // destructor
    ~Player();
 
-   // mutators
-   void charSetTexture(Texture* texture);
-   void charSetImageCount(Vector2u imageCount);
-   void charSetSwitchTime(float switchTime);
-   void charSetSpeed(float speed);
-
    // update function, responds to keyboard input and sets instance values accordingly
    void Update(float deltaTime);
 
@@ -73,6 +64,9 @@ public:
 
    // every 'solid' object in game needs this method for collision
    Collider GetCollider() { return Collider(body); }
+
+   // needed this method in this class, as referencing in Game_Engine would not work
+   bool ColliderCheck(Collider other, float push);
 
 };
 
@@ -96,23 +90,6 @@ Player::Player(Texture* texture, Vector2u imageCount, float switchTime, float sp
 }
 
 Player::~Player(){ /* blank, no allocation */ }
-
-// mutators
-void Player::charSetTexture(Texture* texture) {
-   animation.setAnimationTexture(texture);
-}
-   
-void Player::charSetImageCount(Vector2u imageCount) {
-   animation.setImageCount(imageCount);
-}
-   
-void Player::charSetSwitchTime(float switchTime) {
-   animation.setSwitchTime(switchTime);
-}
-   
-void Player::charSetSpeed(float speed) {
-   this->speed = speed;
-}
 
 void Player::Update(float deltaTime) {
    Vector2f movement(0.0f, 0.0f);
@@ -172,6 +149,11 @@ void Player::Update(float deltaTime) {
 void Player::Draw(RenderWindow& window) {
    // draw the new movement
    window.draw(body);
+}
+
+// wall_one->GetCollider().CheckCollision(player->GetCollider(), 0.0f);
+bool Player::ColliderCheck(Collider other, float push) {
+    GetCollider().CheckCollision(other, push);
 }
 
 #endif  // PLAYER_H
