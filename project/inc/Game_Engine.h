@@ -6,31 +6,58 @@
 
 #include "inc/Player.h"
 
-// speed of the sprite
-#define speed 300
+using sf::View;
+using sf::VideoMode;
+using sf::Event;
+using sf::Clock;
+using sf::Color;
 
-/* acts as game engine
- * for all functionality in game, except homescreen
+// speed of the sprite
+const int speed = 300;
+
+/* Class that acts as game engine
+ * Creates window
+ * Creates player
  */
 
 class Game_Engine {
 // private attributes
 private:
-    sf::RenderWindow* window;
-    sf::VideoMode videoMode;
-    sf::Event ev;    
-        
+    // variables for window creation
+    RenderWindow* window;
+    VideoMode videoMode;
+
+    // variable for event checking
+    Event ev;
+
+    // variables for main character
+    Player* player;
+    View player_view;
+    Texture base_movement;
+
+    // using these so animation runs at same rate irrespective of machine
+    float deltaTime;
+    Clock clock;
+
+    // initializer functions
     void initVariables();
     void initWindow();  
     
 // public attributes 
 public:
-    // constructor and destructor
+    // constructor
     Game_Engine();
+
+    // destructor, deletes dynamic objects
     ~Game_Engine();
 
-    // accessors
-    const bool running() const;
+    // function to resize view when window dimensions change
+    void ResizeView(const RenderWindow& window, View& view);
+
+    // accessors, returns true if window is still open
+    const bool running() const {
+        return window->isOpen();
+    }
 
     // updates events
     void pollEvents();
@@ -44,62 +71,94 @@ public:
 };
 
 void Game_Engine::initVariables() {
+
+    // clearing any previous memory, not necessary, but safe
     this->window = nullptr;
+    this->player = nullptr;
+
+    // loading sprite sheet
+    base_movement.loadFromFile("imgs/base_movement.png");
+
+    // initializing player
+    player = new Player(&base_movement, Vector2u(4, 4), 0.25f, speed);
+
+    // initializing deltaTime 
+    deltaTime = 0.0f;
 }
 
 void Game_Engine::initWindow() {
     // setting dimensions of the window
-    this->videoMode.height = 1000.0f;
-    this->videoMode.width = 1000.0f;
-    this->window = new sf::RenderWindow(videoMode, "Game Window", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);   
+    videoMode.height = 1000.0f;
+    videoMode.width = 1000.0f;
+
+    // initializing window (dynamic allocation)
+    this->window = new RenderWindow(videoMode, "Game Window", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
+
+    // sets player view and centers player in window
+    player_view.setCenter(Vector2f(0.0f,0.0f));
+    player_view.setSize(Vector2f(videoMode.width, videoMode.height)); 
 }
 
-const bool Game_Engine::running() const {
-    return window->isOpen();
+Game_Engine::Game_Engine() {
+    // initializes 
+    initVariables();
+    initWindow();
 }
 
+Game_Engine::~Game_Engine() { 
+    delete this->player;
+    delete this->window;
+}
+
+void Game_Engine::ResizeView(const RenderWindow& window, View& view) {
+    float aspectRatio = float(window.getSize().x) / float (window.getSize().y);
+    view.setSize(videoMode.width * aspectRatio, videoMode.height);
+}
+
+// TODO add more cases
 void Game_Engine::pollEvents() {
     // polls for window close event
-    while(this->window->pollEvent(ev)) {
+    while(window->pollEvent(ev)) {
         switch (ev.type) {
-            case sf::Event::Closed:
-                this->window->close();
+            case Event::Closed:
+                window->close();
                 break;
-            case sf::Event::Resized:
+            case Event::Resized:
                 // TODO add view
-                //ResizeView(*window, player_view);
+                ResizeView(*window, player_view);
                 break;
-            case sf::Event::KeyPressed:
-                if (this->ev.key.code == sf::Keyboard::Escape)
-                    this->window->close();
+            case Event::KeyPressed:
+                if (this->ev.key.code == Keyboard::Escape)
+                    window->close();
                 break;
         }
     }
 }
 
 void Game_Engine::Update() {
+
+    // used in the update function
+    deltaTime = clock.restart().asSeconds();
+
     pollEvents();
+
+    // .Update() responds to keyboard input and updates the player in the respective direction
+    player->Update(deltaTime);
+
+    // must call this after player.Update(), otherwise cammera stutters
+    player_view.setCenter(this->player->getPlayerPos());
 }
 
 void Game_Engine::Render() {
 
     // clears window
-    this->window->clear(sf::Color(150, 150, 150));
+    window->clear(Color(150, 150, 150));
 
-    // TODO draw game objects (player)
+    window->setView(player_view);
+    
+    player->Draw(*window);
 
-    this->window->display();
+    window->display();
 }
-
-
-Game_Engine::Game_Engine() {
-    this->initVariables();
-    this->initWindow();
-}
-
-Game_Engine::~Game_Engine() {
-    delete this->window;
-}
-
 
 #endif  // GAME_ENGINE_H
