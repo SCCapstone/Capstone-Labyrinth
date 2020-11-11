@@ -27,10 +27,13 @@ public:
      */
     bool CheckCollision(Collider& other, float push);
 
+    // determine position of collidable object
     sf::Vector2f GetPosition() { return body.getPosition(); }
 
+    // need this for AABB calculations
     sf::Vector2f GetHalfSize() { return body.getSize() / 2.0f; }
 
+    // this method allows us to 'push' moveable objects
     void Move(float dx, float dy) { body.move(dx, dy); }
 };
 

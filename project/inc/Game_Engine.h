@@ -165,6 +165,8 @@ void Game_Engine::Update() {
     player->Update(deltaTime);
 
     // temporary wall stuff (must call after update)
+    // checks to see if 'wall is colliding with player'
+    // a value of 1.0f is an immovable object, wheres 0.0f would move quickly
     wall_one->ColliderCheck(player->GetCollider(), 0.8f);
     wall_two->ColliderCheck(player->GetCollider(), 1.0f);
 
