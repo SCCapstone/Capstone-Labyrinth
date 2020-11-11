@@ -43,7 +43,7 @@ void Wall::Draw(sf::RenderWindow& window) {
 
 // wall_one->GetCollider().CheckCollision(player->GetCollider(), 0.0f);
 bool Wall::ColliderCheck(Collider other, float push) {
-    GetCollider().CheckCollision(other, push);
+    return GetCollider().CheckCollision(other, push);
 }
 
 #endif  // WALL_H

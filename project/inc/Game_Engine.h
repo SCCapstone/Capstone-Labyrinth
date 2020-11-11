@@ -4,7 +4,9 @@
 #ifndef GAME_ENGINE_H
 #define GAME_ENGINE_H
 
+
 #include "inc/Player.h"
+#include "inc/Enemy.h"
 #include "inc/Wall.h"
 
 using sf::View;
@@ -36,6 +38,10 @@ private:
     View player_view;
     Texture base_movement;
 
+    // variables for enemy character
+    Enemy* minotaur;
+    Texture min_texture;
+
     // temporary wall variables
     Wall* wall_one;
     Wall* wall_two;
@@ -47,7 +53,12 @@ private:
 
     // initializer functions
     void initVariables();
-    void initWindow();  
+    void initWindow();
+
+    // these are called in initVariables
+    void initPlayer();
+    void initWalls();
+    void initEnemies();
     
 // public attributes 
 public:
@@ -77,25 +88,12 @@ public:
 };
 
 void Game_Engine::initVariables() {
-
-    // temporary wall stuff
-    this->wall_one = nullptr;
-    this->wall_two = nullptr;
-
-    // temporary wall stuff
-    brickwall.loadFromFile("imgs/wall.png");
-    wall_one = new Wall(&brickwall, Vector2f(100.0f, 100.0f), Vector2f(500.0f, 200.0f));
-    wall_two = new Wall(&brickwall, Vector2f(100.0f, 100.0f), Vector2f(500.0f, 800.0f));
-
     // clearing any previous memory, not necessary, but safe
     this->window = nullptr;
-    this->player = nullptr;
 
-    // loading sprite sheet
-    base_movement.loadFromFile("imgs/base_movement.png");
-
-    // initializing player
-    player = new Player(&base_movement, Vector2u(4, 4), 0.25f, speed);
+    initPlayer();
+    initWalls();
+    initEnemies();
 
     // initializing deltaTime 
     deltaTime = 0.0f;
@@ -114,6 +112,37 @@ void Game_Engine::initWindow() {
     player_view.setSize(Vector2f(videoMode.width, videoMode.height)); 
 }
 
+void Game_Engine::initPlayer() {
+    this->player = nullptr;
+
+    // loading sprite sheet
+    base_movement.loadFromFile("imgs/base_movement.png");
+
+    // initializing player
+    player = new Player(&base_movement, Vector2u(4, 4), 0.25f, speed);
+}
+    
+void Game_Engine::initWalls() {
+    // temporary wall stuff
+    this->wall_one = nullptr;
+    this->wall_two = nullptr;
+
+    // temporary wall stuff
+    brickwall.loadFromFile("imgs/wall.png");
+    wall_one = new Wall(&brickwall, Vector2f(100.0f, 100.0f), Vector2f(500.0f, 200.0f));
+    wall_two = new Wall(&brickwall, Vector2f(100.0f, 100.0f), Vector2f(500.0f, 800.0f));
+}
+
+void Game_Engine::initEnemies() {
+    this->minotaur = nullptr;
+
+    // loading sprite sheet
+    min_texture.loadFromFile("imgs/minotaur.png");
+
+    // initializing enemy
+    minotaur = new Enemy(&min_texture, Vector2u(10, 5), 0.25f, speed/2);
+}
+
 Game_Engine::Game_Engine() {
     // initializes 
     initVariables();
@@ -123,6 +152,8 @@ Game_Engine::Game_Engine() {
 Game_Engine::~Game_Engine() { 
     delete this->player;
     delete this->window;
+
+    delete this->minotaur;
 
     // temporary wall stuff
     delete this->wall_one;
@@ -150,6 +181,8 @@ void Game_Engine::pollEvents() {
                 if (this->ev.key.code == Keyboard::Escape)
                     window->close();
                 break;
+            default:
+                break;
         }
     }
 }
@@ -164,11 +197,19 @@ void Game_Engine::Update() {
     // .Update() responds to keyboard input and updates the player in the respective direction
     player->Update(deltaTime);
 
+    minotaur->Update(deltaTime);
+
     // temporary wall stuff (must call after update)
     // checks to see if 'wall is colliding with player'
     // a value of 1.0f is an immovable object, wheres 0.0f would move quickly
-    wall_one->ColliderCheck(player->GetCollider(), 0.8f);
+    wall_one->ColliderCheck(player->GetCollider(), 1.0f);
     wall_two->ColliderCheck(player->GetCollider(), 1.0f);
+
+    wall_one->ColliderCheck(minotaur->GetCollider(), 1.0f);
+    wall_two->ColliderCheck(minotaur->GetCollider(), 1.0f);
+
+    minotaur->ColliderCheck(player->GetCollider(), 0.5f);
+    player->ColliderCheck(minotaur->GetCollider(), 0.5f);
 
     // must call this after player.Update(), otherwise cammera stutters
     player_view.setCenter(this->player->getPlayerPos());
@@ -182,6 +223,8 @@ void Game_Engine::Render() {
     window->setView(player_view);
     
     player->Draw(*window);
+
+    minotaur->Draw(*window);
 
     // temporary wall stuff
     wall_one->Draw(*window);

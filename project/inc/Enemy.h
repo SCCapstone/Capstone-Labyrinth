@@ -1,8 +1,11 @@
 /* Copyright 2020 Samuel Dunny */
 /* Player class (in header file) */
 
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef ENEMY_H
+#define ENEMY_H
+
+// for random placement
+#include <ctime>
 
 #include "Animation.h"
 #include "Collider.h"
@@ -20,7 +23,7 @@ using sf::Keyboard;
 #define body_height 150.0f
 #define body_width 100.0f
 
-class Player {
+class Enemy {
 // private attributes
 private:
    /* using RectangleSHape for this class instead of Sprite so we can use sprite sheets 
@@ -49,10 +52,10 @@ public:
     * imageCount for number of images in sheet
     * switchTime for frame rate
     */
-   Player(Texture* texture, Vector2u imageCount, float switchTime, float speed);
+   Enemy(Texture* texture, Vector2u imageCount, float switchTime, float speed);
 
    // destructor
-   ~Player();
+   ~Enemy();
 
    // update function, responds to keyboard input and sets instance values accordingly
    void Update(float deltaTime);
@@ -73,7 +76,7 @@ public:
 
 };
 
-Player::Player(Texture* texture, Vector2u imageCount, float switchTime, float speed) :
+Enemy::Enemy(Texture* texture, Vector2u imageCount, float switchTime, float speed) :
    animation(texture, imageCount, switchTime) {
 
       this->speed = speed;
@@ -88,32 +91,37 @@ Player::Player(Texture* texture, Vector2u imageCount, float switchTime, float sp
       /* centers character in the middle of the initial screen
        * the resize function in Game-Engine will keep it center if window changes
       */
-      body.setPosition(500, 500);
+      srand((unsigned) time(0));
+
+      int p1 = rand() % 1000 + 1;
+      int p2 = rand() % 1000 + 1;
+
+      body.setPosition(p1, p2);
       body.setTexture(texture);
 }
 
-Player::~Player(){ /* blank, no allocation */ }
+Enemy::~Enemy(){ /* blank, no allocation */ }
 
-void Player::Update(float deltaTime) {
+void Enemy::Update(float deltaTime) {
    Vector2f movement(0.0f, 0.0f);
 
    // TODO add other directions
-   if (Keyboard::isKeyPressed(Keyboard::Left)) {
+   if (Keyboard::isKeyPressed(Keyboard::A)) {
       movement.x -= speed * deltaTime;
    }
-   if (Keyboard::isKeyPressed(Keyboard::Right)) {
+   if (Keyboard::isKeyPressed(Keyboard::D)) {
       movement.x += speed * deltaTime;
    }
-   if (Keyboard::isKeyPressed(Keyboard::Up)) {
+   if (Keyboard::isKeyPressed(Keyboard::W)) {
       movement.y -= speed * deltaTime;
    }
-   if (Keyboard::isKeyPressed(Keyboard::Down)) {
+   if (Keyboard::isKeyPressed(Keyboard::S)) {
       movement.y += speed * deltaTime;
    }
 
    // idle animation
    if (movement.x == 0.0f && movement.y == 0.0f)
-      row = 0;
+      row = 1;
    else {
       // running left and right animations
       if (movement.x != 0.0f) {
@@ -131,7 +139,7 @@ void Player::Update(float deltaTime) {
       }
       // moving up
       if (movement.y < 0.0f){
-         row = 3;
+         row = 2;
          movingUp = true;
          movingDown = false;
       }
@@ -149,14 +157,14 @@ void Player::Update(float deltaTime) {
    body.move(movement);
 }
 
-void Player::Draw(RenderWindow& window) {
+void Enemy::Draw(RenderWindow& window) {
    // draw the new movement
    window.draw(body);
 }
 
 // wall_one->GetCollider().CheckCollision(player->GetCollider(), 0.0f);
-bool Player::ColliderCheck(Collider other, float push) {
+bool Enemy::ColliderCheck(Collider other, float push) {
     return GetCollider().CheckCollision(other, push);
 }
 
-#endif  // PLAYER_H
+#endif  // ENEMY_H
