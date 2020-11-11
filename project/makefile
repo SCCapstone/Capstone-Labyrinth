@@ -18,7 +18,7 @@ COMPILE = $(CC) $(FLAGS) -c
 # $^ loads all dependancies
 # $@ loads target
 
-player : bin/main.o
+game : bin/main.o
 	$(CC) $^ -o $@ $(LIBS)
 
 bin/main.o : src/main.cpp
@@ -27,4 +27,4 @@ bin/main.o : src/main.cpp
 
 # UTILITY: removes intermediary files and executables
 clean:
-	rm -f bin/* player *.o
+	rm -f bin/* game *.o

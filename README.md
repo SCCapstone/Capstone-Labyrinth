@@ -20,7 +20,9 @@ N/A
 
 ## Running
 
-No executables yet
+$ make clean  
+$ make game  
+$ ./game
 
 # Deployment
 
