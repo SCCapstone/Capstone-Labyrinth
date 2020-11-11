@@ -5,6 +5,7 @@
 #define GAME_ENGINE_H
 
 #include "inc/Player.h"
+#include "inc/Wall.h"
 
 using sf::View;
 using sf::VideoMode;
@@ -34,6 +35,11 @@ private:
     Player* player;
     View player_view;
     Texture base_movement;
+
+    // temporary wall variables
+    Wall* wall_one;
+    Wall* wall_two;
+    Texture brickwall;
 
     // using these so animation runs at same rate irrespective of machine
     float deltaTime;
@@ -72,6 +78,15 @@ public:
 
 void Game_Engine::initVariables() {
 
+    // temporary wall stuff
+    this->wall_one = nullptr;
+    this->wall_two = nullptr;
+
+    // temporary wall stuff
+    brickwall.loadFromFile("imgs/wall.png");
+    wall_one = new Wall(&brickwall, Vector2f(100.0f, 100.0f), Vector2f(500.0f, 200.0f));
+    wall_two = new Wall(&brickwall, Vector2f(100.0f, 100.0f), Vector2f(500.0f, 800.0f));
+
     // clearing any previous memory, not necessary, but safe
     this->window = nullptr;
     this->player = nullptr;
@@ -108,6 +123,10 @@ Game_Engine::Game_Engine() {
 Game_Engine::~Game_Engine() { 
     delete this->player;
     delete this->window;
+
+    // temporary wall stuff
+    delete this->wall_one;
+    delete this->wall_two;
 }
 
 void Game_Engine::ResizeView(const RenderWindow& window, View& view) {
@@ -145,6 +164,10 @@ void Game_Engine::Update() {
     // .Update() responds to keyboard input and updates the player in the respective direction
     player->Update(deltaTime);
 
+    // temporary wall stuff (must call after update)
+    wall_one->ColliderCheck(player->GetCollider(), 0.8f);
+    wall_two->ColliderCheck(player->GetCollider(), 1.0f);
+
     // must call this after player.Update(), otherwise cammera stutters
     player_view.setCenter(this->player->getPlayerPos());
 }
@@ -157,6 +180,10 @@ void Game_Engine::Render() {
     window->setView(player_view);
     
     player->Draw(*window);
+
+    // temporary wall stuff
+    wall_one->Draw(*window);
+    wall_two->Draw(*window);
 
     window->display();
 }
