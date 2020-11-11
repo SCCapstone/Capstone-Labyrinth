@@ -1,5 +1,5 @@
 /* Copyright 2020 Samuel Dunny */
-/* Collider class (in header file) */
+/* Wall class (in header file) */
 
 #ifndef WALL_H
 #define WALL_H
@@ -23,6 +23,7 @@ public:
     // every 'solid' object in game needs this method for collision
    Collider GetCollider() { return Collider(wall); }
 
+   // needed this method in this class, as referencing in Game_Engine would not work
    bool ColliderCheck(Collider other, float push);
 
 };
@@ -45,4 +46,4 @@ bool Wall::ColliderCheck(Collider other, float push) {
     GetCollider().CheckCollision(other, push);
 }
 
-#endif  // COLLIDER_H
+#endif  // WALL_H
