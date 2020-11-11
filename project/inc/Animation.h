@@ -1,5 +1,5 @@
 /* Copyright 2020 Samuel Dunny */
-/* Player class (in header file) */
+/* Animation class (in header file) */
 
 #ifndef ANIMATION_H
 #define ANIMATION_H
@@ -22,31 +22,37 @@ private:
 
     // these next 2 variables control the animation time
 
-    // time since yo ulast changed images
+    // time since you last changed images
     float totalTime;
 
-    // how quickly the animation sprites switch
+    // how quickly the animation sprites switch frames
     float switchTime;
 
 // public attributes
 public:
-    // rect to display animation
-    IntRect uvRect;
-
-    /* default constructor
+    /* constructor
      * only need pointer to texture for size
      * imageCount for number of images in sheet
+     * switchTime for frame rate
     */
     Animation(Texture* texture, Vector2u imageCount, float switchTime);
 
     //destructor
-    ~Animation(){}
+    ~Animation();
+
+    // mutators
+    void setAnimationTexture(Texture* texture);
+    void setImageCount(Vector2u imageCount);
+    void setSwitchTime(float switchTime);
 
     /* update function (takes in image and time difference) 
      * bool faceRight is used to determine if the character is facing right
      * TODO add bool up and bool down (maybe?)
     */
     void Update(int row, float deltaTime, bool faceRight, bool down, bool up);
+
+    // rect to display animation
+    IntRect uvRect;
 };
 
 Animation::Animation(Texture* texture, Vector2u imageCount, float switchTime) {
@@ -64,6 +70,25 @@ Animation::Animation(Texture* texture, Vector2u imageCount, float switchTime) {
 
     // setting animation height to texture height
     uvRect.height = texture->getSize().y / float(imageCount.y);
+}
+
+Animation::~Animation() { /* empty */}
+
+// mutators
+void Animation::setAnimationTexture(Texture* texture) {
+    // setting animation width to texture width
+    uvRect.width = texture->getSize().x / float(imageCount.x);
+
+    // setting animation height to texture height
+    uvRect.height = texture->getSize().y / float(imageCount.y);
+}
+
+void Animation::setImageCount(Vector2u imageCount) {
+    this->imageCount = imageCount;
+}
+
+void Animation::setSwitchTime(float switchTime) {
+    this->switchTime = switchTime;
 }
 
 void Animation::Update(int row, float deltaTime, bool faceRight, bool down, bool up) {
