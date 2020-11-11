@@ -4,6 +4,9 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
+// for random placement
+#include <ctime>
+
 #include "Animation.h"
 #include "Collider.h"
 
@@ -88,7 +91,12 @@ Enemy::Enemy(Texture* texture, Vector2u imageCount, float switchTime, float spee
       /* centers character in the middle of the initial screen
        * the resize function in Game-Engine will keep it center if window changes
       */
-      body.setPosition(500, 500);
+      srand((unsigned) time(0));
+
+      int p1 = rand() % 1000 + 1;
+      int p2 = rand() % 1000 + 1;
+
+      body.setPosition(p1, p2);
       body.setTexture(texture);
 }
 
@@ -156,7 +164,7 @@ void Enemy::Draw(RenderWindow& window) {
 
 // wall_one->GetCollider().CheckCollision(player->GetCollider(), 0.0f);
 bool Enemy::ColliderCheck(Collider other, float push) {
-    GetCollider().CheckCollision(other, push);
+    return GetCollider().CheckCollision(other, push);
 }
 
 #endif  // ENEMY_H

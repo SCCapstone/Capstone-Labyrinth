@@ -156,7 +156,7 @@ void Player::Draw(RenderWindow& window) {
 
 // wall_one->GetCollider().CheckCollision(player->GetCollider(), 0.0f);
 bool Player::ColliderCheck(Collider other, float push) {
-    GetCollider().CheckCollision(other, push);
+    return GetCollider().CheckCollision(other, push);
 }
 
 #endif  // PLAYER_H

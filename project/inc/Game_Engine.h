@@ -53,7 +53,12 @@ private:
 
     // initializer functions
     void initVariables();
-    void initWindow();  
+    void initWindow();
+
+    // these are called in initVariables
+    void initPlayer();
+    void initWalls();
+    void initEnemies();
     
 // public attributes 
 public:
@@ -83,32 +88,12 @@ public:
 };
 
 void Game_Engine::initVariables() {
-
-    // temporary wall stuff
-    this->wall_one = nullptr;
-    this->wall_two = nullptr;
-
-    // temporary wall stuff
-    brickwall.loadFromFile("imgs/wall.png");
-    wall_one = new Wall(&brickwall, Vector2f(100.0f, 100.0f), Vector2f(500.0f, 200.0f));
-    wall_two = new Wall(&brickwall, Vector2f(100.0f, 100.0f), Vector2f(500.0f, 800.0f));
-
     // clearing any previous memory, not necessary, but safe
     this->window = nullptr;
-    this->player = nullptr;
-    this->minotaur = nullptr;
 
-    // loading sprite sheet
-    base_movement.loadFromFile("imgs/base_movement.png");
-
-    // initializing player
-    player = new Player(&base_movement, Vector2u(4, 4), 0.25f, speed);
-
-    // loading sprite sheet
-    min_texture.loadFromFile("imgs/minotaur.png");
-
-    // initializing enemy
-    minotaur = new Enemy(&min_texture, Vector2u(10, 5), 0.25f, speed/2);
+    initPlayer();
+    initWalls();
+    initEnemies();
 
     // initializing deltaTime 
     deltaTime = 0.0f;
@@ -125,6 +110,37 @@ void Game_Engine::initWindow() {
     // sets player view and centers player in window
     player_view.setCenter(Vector2f(0.0f,0.0f));
     player_view.setSize(Vector2f(videoMode.width, videoMode.height)); 
+}
+
+void Game_Engine::initPlayer() {
+    this->player = nullptr;
+
+    // loading sprite sheet
+    base_movement.loadFromFile("imgs/base_movement.png");
+
+    // initializing player
+    player = new Player(&base_movement, Vector2u(4, 4), 0.25f, speed);
+}
+    
+void Game_Engine::initWalls() {
+    // temporary wall stuff
+    this->wall_one = nullptr;
+    this->wall_two = nullptr;
+
+    // temporary wall stuff
+    brickwall.loadFromFile("imgs/wall.png");
+    wall_one = new Wall(&brickwall, Vector2f(100.0f, 100.0f), Vector2f(500.0f, 200.0f));
+    wall_two = new Wall(&brickwall, Vector2f(100.0f, 100.0f), Vector2f(500.0f, 800.0f));
+}
+
+void Game_Engine::initEnemies() {
+    this->minotaur = nullptr;
+
+    // loading sprite sheet
+    min_texture.loadFromFile("imgs/minotaur.png");
+
+    // initializing enemy
+    minotaur = new Enemy(&min_texture, Vector2u(10, 5), 0.25f, speed/2);
 }
 
 Game_Engine::Game_Engine() {
@@ -164,6 +180,8 @@ void Game_Engine::pollEvents() {
             case Event::KeyPressed:
                 if (this->ev.key.code == Keyboard::Escape)
                     window->close();
+                break;
+            default:
                 break;
         }
     }
