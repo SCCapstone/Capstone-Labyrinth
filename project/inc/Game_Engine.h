@@ -4,7 +4,9 @@
 #ifndef GAME_ENGINE_H
 #define GAME_ENGINE_H
 
+
 #include "inc/Player.h"
+#include "inc/Enemy.h"
 #include "inc/Wall.h"
 
 using sf::View;
@@ -35,6 +37,10 @@ private:
     Player* player;
     View player_view;
     Texture base_movement;
+
+    // variables for enemy character
+    Enemy* minotaur;
+    Texture min_texture;
 
     // temporary wall variables
     Wall* wall_one;
@@ -90,12 +96,19 @@ void Game_Engine::initVariables() {
     // clearing any previous memory, not necessary, but safe
     this->window = nullptr;
     this->player = nullptr;
+    this->minotaur = nullptr;
 
     // loading sprite sheet
     base_movement.loadFromFile("imgs/base_movement.png");
 
     // initializing player
     player = new Player(&base_movement, Vector2u(4, 4), 0.25f, speed);
+
+    // loading sprite sheet
+    min_texture.loadFromFile("imgs/minotaur.png");
+
+    // initializing enemy
+    minotaur = new Enemy(&min_texture, Vector2u(10, 5), 0.25f, speed/2);
 
     // initializing deltaTime 
     deltaTime = 0.0f;
@@ -123,6 +136,8 @@ Game_Engine::Game_Engine() {
 Game_Engine::~Game_Engine() { 
     delete this->player;
     delete this->window;
+
+    delete this->minotaur;
 
     // temporary wall stuff
     delete this->wall_one;
@@ -164,11 +179,19 @@ void Game_Engine::Update() {
     // .Update() responds to keyboard input and updates the player in the respective direction
     player->Update(deltaTime);
 
+    minotaur->Update(deltaTime);
+
     // temporary wall stuff (must call after update)
     // checks to see if 'wall is colliding with player'
     // a value of 1.0f is an immovable object, wheres 0.0f would move quickly
-    wall_one->ColliderCheck(player->GetCollider(), 0.8f);
+    wall_one->ColliderCheck(player->GetCollider(), 1.0f);
     wall_two->ColliderCheck(player->GetCollider(), 1.0f);
+
+    wall_one->ColliderCheck(minotaur->GetCollider(), 1.0f);
+    wall_two->ColliderCheck(minotaur->GetCollider(), 1.0f);
+
+    minotaur->ColliderCheck(player->GetCollider(), 0.5f);
+    player->ColliderCheck(minotaur->GetCollider(), 0.5f);
 
     // must call this after player.Update(), otherwise cammera stutters
     player_view.setCenter(this->player->getPlayerPos());
@@ -182,6 +205,8 @@ void Game_Engine::Render() {
     window->setView(player_view);
     
     player->Draw(*window);
+
+    minotaur->Draw(*window);
 
     // temporary wall stuff
     wall_one->Draw(*window);
