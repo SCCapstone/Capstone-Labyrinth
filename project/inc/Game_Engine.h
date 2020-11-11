@@ -165,7 +165,6 @@ void Game_Engine::ResizeView(const RenderWindow& window, View& view) {
     view.setSize(videoMode.width * aspectRatio, videoMode.height);
 }
 
-// TODO add more cases
 void Game_Engine::pollEvents() {
     // polls for window close event
     while(window->pollEvent(ev)) {
@@ -174,7 +173,6 @@ void Game_Engine::pollEvents() {
                 window->close();
                 break;
             case Event::Resized:
-                // TODO add view
                 ResizeView(*window, player_view);
                 break;
             case Event::KeyPressed:

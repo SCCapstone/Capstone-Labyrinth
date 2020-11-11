@@ -42,6 +42,9 @@ private:
    bool movingUp;
    bool movingDown;
 
+   float base_attackVal = 10.0f;
+   float totalHealth = 100.0f;
+
 // public attributes
 public:
    /* constructor
@@ -70,6 +73,8 @@ public:
 
    // needed this method in this class, as referencing in Game_Engine would not work
    bool ColliderCheck(Collider other, float push);
+   
+   float getHealth() { return this->totalHealth; }
 
 };
 

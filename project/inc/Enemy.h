@@ -17,9 +17,6 @@ using sf::Vector2f;
 using sf::RectangleShape;
 using sf::Keyboard;
 
-//const float body_height = 150.0f;
-//const float body_width = 100.0f;
-
 #define body_height 150.0f
 #define body_width 100.0f
 
@@ -44,6 +41,9 @@ private:
 
    bool movingUp;
    bool movingDown;
+
+   float base_attackVal = 50.0f;
+   float totalHealth = 100.0f;
 
 // public attributes
 public:
@@ -74,6 +74,7 @@ public:
    // needed this method in this class, as referencing in Game_Engine would not work
    bool ColliderCheck(Collider other, float push);
 
+   float getHealth() { return this->totalHealth; }
 };
 
 Enemy::Enemy(Texture* texture, Vector2u imageCount, float switchTime, float speed) :
