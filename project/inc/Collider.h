@@ -35,9 +35,7 @@ public:
 };
 
 Collider::Collider(sf::RectangleShape& body_shape) :
-    body(body_shape) {
-
-}
+    body(body_shape) {}
 
 Collider::~Collider() { /* empty */ }
 

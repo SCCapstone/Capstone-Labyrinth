@@ -71,6 +71,7 @@ public:
       return body.getPosition();
    }
 
+   // every 'solid' object in game needs this method for collision
    Collider GetCollider() { return Collider(body); }
 
 };
