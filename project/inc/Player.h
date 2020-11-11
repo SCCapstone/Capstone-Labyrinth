@@ -5,6 +5,7 @@
 #define PLAYER_H
 
 #include "Animation.h"
+#include "Collider.h"
 
 // from sf library
 using sf::RenderWindow;
@@ -69,6 +70,8 @@ public:
    Vector2f getPlayerPos() {
       return body.getPosition();
    }
+
+   Collider GetCollider() { return Collider(body); }
 
 };
 
