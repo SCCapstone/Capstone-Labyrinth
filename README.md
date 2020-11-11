@@ -21,8 +21,8 @@ N/A
 ## Running
 
 $ make clean  
-$ make player  
-$ ./player
+$ make game  
+$ ./game
 
 # Deployment
 
