@@ -23,6 +23,8 @@ public:
     // every 'solid' object in game needs this method for collision
    Collider GetCollider() { return Collider(wall); }
 
+   bool ColliderCheck(Collider other, float push);
+
 };
 
 Wall::Wall(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position) {
@@ -36,6 +38,11 @@ Wall::~Wall() { /* empty */}
 
 void Wall::Draw(sf::RenderWindow& window) {
    window.draw(wall);
+}
+
+// wall_one->GetCollider().CheckCollision(player->GetCollider(), 0.0f);
+bool Wall::ColliderCheck(Collider other, float push) {
+    GetCollider().CheckCollision(other, push);
 }
 
 #endif  // COLLIDER_H

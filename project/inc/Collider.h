@@ -39,6 +39,7 @@ Collider::Collider(sf::RectangleShape& body_shape) :
 
 Collider::~Collider() { /* empty */ }
 
+// based on AABB collision detection algorithm
 bool Collider::CheckCollision(Collider& other, float push) {
     // getting 'others' coordinates
     sf::Vector2f otherPosition = other.GetPosition();
