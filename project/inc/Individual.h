@@ -67,13 +67,11 @@ public:
    void Draw(RenderWindow& window);
 
    // returns player position, used when setting center view in Game_Engine
-   Vector2f getIndividualPos() {
-      return body.getPosition();
-   }
+   Vector2f getIndividualPos() { return body.getPosition(); }
 
    // every 'solid' object in game needs this method for collision
-   Collider GetCollider() { return Collider(body); }
-   Collider GetVisionCollider() { return Collider(FoV); }
+   Collider GetCollider() { return Collider(body, FoV); }
+   Collider GetVisionCollider() { return Collider(body, FoV); }
 
    // needed this method in this class, as referencing in Game_Engine would not work
    bool ColliderCheck(Collider other, float push);
