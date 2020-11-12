@@ -4,9 +4,7 @@
 #ifndef GAME_ENGINE_H
 #define GAME_ENGINE_H
 
-
-#include "inc/Player.h"
-#include "inc/Enemy.h"
+#include "inc/Individual.h"
 #include "inc/Wall.h"
 
 using sf::View;
@@ -34,12 +32,12 @@ private:
     Event ev;
 
     // variables for main character
-    Player* player;
+    Individual* player;
     View player_view;
     Texture base_movement;
 
     // variables for enemy character
-    Enemy* minotaur;
+    Individual* minotaur;
     Texture min_texture;
 
     // temporary wall variables
@@ -119,7 +117,7 @@ void Game_Engine::initPlayer() {
     base_movement.loadFromFile("imgs/base_movement.png");
 
     // initializing player
-    player = new Player(&base_movement, Vector2u(4, 4), 0.25f, speed);
+    player = new Individual(&base_movement, Vector2u(4, 4), 0.25f, speed);
 }
     
 void Game_Engine::initWalls() {
@@ -140,7 +138,7 @@ void Game_Engine::initEnemies() {
     min_texture.loadFromFile("imgs/minotaur.png");
 
     // initializing enemy
-    minotaur = new Enemy(&min_texture, Vector2u(10, 5), 0.25f, speed/2);
+    minotaur = new Individual(&min_texture, Vector2u(10, 5), 0.25f, speed/2);
 }
 
 Game_Engine::Game_Engine() {
@@ -210,7 +208,7 @@ void Game_Engine::Update() {
     player->ColliderCheck(minotaur->GetCollider(), 0.5f);
 
     // must call this after player.Update(), otherwise cammera stutters
-    player_view.setCenter(this->player->getPlayerPos());
+    player_view.setCenter(this->player->getIndividualPos());
 }
 
 void Game_Engine::Render() {
