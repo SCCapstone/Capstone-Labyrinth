@@ -4,7 +4,8 @@
 #ifndef GAME_ENGINE_H
 #define GAME_ENGINE_H
 
-#include "inc/Individual.h"
+#include "inc/Player.h"
+#include "inc/Enemy.h"
 #include "inc/Wall.h"
 
 using sf::View;
@@ -32,12 +33,12 @@ private:
     Event ev;
 
     // variables for main character
-    Individual* player;
+    Player* player;
     View player_view;
     Texture base_movement;
 
     // variables for enemy character
-    Individual* minotaur;
+    Enemy* minotaur;
     Texture min_texture;
 
     // temporary wall variables
@@ -117,7 +118,7 @@ void Game_Engine::initPlayer() {
     base_movement.loadFromFile("imgs/base_movement.png");
 
     // initializing player
-    player = new Individual(&base_movement, Vector2u(4, 4), 0.25f, speed);
+    player = new Player(&base_movement, Vector2u(4, 4), 0.25f, speed);
 }
     
 void Game_Engine::initWalls() {
@@ -138,7 +139,8 @@ void Game_Engine::initEnemies() {
     min_texture.loadFromFile("imgs/minotaur.png");
 
     // initializing enemy
-    minotaur = new Individual(&min_texture, Vector2u(10, 5), 0.25f, speed/2);
+    minotaur = new Enemy(&min_texture, Vector2u(10, 5), 0.25f, speed/2);
+    minotaur->setRandPos();
 }
 
 Game_Engine::Game_Engine() {

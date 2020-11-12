@@ -24,7 +24,7 @@ using sf::Keyboard;
 
 class Individual {
 // private attributes
-private:
+protected:
    /* using RectangleSHape for this class instead of Sprite so we can use sprite sheets 
       instead of a bunch of sprites with different textures */
    RectangleShape body;
@@ -60,7 +60,7 @@ public:
    ~Individual();
 
    // update function, responds to keyboard input and sets instance values accordingly
-   void Update(float deltaTime);
+   //void Update(float deltaTime);
 
    // takes in window reference, draws player
    void Draw(RenderWindow& window);
@@ -77,8 +77,10 @@ public:
    bool ColliderCheck(Collider other, float push);
    
    float getHealth() { return this->totalHealth; }
+   
 
 };
+
 
 Individual::Individual(Texture* texture, Vector2u imageCount, float switchTime, float speed) :
    animation(texture, imageCount, switchTime) {
@@ -92,69 +94,11 @@ Individual::Individual(Texture* texture, Vector2u imageCount, float switchTime, 
       body.setSize(Vector2f(body_width, body_height));
       body.setOrigin(body.getSize() / 2.0f);
 
-      /* centers character in the middle of the initial screen
-       * the resize function in Game-Engine will keep it center if window changes
-      */
       body.setPosition(500, 500);
       body.setTexture(texture);
 }
 
 Individual::~Individual(){ /* blank, no allocation */ }
-
-void Individual::Update(float deltaTime) {
-   Vector2f movement(0.0f, 0.0f);
-
-   // TODO add other directions
-   if (Keyboard::isKeyPressed(Keyboard::Left)) {
-      movement.x -= speed * deltaTime;
-   }
-   if (Keyboard::isKeyPressed(Keyboard::Right)) {
-      movement.x += speed * deltaTime;
-   }
-   if (Keyboard::isKeyPressed(Keyboard::Up)) {
-      movement.y -= speed * deltaTime;
-   }
-   if (Keyboard::isKeyPressed(Keyboard::Down)) {
-      movement.y += speed * deltaTime;
-   }
-
-   // idle animation
-   if (movement.x == 0.0f && movement.y == 0.0f)
-      row = 0;
-   else {
-      // running left and right animations
-      if (movement.x != 0.0f) {
-         row = 2;
-         if (movement.x > 0.0f)
-            faceRight = true;
-         else
-            faceRight = false;
-      }
-      // moving down
-      if (movement.y > 0.0f){
-         row = 0;
-         movingDown = true;
-         movingUp = false;
-      }
-      // moving up
-      if (movement.y < 0.0f){
-         row = 3;
-         movingUp = true;
-         movingDown = false;
-      }
-      // intentionally empty
-      else {}
-   }  
-
-   // update the animation
-   animation.Update(row, deltaTime, faceRight, movingDown, movingUp);
-
-   // update the character rectangle
-   body.setTextureRect(animation.uvRect);
-
-   // move the character
-   body.move(movement);
-}
 
 void Individual::Draw(RenderWindow& window) {
    // draw the new movement
