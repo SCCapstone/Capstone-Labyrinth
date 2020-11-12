@@ -28,6 +28,7 @@ protected:
    /* using RectangleSHape for this class instead of Sprite so we can use sprite sheets 
       instead of a bunch of sprites with different textures */
    RectangleShape body;
+   RectangleShape FoV;
 
    // creating instance of animation (to animate body)
    Animation animation;
@@ -57,7 +58,7 @@ public:
    Individual(Texture* texture, Vector2u imageCount, float switchTime, float speed);
 
    // destructor
-   ~Individual();
+   virtual ~Individual();
 
    // update function, responds to keyboard input and sets instance values accordingly
    //void Update(float deltaTime);
@@ -72,13 +73,17 @@ public:
 
    // every 'solid' object in game needs this method for collision
    Collider GetCollider() { return Collider(body); }
+   Collider GetVisionCollider() { return Collider(FoV); }
 
    // needed this method in this class, as referencing in Game_Engine would not work
    bool ColliderCheck(Collider other, float push);
-   
-   float getHealth() { return this->totalHealth; }
-   
 
+   bool VisionColliderCheck(Collider other, float push);
+   
+   float getTotalHealth() { return this->totalHealth; }
+   void setTotalHealth(float val) { this->totalHealth = val; }
+
+   void commitAttack(Individual& other);
 };
 
 
@@ -96,6 +101,13 @@ Individual::Individual(Texture* texture, Vector2u imageCount, float switchTime, 
 
       body.setPosition(500, 500);
       body.setTexture(texture);
+
+      FoV.setSize(Vector2f(3.0f * body_width, 2.0f * body_height));
+      FoV.setOrigin(FoV.getSize() / 2.0f);
+      FoV.setFillColor(sf::Color::Transparent);
+      FoV.setOutlineThickness(1.0f);
+      FoV.setOutlineColor(sf::Color::Green);
+      FoV.setPosition(body.getPosition());
 }
 
 Individual::~Individual(){ /* blank, no allocation */ }
@@ -103,11 +115,24 @@ Individual::~Individual(){ /* blank, no allocation */ }
 void Individual::Draw(RenderWindow& window) {
    // draw the new movement
    window.draw(body);
+   window.draw(FoV);
 }
 
 // wall_one->GetCollider().CheckCollision(player->GetCollider(), 0.0f);
 bool Individual::ColliderCheck(Collider other, float push) {
+    // returns the body's collider, checks with other's collider
     return GetCollider().CheckCollision(other, push);
+}
+
+bool Individual::VisionColliderCheck(Collider other, float push) {
+    // returns the FoV's collider, checks with other
+    return GetVisionCollider().CheckCollision(other, push);
+}
+
+void Individual::commitAttack(Individual& other) {
+   float thierHealth = other.getTotalHealth();
+   thierHealth -= base_attackVal;
+   other.setTotalHealth(thierHealth);
 }
 
 #endif  // INDIVIDUAL_H

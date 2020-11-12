@@ -15,8 +15,12 @@ public:
     Player(Texture* texture, Vector2u imageCount, float switchTime, float speed) :
         Individual(texture, imageCount, switchTime, speed) {}
 
+    ~Player();
+
     void Update(float time);
 };
+
+Player::~Player() { /* empty */}
 
 void Player::Update(float deltaTime) {
    Vector2f movement(0.0f, 0.0f);
@@ -71,6 +75,9 @@ void Player::Update(float deltaTime) {
 
    // move the character
    body.move(movement);
+
+   // ensure players field of vision moves with them
+   FoV.move(movement);
 }
 
 #endif  // PLAYER_H
