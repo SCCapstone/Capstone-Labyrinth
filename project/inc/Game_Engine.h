@@ -4,7 +4,6 @@
 #ifndef GAME_ENGINE_H
 #define GAME_ENGINE_H
 
-
 #include "inc/Player.h"
 #include "inc/Enemy.h"
 #include "inc/Wall.h"
@@ -120,6 +119,9 @@ void Game_Engine::initPlayer() {
 
     // initializing player
     player = new Player(&base_movement, Vector2u(4, 4), 0.25f, speed);
+    
+    // initializing player health
+    player->setTotalHealth(100);
 }
     
 void Game_Engine::initWalls() {
@@ -140,7 +142,13 @@ void Game_Engine::initEnemies() {
     min_texture.loadFromFile("imgs/minotaur.png");
 
     // initializing enemy
-    minotaur = new Enemy(&min_texture, Vector2u(10, 5), 0.25f, speed/2);
+    minotaur = new Enemy(&min_texture, Vector2u(10, 5), 0.45f, speed/8);
+
+    // setting minotaurs health
+    minotaur->setTotalHealth(50);
+
+    // sets minotaurs position
+    minotaur->setRandPos();
 }
 
 Game_Engine::Game_Engine() {
@@ -165,7 +173,6 @@ void Game_Engine::ResizeView(const RenderWindow& window, View& view) {
     view.setSize(videoMode.width * aspectRatio, videoMode.height);
 }
 
-// TODO add more cases
 void Game_Engine::pollEvents() {
     // polls for window close event
     while(window->pollEvent(ev)) {
@@ -174,7 +181,6 @@ void Game_Engine::pollEvents() {
                 window->close();
                 break;
             case Event::Resized:
-                // TODO add view
                 ResizeView(*window, player_view);
                 break;
             case Event::KeyPressed:
@@ -197,22 +203,26 @@ void Game_Engine::Update() {
     // .Update() responds to keyboard input and updates the player in the respective direction
     player->Update(deltaTime);
 
+    // updates the minotaur's information
     minotaur->Update(deltaTime);
 
-    // temporary wall stuff (must call after update)
-    // checks to see if 'wall is colliding with player'
     // a value of 1.0f is an immovable object, wheres 0.0f would move quickly
+    // makes wall the immovable object to player
     wall_one->ColliderCheck(player->GetCollider(), 1.0f);
     wall_two->ColliderCheck(player->GetCollider(), 1.0f);
 
+    // makes wall the immovable object to minotaur
     wall_one->ColliderCheck(minotaur->GetCollider(), 1.0f);
     wall_two->ColliderCheck(minotaur->GetCollider(), 1.0f);
 
-    minotaur->ColliderCheck(player->GetCollider(), 0.5f);
+    // makes player and mintaur able to push each other
     player->ColliderCheck(minotaur->GetCollider(), 0.5f);
 
+    // TODO fix this
+    player->VisionColliderCheck(minotaur->GetCollider(), 0.0f);
+
     // must call this after player.Update(), otherwise cammera stutters
-    player_view.setCenter(this->player->getPlayerPos());
+    player_view.setCenter(this->player->getIndividualPos());
 }
 
 void Game_Engine::Render() {

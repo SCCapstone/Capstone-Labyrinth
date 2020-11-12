@@ -12,6 +12,9 @@ class Wall {
 private:
     sf::RectangleShape wall;
 
+    // useless, needed for collider call
+    sf::RectangleShape wallView;
+
 // public attributes
 public:
     Wall(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position);
@@ -21,7 +24,7 @@ public:
    void Draw(sf::RenderWindow& window);
 
     // every 'solid' object in game needs this method for collision
-   Collider GetCollider() { return Collider(wall); }
+   Collider GetCollider() { return Collider(wall, wallView); }
 
    // needed this method in this class, as referencing in Game_Engine would not work
    bool ColliderCheck(Collider other, float push);
