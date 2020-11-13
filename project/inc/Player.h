@@ -65,7 +65,7 @@ void Player::Update(float deltaTime) {
       }
       // intentionally empty
       else {}
-   }  
+   }
 
    // update the animation
    animation.Update(row, deltaTime, faceRight, movingDown, movingUp);

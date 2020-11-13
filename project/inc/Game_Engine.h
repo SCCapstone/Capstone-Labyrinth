@@ -20,6 +20,8 @@ const int speed = 300;
 /* Class that acts as game engine
  * Creates window
  * Creates player
+ * Creates enemy
+ * Creates 2 wall instances
  */
 
 class Game_Engine {
@@ -203,8 +205,16 @@ void Game_Engine::Update() {
     // .Update() responds to keyboard input and updates the player in the respective direction
     player->Update(deltaTime);
 
-    // updates the minotaur's information
-    minotaur->Update(deltaTime);
+
+    if (player->VisionColliderCheck(minotaur->GetCollider(), 0.0f))
+    {
+        //std::cout << "Player Attack" << std::endl;
+        minotaur->Chase(*player, deltaTime);
+    }
+    else {
+        // updates the minotaur's information
+        minotaur->Update(deltaTime);
+    }
 
     // a value of 1.0f is an immovable object, wheres 0.0f would move quickly
     // makes wall the immovable object to player
@@ -217,12 +227,10 @@ void Game_Engine::Update() {
 
     // makes player and mintaur able to push each other
     player->ColliderCheck(minotaur->GetCollider(), 0.5f);
-
-    // TODO fix this
-    player->VisionColliderCheck(minotaur->GetCollider(), 0.0f);
-
+    
     // must call this after player.Update(), otherwise cammera stutters
     player_view.setCenter(this->player->getIndividualPos());
+
 }
 
 void Game_Engine::Render() {
@@ -232,9 +240,11 @@ void Game_Engine::Render() {
 
     window->setView(player_view);
     
-    player->Draw(*window);
+    if (player->getTotalHealth() > 0.0f)
+        player->Draw(*window);
 
-    minotaur->Draw(*window);
+    if (minotaur->getTotalHealth() > 0.0f)
+        minotaur->Draw(*window);
 
     // temporary wall stuff
     wall_one->Draw(*window);

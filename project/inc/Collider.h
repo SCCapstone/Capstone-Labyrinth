@@ -37,6 +37,13 @@ public:
         fOV.move(dx, dy);
     }
     
+    bool CheckVisionCollision(Collider& other, float push);
+    // determine position of collidable object
+    sf::Vector2f GetVisionPosition() { return fOV.getPosition(); }
+    // need this for AABB calculations
+    sf::Vector2f GetVisionHalfSize() { return fOV.getSize() / 2.0f; }
+    // this method allows us to 'push' moveable objects
+    
 };
 
 Collider::Collider(sf::RectangleShape& body_shape, sf::RectangleShape& fieldOfVision) 
@@ -86,6 +93,28 @@ bool Collider::CheckCollision(Collider& other, float push) {
                 other.Move(0.0f, intersectY * push);
             }
         }
+        return true;
+    }
+    return false;
+}
+
+// based on AABB collision detection algorithm
+bool Collider::CheckVisionCollision(Collider& other, float push) {
+    // getting 'others' coordinates
+    sf::Vector2f otherPosition = other.GetVisionPosition();
+    sf::Vector2f otherHalfSize = other.GetVisionHalfSize();
+
+    // getting our objects coordinates
+    sf::Vector2f thisPosition = GetVisionPosition();
+    sf::Vector2f thisHalfSize = GetVisionHalfSize();
+
+    float deltaX = otherPosition.x - thisPosition.x;
+    float deltaY = otherPosition.y - thisPosition.y;
+
+    float intersectX = abs(deltaX) - (otherHalfSize.x + thisHalfSize.x);
+    float intersectY = abs(deltaY) - (otherHalfSize.y + thisHalfSize.y);
+
+    if ((intersectX < 0.0f) && (intersectY < 0.0f)) {
         return true;
     }
     return false;

@@ -71,7 +71,6 @@ public:
 
    // every 'solid' object in game needs this method for collision
    Collider GetCollider() { return Collider(body, FoV); }
-   Collider GetVisionCollider() { return Collider(body, FoV); }
 
    // needed this method in this class, as referencing in Game_Engine would not work
    bool ColliderCheck(Collider other, float push);
@@ -124,7 +123,7 @@ bool Individual::ColliderCheck(Collider other, float push) {
 
 bool Individual::VisionColliderCheck(Collider other, float push) {
     // returns the FoV's collider, checks with other
-    return GetVisionCollider().CheckCollision(other, push);
+    return GetCollider().CheckVisionCollision(other, push);
 }
 
 void Individual::commitAttack(Individual& other) {
