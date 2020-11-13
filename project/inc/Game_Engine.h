@@ -86,6 +86,12 @@ public:
     // responsinle for drawing players, animations, enemies, ect.
     void Render();
 
+    bool exists(Individual* other) {
+      if (other != nullptr)
+         return true;
+      return false;
+   }
+
 };
 
 void Game_Engine::initVariables() {
@@ -205,15 +211,22 @@ void Game_Engine::Update() {
     // .Update() responds to keyboard input and updates the player in the respective direction
     player->Update(deltaTime);
 
+    // assuming enemy hasnt been defeated yet
+    if (exists(minotaur)) {
+        // if the player and the minotaur's field of vision collide, minotaur chase
+        if (player->VisionColliderCheck(minotaur->GetCollider(), 0.0f))
+        {
+            std::cout << "Player in View" << std::endl;
+            minotaur->Chase(*player, deltaTime);
+        }
+        else {
+            // updates the minotaur's information
+            minotaur->Update(deltaTime);
+        }
 
-    if (player->VisionColliderCheck(minotaur->GetCollider(), 0.0f))
-    {
-        //std::cout << "Player Attack" << std::endl;
-        minotaur->Chase(*player, deltaTime);
-    }
-    else {
-        // updates the minotaur's information
-        minotaur->Update(deltaTime);
+        // makes wall the immovable object to minotaur
+        wall_one->ColliderCheck(minotaur->GetCollider(), 1.0f);
+        wall_two->ColliderCheck(minotaur->GetCollider(), 1.0f);
     }
 
     // a value of 1.0f is an immovable object, wheres 0.0f would move quickly
@@ -221,12 +234,20 @@ void Game_Engine::Update() {
     wall_one->ColliderCheck(player->GetCollider(), 1.0f);
     wall_two->ColliderCheck(player->GetCollider(), 1.0f);
 
-    // makes wall the immovable object to minotaur
-    wall_one->ColliderCheck(minotaur->GetCollider(), 1.0f);
-    wall_two->ColliderCheck(minotaur->GetCollider(), 1.0f);
-
-    // makes player and mintaur able to push each other
-    player->ColliderCheck(minotaur->GetCollider(), 0.5f);
+    // assuming enemy hasnt been defeated yet
+    if (exists(minotaur)) {
+        // makes player and mintaur able to push each other
+        if (player->ColliderCheck(minotaur->GetCollider(), 0.5f)) {
+            std::cout << "Player should attack" << std::endl;
+            if (minotaur->getTotalHealth() > 0)
+                player->commitAttack(*minotaur);
+            else {
+                // set enemy to null and delete
+                minotaur = nullptr;
+                delete minotaur;
+            }
+        }
+    }
     
     // must call this after player.Update(), otherwise cammera stutters
     player_view.setCenter(this->player->getIndividualPos());
@@ -243,7 +264,7 @@ void Game_Engine::Render() {
     if (player->getTotalHealth() > 0.0f)
         player->Draw(*window);
 
-    if (minotaur->getTotalHealth() > 0.0f)
+    if (exists(minotaur))
         minotaur->Draw(*window);
 
     // temporary wall stuff

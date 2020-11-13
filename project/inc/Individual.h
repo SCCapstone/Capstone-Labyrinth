@@ -45,7 +45,7 @@ protected:
    bool movingUp;
    bool movingDown;
 
-   float base_attackVal = 10.0f;
+   float base_attackVal = 1.0f;
    float totalHealth = 100.0f;
 
 // public attributes
@@ -107,7 +107,7 @@ Individual::Individual(Texture* texture, Vector2u imageCount, float switchTime, 
       FoV.setPosition(body.getPosition());
 }
 
-Individual::~Individual(){ /* blank, no allocation */ }
+Individual::~Individual(){ }
 
 void Individual::Draw(RenderWindow& window) {
    // draw the new movement
