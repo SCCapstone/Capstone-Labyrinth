@@ -23,6 +23,8 @@ public:
 
     void setRandPos();
 
+    void Chase(Player& player, float deltaTime);
+
 };
 
 Enemy::~Enemy() { /* empty */ }
@@ -36,18 +38,19 @@ void Enemy::Update(float deltaTime) {
     int p1 = rand() % 5 + 1;
 
     // TODO add other directions
-    if (p1 == 4) {
+
+    // left
+    if (p1 == 4) 
         movement.x -= speed * deltaTime;
-    }
-    if (p1 == 2) {
+    // right
+    if (p1 == 2) 
         movement.x += speed * deltaTime;
-    }
-    if (p1 == 1) {
+    // up
+    if (p1 == 1) 
         movement.y -= speed * deltaTime;
-    }
-    if (p1 == 3) {
+    // down
+    if (p1 == 3)
         movement.y += speed * deltaTime;
-    }
     if (p1 == 5) {
         movement.x = 0.0f;
         movement.y = 0.0f;
@@ -110,5 +113,70 @@ void Enemy::setRandPos() {
     FoV.setPosition(body.getPosition());
 }
 
+
+void Enemy::Chase(Player& player, float deltaTime) {
+    Vector2f playerPos = player.getIndividualPos();
+    Vector2f enemyPos = getIndividualPos();
+
+    Vector2f movement(0.0f, 0.0f);
+
+    float deltaX = playerPos.x - enemyPos.x;
+    float deltaY = playerPos.y - enemyPos.y;
+
+    // movement speed is tripled for chasing effect
+
+    // left
+    if (deltaX < 0) 
+        movement.x -= 3.0f * speed * deltaTime;
+    // right
+    if (deltaX > 0) 
+        movement.x += 3.0f * speed * deltaTime;
+    // up
+    if (deltaY < 0) 
+        movement.y -= 3.0f * speed * deltaTime;
+    // down
+    if (deltaY > 0)
+        movement.y += 3.0f * speed * deltaTime;
+
+    // idle animation
+    if (movement.x == 0.0f && movement.y == 0.0f)
+        row = 1;
+    else {
+        // running left and right animations
+        if (movement.x != 0.0f) {
+            row = 2;
+            if (movement.x > 0.0f)
+                faceRight = true;
+            else
+                faceRight = false;
+        }
+        // moving down
+        if (movement.y > 0.0f) {
+            row = 0;
+            movingDown = true;
+            movingUp = false;
+        }
+        // moving up
+        if (movement.y < 0.0f) {
+            row = 2;
+            movingUp = true;
+            movingDown = false;
+        }
+        // intentionally empty
+        else {}
+    }
+    // update the animation
+    animation.Update(row, deltaTime, faceRight, movingDown, movingUp);
+
+    // update the character rectangle
+    body.setTextureRect(animation.uvRect);
+    FoV.setTextureRect(animation.uvRect);
+
+    // move the character
+    body.move(movement);
+
+    // move the characters field of vision
+    FoV.move(movement);
+}
 
 #endif  // ENEMY_H
