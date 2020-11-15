@@ -45,8 +45,8 @@ protected:
    bool movingUp;
    bool movingDown;
 
-   float base_attackVal = 1.0f;
-   float totalHealth = 100.0f;
+   int base_attackVal = 10;
+   int totalHealth = 100;
 
 // public attributes
 public:
@@ -77,10 +77,13 @@ public:
 
    bool VisionColliderCheck(Collider other, float push);
    
-   float getTotalHealth() { return this->totalHealth; }
+   int getTotalHealth() { return this->totalHealth; }
+   int getAttackValue() { return this->base_attackVal; }
+
    void setTotalHealth(float val) { this->totalHealth = val; }
 
    void commitAttack(Individual& other);
+
 };
 
 
@@ -127,9 +130,7 @@ bool Individual::VisionColliderCheck(Collider other, float push) {
 }
 
 void Individual::commitAttack(Individual& other) {
-   float thierHealth = other.getTotalHealth();
-   thierHealth -= base_attackVal;
-   other.setTotalHealth(thierHealth);
+   
 }
 
 #endif  // INDIVIDUAL_H

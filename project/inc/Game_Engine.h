@@ -52,6 +52,8 @@ private:
     float deltaTime;
     Clock clock;
 
+    bool attacking;
+
     // initializer functions
     void initVariables();
     void initWindow();
@@ -104,6 +106,8 @@ void Game_Engine::initVariables() {
 
     // initializing deltaTime 
     deltaTime = 0.0f;
+
+    attacking = false;
 }
 
 void Game_Engine::initWindow() {
@@ -113,6 +117,7 @@ void Game_Engine::initWindow() {
 
     // initializing window (dynamic allocation)
     this->window = new RenderWindow(videoMode, "Game Window", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
+    window->setKeyRepeatEnabled(false);
 
     // sets player view and centers player in window
     player_view.setCenter(Vector2f(0.0f,0.0f));
@@ -153,7 +158,7 @@ void Game_Engine::initEnemies() {
     minotaur = new Enemy(&min_texture, Vector2u(10, 5), 0.45f, speed/8);
 
     // setting minotaurs health
-    minotaur->setTotalHealth(50);
+    //minotaur->setTotalHealth(50);
 
     // sets minotaurs position
     minotaur->setRandPos();
@@ -188,13 +193,35 @@ void Game_Engine::pollEvents() {
             case Event::Closed:
                 window->close();
                 break;
+
             case Event::Resized:
                 ResizeView(*window, player_view);
                 break;
+
             case Event::KeyPressed:
                 if (this->ev.key.code == Keyboard::Escape)
                     window->close();
                 break;
+
+            case Event::KeyReleased:
+                if (attacking) {
+                    if (this->ev.key.code == Keyboard::Space) {
+                        std::cout << "Attacking" << std::endl;
+                        if (minotaur->getTotalHealth() > player->getAttackValue()) {
+                            std::cout << "  Pre Attack: " << minotaur->getTotalHealth() << std::endl;
+                            float damage = minotaur->getTotalHealth() - player->getAttackValue();
+                            minotaur->setTotalHealth(damage);
+                            std::cout << "  Post Attack: " << minotaur->getTotalHealth() << std::endl;
+                        }
+                        else {
+                            minotaur = nullptr;
+                            delete minotaur;
+                            std::cout << "Enemy deleted" << std::endl;
+                        }
+                    }
+                }
+                break;
+
             default:
                 break;
         }
@@ -216,7 +243,7 @@ void Game_Engine::Update() {
         // if the player and the minotaur's field of vision collide, minotaur chase
         if (player->VisionColliderCheck(minotaur->GetCollider(), 0.0f))
         {
-            std::cout << "Player in View" << std::endl;
+            //std::cout << "Player in View" << std::endl;
             minotaur->Chase(*player, deltaTime);
         }
         else {
@@ -234,24 +261,20 @@ void Game_Engine::Update() {
     wall_one->ColliderCheck(player->GetCollider(), 1.0f);
     wall_two->ColliderCheck(player->GetCollider(), 1.0f);
 
-    // assuming enemy hasnt been defeated yet
     if (exists(minotaur)) {
-        // makes player and mintaur able to push each other
-        if (player->ColliderCheck(minotaur->GetCollider(), 0.5f)) {
-            std::cout << "Player should attack" << std::endl;
-            if (minotaur->getTotalHealth() > 0)
-                player->commitAttack(*minotaur);
-            else {
-                // set enemy to null and delete
-                minotaur = nullptr;
-                delete minotaur;
+        if (player->ColliderCheck(minotaur->GetCollider(), 0.05)) {
+            std::cout << "Colliding" << std::endl;
+            if (Keyboard::isKeyPressed(Keyboard::Space)) {
+                attacking = true;
+                pollEvents();
             }
+            else 
+                attacking = false;
         }
     }
     
     // must call this after player.Update(), otherwise cammera stutters
     player_view.setCenter(this->player->getIndividualPos());
-
 }
 
 void Game_Engine::Render() {
