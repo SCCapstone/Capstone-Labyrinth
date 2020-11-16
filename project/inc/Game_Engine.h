@@ -52,6 +52,8 @@ private:
     float deltaTime;
     Clock clock;
 
+    bool attacking;
+
     // initializer functions
     void initVariables();
     void initWindow();
@@ -86,6 +88,12 @@ public:
     // responsinle for drawing players, animations, enemies, ect.
     void Render();
 
+    bool exists(Individual* other) {
+      if (other != nullptr)
+         return true;
+      return false;
+   }
+
 };
 
 void Game_Engine::initVariables() {
@@ -98,6 +106,8 @@ void Game_Engine::initVariables() {
 
     // initializing deltaTime 
     deltaTime = 0.0f;
+
+    attacking = false;
 }
 
 void Game_Engine::initWindow() {
@@ -107,6 +117,7 @@ void Game_Engine::initWindow() {
 
     // initializing window (dynamic allocation)
     this->window = new RenderWindow(videoMode, "Game Window", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
+    window->setKeyRepeatEnabled(false);
 
     // sets player view and centers player in window
     player_view.setCenter(Vector2f(0.0f,0.0f));
@@ -146,9 +157,6 @@ void Game_Engine::initEnemies() {
     // initializing enemy
     minotaur = new Enemy(&min_texture, Vector2u(10, 5), 0.45f, speed/8);
 
-    // setting minotaurs health
-    minotaur->setTotalHealth(50);
-
     // sets minotaurs position
     minotaur->setRandPos();
 }
@@ -182,13 +190,34 @@ void Game_Engine::pollEvents() {
             case Event::Closed:
                 window->close();
                 break;
+
             case Event::Resized:
                 ResizeView(*window, player_view);
                 break;
+
             case Event::KeyPressed:
                 if (this->ev.key.code == Keyboard::Escape)
                     window->close();
                 break;
+
+            case Event::KeyReleased:
+                // player attacking using the space bar
+                if (this->ev.key.code == Keyboard::Space) {
+                    if (exists(minotaur)) {
+                        if (attacking) {
+                            if (minotaur->getTotalHealth() > player->getAttackValue()) {
+                                player->commitAttack(*minotaur);
+                            }
+                            else {
+                                minotaur = nullptr;
+                                delete minotaur;
+                                std::cout << "Enemy deleted" << std::endl;
+                                }
+                            }
+                        }
+                }
+                break;
+
             default:
                 break;
         }
@@ -205,15 +234,22 @@ void Game_Engine::Update() {
     // .Update() responds to keyboard input and updates the player in the respective direction
     player->Update(deltaTime);
 
+    // chase condition
+    if (exists(minotaur)) {
+        // if the player and the minotaur's field of vision collide, minotaur chase
+        if (player->VisionColliderCheck(minotaur->GetCollider(), 0.0f))
+        {
+            //std::cout << "Player in View" << std::endl;
+            minotaur->Chase(*player, deltaTime);
+        }
+        else {
+            // updates the minotaur's information
+            minotaur->Update(deltaTime);
+        }
 
-    if (player->VisionColliderCheck(minotaur->GetCollider(), 0.0f))
-    {
-        //std::cout << "Player Attack" << std::endl;
-        minotaur->Chase(*player, deltaTime);
-    }
-    else {
-        // updates the minotaur's information
-        minotaur->Update(deltaTime);
+        // makes wall the immovable object to minotaur
+        wall_one->ColliderCheck(minotaur->GetCollider(), 1.0f);
+        wall_two->ColliderCheck(minotaur->GetCollider(), 1.0f);
     }
 
     // a value of 1.0f is an immovable object, wheres 0.0f would move quickly
@@ -221,16 +257,21 @@ void Game_Engine::Update() {
     wall_one->ColliderCheck(player->GetCollider(), 1.0f);
     wall_two->ColliderCheck(player->GetCollider(), 1.0f);
 
-    // makes wall the immovable object to minotaur
-    wall_one->ColliderCheck(minotaur->GetCollider(), 1.0f);
-    wall_two->ColliderCheck(minotaur->GetCollider(), 1.0f);
-
-    // makes player and mintaur able to push each other
-    player->ColliderCheck(minotaur->GetCollider(), 0.5f);
+    // attack condition
+    if (exists(minotaur)) {
+        if (player->ColliderCheck(minotaur->GetCollider(), 0.05)) {
+            //std::cout << "Colliding" << std::endl;
+            if (Keyboard::isKeyPressed(Keyboard::Space)) {
+                attacking = true;
+                pollEvents();
+            }
+            else 
+                attacking = false;
+        }
+    }
     
     // must call this after player.Update(), otherwise cammera stutters
     player_view.setCenter(this->player->getIndividualPos());
-
 }
 
 void Game_Engine::Render() {
@@ -243,7 +284,7 @@ void Game_Engine::Render() {
     if (player->getTotalHealth() > 0.0f)
         player->Draw(*window);
 
-    if (minotaur->getTotalHealth() > 0.0f)
+    if (exists(minotaur))
         minotaur->Draw(*window);
 
     // temporary wall stuff

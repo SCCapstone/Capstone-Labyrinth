@@ -45,8 +45,8 @@ protected:
    bool movingUp;
    bool movingDown;
 
-   float base_attackVal = 10.0f;
-   float totalHealth = 100.0f;
+   int base_attackVal = 10;
+   int totalHealth = 100;
 
 // public attributes
 public:
@@ -77,10 +77,13 @@ public:
 
    bool VisionColliderCheck(Collider other, float push);
    
-   float getTotalHealth() { return this->totalHealth; }
+   int getTotalHealth() { return this->totalHealth; }
+   int getAttackValue() { return this->base_attackVal; }
+
    void setTotalHealth(float val) { this->totalHealth = val; }
 
    void commitAttack(Individual& other);
+
 };
 
 
@@ -107,7 +110,7 @@ Individual::Individual(Texture* texture, Vector2u imageCount, float switchTime, 
       FoV.setPosition(body.getPosition());
 }
 
-Individual::~Individual(){ /* blank, no allocation */ }
+Individual::~Individual(){ }
 
 void Individual::Draw(RenderWindow& window) {
    // draw the new movement
@@ -127,9 +130,11 @@ bool Individual::VisionColliderCheck(Collider other, float push) {
 }
 
 void Individual::commitAttack(Individual& other) {
-   float thierHealth = other.getTotalHealth();
-   thierHealth -= base_attackVal;
-   other.setTotalHealth(thierHealth);
+   std::cout << "Attacking" << std::endl;
+   std::cout << "  Pre Attack: " << other.getTotalHealth() << std::endl;
+   float damage = other.getTotalHealth() - getAttackValue();
+   other.setTotalHealth(damage);
+   std::cout << "  Post Attack: " << other.getTotalHealth() << std::endl;
 }
 
 #endif  // INDIVIDUAL_H
