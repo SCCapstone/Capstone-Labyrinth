@@ -130,7 +130,11 @@ bool Individual::VisionColliderCheck(Collider other, float push) {
 }
 
 void Individual::commitAttack(Individual& other) {
-   
+   std::cout << "Attacking" << std::endl;
+   std::cout << "  Pre Attack: " << other.getTotalHealth() << std::endl;
+   float damage = other.getTotalHealth() - getAttackValue();
+   other.setTotalHealth(damage);
+   std::cout << "  Post Attack: " << other.getTotalHealth() << std::endl;
 }
 
 #endif  // INDIVIDUAL_H

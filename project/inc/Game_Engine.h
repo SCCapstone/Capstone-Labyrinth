@@ -157,9 +157,6 @@ void Game_Engine::initEnemies() {
     // initializing enemy
     minotaur = new Enemy(&min_texture, Vector2u(10, 5), 0.45f, speed/8);
 
-    // setting minotaurs health
-    //minotaur->setTotalHealth(50);
-
     // sets minotaurs position
     minotaur->setRandPos();
 }
@@ -204,21 +201,20 @@ void Game_Engine::pollEvents() {
                 break;
 
             case Event::KeyReleased:
-                if (attacking) {
-                    if (this->ev.key.code == Keyboard::Space) {
-                        std::cout << "Attacking" << std::endl;
-                        if (minotaur->getTotalHealth() > player->getAttackValue()) {
-                            std::cout << "  Pre Attack: " << minotaur->getTotalHealth() << std::endl;
-                            float damage = minotaur->getTotalHealth() - player->getAttackValue();
-                            minotaur->setTotalHealth(damage);
-                            std::cout << "  Post Attack: " << minotaur->getTotalHealth() << std::endl;
+                // player attacking using the space bar
+                if (this->ev.key.code == Keyboard::Space) {
+                    if (exists(minotaur)) {
+                        if (attacking) {
+                            if (minotaur->getTotalHealth() > player->getAttackValue()) {
+                                player->commitAttack(*minotaur);
+                            }
+                            else {
+                                minotaur = nullptr;
+                                delete minotaur;
+                                std::cout << "Enemy deleted" << std::endl;
+                                }
+                            }
                         }
-                        else {
-                            minotaur = nullptr;
-                            delete minotaur;
-                            std::cout << "Enemy deleted" << std::endl;
-                        }
-                    }
                 }
                 break;
 
@@ -238,7 +234,7 @@ void Game_Engine::Update() {
     // .Update() responds to keyboard input and updates the player in the respective direction
     player->Update(deltaTime);
 
-    // assuming enemy hasnt been defeated yet
+    // chase condition
     if (exists(minotaur)) {
         // if the player and the minotaur's field of vision collide, minotaur chase
         if (player->VisionColliderCheck(minotaur->GetCollider(), 0.0f))
@@ -261,9 +257,10 @@ void Game_Engine::Update() {
     wall_one->ColliderCheck(player->GetCollider(), 1.0f);
     wall_two->ColliderCheck(player->GetCollider(), 1.0f);
 
+    // attack condition
     if (exists(minotaur)) {
         if (player->ColliderCheck(minotaur->GetCollider(), 0.05)) {
-            std::cout << "Colliding" << std::endl;
+            //std::cout << "Colliding" << std::endl;
             if (Keyboard::isKeyPressed(Keyboard::Space)) {
                 attacking = true;
                 pollEvents();
