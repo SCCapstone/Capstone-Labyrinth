@@ -5,8 +5,7 @@
 #define ENEMY_H
 
 #include "inc/Individual.h"
-// for random placement
-#include <ctime>
+#include <unistd.h>
 
 class Enemy : public Individual {
 // private attributes
@@ -24,6 +23,8 @@ public:
     void setRandPos();
 
     void Chase(Player& player, float deltaTime);
+
+    void ConstantAttack(Individual& other, int rate);
 
 };
 
@@ -98,7 +99,6 @@ void Enemy::Update(float deltaTime) {
 }
 
 void Enemy::setRandPos() {
-    srand((unsigned) time(0));
 
     // finding two random spawn coordinates
     int p1 = rand() % 1000 + 1;
@@ -112,7 +112,6 @@ void Enemy::setRandPos() {
     // ensure enemy's outline spawns with enemy
     FoV.setPosition(body.getPosition());
 }
-
 
 void Enemy::Chase(Player& player, float deltaTime) {
     Vector2f playerPos = player.getIndividualPos();
@@ -177,6 +176,13 @@ void Enemy::Chase(Player& player, float deltaTime) {
 
     // move the characters field of vision
     FoV.move(movement);
+}
+
+void Enemy::ConstantAttack(Individual& other, int rate) {
+    if (other.getTotalHealth() > getAttackValue()) {
+        commitAttack(other);
+        usleep(rate * 100);
+    }
 }
 
 #endif  // ENEMY_H

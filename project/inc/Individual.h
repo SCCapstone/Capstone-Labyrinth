@@ -6,8 +6,6 @@
 
 #include "Animation.h"
 #include "Collider.h"
-//#include "Player.h"
-//#include "Enemy.h"
 
 // from sf library
 using sf::RenderWindow;
@@ -15,9 +13,6 @@ using sf::Texture;
 using sf::Vector2f;
 using sf::RectangleShape;
 using sf::Keyboard;
-
-//const float body_height = 150.0f;
-//const float body_width = 100.0f;
 
 #define body_height 150.0f
 #define body_width 100.0f
@@ -60,9 +55,6 @@ public:
    // destructor
    virtual ~Individual();
 
-   // update function, responds to keyboard input and sets instance values accordingly
-   //void Update(float deltaTime);
-
    // takes in window reference, draws player
    void Draw(RenderWindow& window);
 
@@ -75,17 +67,21 @@ public:
    // needed this method in this class, as referencing in Game_Engine would not work
    bool ColliderCheck(Collider other, float push);
 
+   // checks if vision fields collide
    bool VisionColliderCheck(Collider other, float push);
    
+   // accessors
    int getTotalHealth() { return this->totalHealth; }
    int getAttackValue() { return this->base_attackVal; }
 
+   // mutators
    void setTotalHealth(float val) { this->totalHealth = val; }
+   void setAttackValue(float val) { this->base_attackVal = val; }
 
+   // attack function
    void commitAttack(Individual& other);
 
 };
-
 
 Individual::Individual(Texture* texture, Vector2u imageCount, float switchTime, float speed) :
    animation(texture, imageCount, switchTime) {
@@ -130,11 +126,11 @@ bool Individual::VisionColliderCheck(Collider other, float push) {
 }
 
 void Individual::commitAttack(Individual& other) {
-   std::cout << "Attacking" << std::endl;
-   std::cout << "  Pre Attack: " << other.getTotalHealth() << std::endl;
+   //std::cout << "Attacking" << std::endl;
+   //std::cout << "  Pre Attack: " << other.getTotalHealth() << std::endl;
    float damage = other.getTotalHealth() - getAttackValue();
    other.setTotalHealth(damage);
-   std::cout << "  Post Attack: " << other.getTotalHealth() << std::endl;
+   std::cout << "  Post Attack Health: " << other.getTotalHealth() << std::endl;
 }
 
 #endif  // INDIVIDUAL_H

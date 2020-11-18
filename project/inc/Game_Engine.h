@@ -7,6 +7,8 @@
 #include "inc/Player.h"
 #include "inc/Enemy.h"
 #include "inc/Wall.h"
+// for random placement
+#include <ctime>
 
 using sf::View;
 using sf::VideoMode;
@@ -57,8 +59,6 @@ private:
     // initializer functions
     void initVariables();
     void initWindow();
-
-    // these are called in initVariables
     void initPlayer();
     void initWalls();
     void initEnemies();
@@ -71,16 +71,23 @@ public:
     // destructor, deletes dynamic objects
     ~Game_Engine();
 
-    // function to resize view when window dimensions change
-    void ResizeView(const RenderWindow& window, View& view);
-
     // accessors, returns true if window is still open
     const bool running() const {
         return window->isOpen();
     }
 
+    // function to test if Individuals exist (player, enemy)
+    bool exists(Individual* other) {
+      if (other != nullptr)
+         return true;
+      return false;
+   }
+
     // updates events
     void pollEvents();
+
+    // function to resize view when window dimensions change
+    void ResizeView(const RenderWindow& window, View& view);
 
     // responsible for updating players, animations, enemies, ect.
     void Update();
@@ -88,14 +95,28 @@ public:
     // responsinle for drawing players, animations, enemies, ect.
     void Render();
 
-    bool exists(Individual* other) {
-      if (other != nullptr)
-         return true;
-      return false;
-   }
-
 };
 
+// constructor and destructor
+Game_Engine::Game_Engine() {
+    // initializes 
+    initVariables();
+    initWindow();
+}
+
+Game_Engine::~Game_Engine() { 
+    delete this->player;
+    delete this->window;
+
+    delete this->minotaur;
+
+    // temporary wall stuff
+    delete this->wall_one;
+    delete this->wall_two;
+}
+
+
+// initializer functions
 void Game_Engine::initVariables() {
     // clearing any previous memory, not necessary, but safe
     this->window = nullptr;
@@ -132,9 +153,9 @@ void Game_Engine::initPlayer() {
 
     // initializing player
     player = new Player(&base_movement, Vector2u(4, 4), 0.25f, speed);
-    
-    // initializing player health
-    player->setTotalHealth(100);
+
+    std::cout << "Player Total Health: " << player->getTotalHealth() << std::endl;
+    std::cout << "Player Attack Value: " << player->getAttackValue() << "\n" << std::endl;
 }
     
 void Game_Engine::initWalls() {
@@ -157,49 +178,52 @@ void Game_Engine::initEnemies() {
     // initializing enemy
     minotaur = new Enemy(&min_texture, Vector2u(10, 5), 0.45f, speed/8);
 
+    // for random positions
+    srand((unsigned) time(0));
+
     // sets minotaurs position
     minotaur->setRandPos();
+    minotaur->setAttackValue(20.0f);
+
+    std::cout << "Enemy Total Health: " << minotaur->getTotalHealth() << std::endl;
+    std::cout << "Enemy Attack Val: " << minotaur->getAttackValue() << "\n" << std::endl;
 }
 
-Game_Engine::Game_Engine() {
-    // initializes 
-    initVariables();
-    initWindow();
-}
 
-Game_Engine::~Game_Engine() { 
-    delete this->player;
-    delete this->window;
-
-    delete this->minotaur;
-
-    // temporary wall stuff
-    delete this->wall_one;
-    delete this->wall_two;
-}
-
+// ResizeView function
 void Game_Engine::ResizeView(const RenderWindow& window, View& view) {
     float aspectRatio = float(window.getSize().x) / float (window.getSize().y);
     view.setSize(videoMode.width * aspectRatio, videoMode.height);
 }
 
+
+// game driver functions
 void Game_Engine::pollEvents() {
     // polls for window close event
     while(window->pollEvent(ev)) {
         switch (ev.type) {
+
+            // window is closing
             case Event::Closed:
                 window->close();
+                std::cout << "Window Closed (X)" << std::endl;
                 break;
 
+            // window is resized
             case Event::Resized:
                 ResizeView(*window, player_view);
+                std::cout << "Window Resized" << std::endl;
                 break;
 
+            // keys have been pressed
             case Event::KeyPressed:
-                if (this->ev.key.code == Keyboard::Escape)
+                if (this->ev.key.code == Keyboard::Escape) {
                     window->close();
+                    std::cout << "Window Closed (Esc)" << std::endl;
+                }
                 break;
 
+            // keys have been released
             case Event::KeyReleased:
                 // player attacking using the space bar
                 if (this->ev.key.code == Keyboard::Space) {
@@ -211,13 +235,14 @@ void Game_Engine::pollEvents() {
                             else {
                                 minotaur = nullptr;
                                 delete minotaur;
-                                std::cout << "Enemy deleted" << std::endl;
-                                }
+                                std::cout << "\nEnemy deleted" << std::endl;
                             }
                         }
+                    }
                 }
                 break;
 
+            // default case
             default:
                 break;
         }
@@ -234,8 +259,16 @@ void Game_Engine::Update() {
     // .Update() responds to keyboard input and updates the player in the respective direction
     player->Update(deltaTime);
 
-    // chase condition
+    // must call this after player.Update(), otherwise cammera stutters
+    player_view.setCenter(this->player->getIndividualPos());
+
+    // makes wall the immovable object to player
+    wall_one->ColliderCheck(player->GetCollider(), 1.0f);
+    wall_two->ColliderCheck(player->GetCollider(), 1.0f);
+
+    // make sure mintaur exits before you utilize it
     if (exists(minotaur)) {
+        
         // if the player and the minotaur's field of vision collide, minotaur chase
         if (player->VisionColliderCheck(minotaur->GetCollider(), 0.0f))
         {
@@ -248,30 +281,27 @@ void Game_Engine::Update() {
         }
 
         // makes wall the immovable object to minotaur
+        // a value of 1.0f is an immovable object, wheres 0.0f would move quickly
         wall_one->ColliderCheck(minotaur->GetCollider(), 1.0f);
         wall_two->ColliderCheck(minotaur->GetCollider(), 1.0f);
-    }
-
-    // a value of 1.0f is an immovable object, wheres 0.0f would move quickly
-    // makes wall the immovable object to player
-    wall_one->ColliderCheck(player->GetCollider(), 1.0f);
-    wall_two->ColliderCheck(player->GetCollider(), 1.0f);
-
-    // attack condition
-    if (exists(minotaur)) {
+        
+        // if player and enemy collide, proceed to attack each other
         if (player->ColliderCheck(minotaur->GetCollider(), 0.05)) {
             //std::cout << "Colliding" << std::endl;
             if (Keyboard::isKeyPressed(Keyboard::Space)) {
                 attacking = true;
                 pollEvents();
             }
-            else 
+            else {
                 attacking = false;
+            }
+            // minotaur attacks player, TODO slow down rate
+            if (player->getTotalHealth() > minotaur->getAttackValue()) {
+                minotaur->commitAttack(*player);
+            }
         }
     }
     
-    // must call this after player.Update(), otherwise cammera stutters
-    player_view.setCenter(this->player->getIndividualPos());
 }
 
 void Game_Engine::Render() {
@@ -281,7 +311,7 @@ void Game_Engine::Render() {
 
     window->setView(player_view);
     
-    if (player->getTotalHealth() > 0.0f)
+    if (exists(player))
         player->Draw(*window);
 
     if (exists(minotaur))
