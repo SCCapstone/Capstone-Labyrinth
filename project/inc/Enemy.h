@@ -10,11 +10,19 @@
 class Enemy : public Individual {
 // private attributes
 private:
+    // used to time out attacks for enemies
+    sf::Clock attackTimer;
+    sf::Int32 attackTimerMax;
     
 // public attributes
 public:
     Enemy(Texture* texture, Vector2u imageCount, float switchTime, float speed) :
-        Individual(texture, imageCount, switchTime, speed) {}
+        Individual(texture, imageCount, switchTime, speed) {
+        this->attackTimer.restart();
+
+        // this is in milliseconds
+        this->attackTimerMax = 1000;
+    }
 
     ~Enemy();
 
@@ -24,7 +32,11 @@ public:
 
     void Chase(Player& player, float deltaTime);
 
-    void ConstantAttack(Individual& other, int rate);
+    void ConstantAttack(Individual& other);
+
+    const bool getAttackTimer();
+
+    void commitAttack(Individual& other);
 
 };
 
@@ -178,11 +190,30 @@ void Enemy::Chase(Player& player, float deltaTime) {
     FoV.move(movement);
 }
 
-void Enemy::ConstantAttack(Individual& other, int rate) {
-    if (other.getTotalHealth() > getAttackValue()) {
-        commitAttack(other);
-        usleep(rate * 100);
+void Enemy::ConstantAttack(Individual& other) {
+    if (getAttackTimer()) {
+        if (other.getTotalHealth() > getAttackValue()) {
+            commitAttack(other);
+        }
     }
+}
+
+// this funciton returns true if it is time for enemy to attack 
+const bool Enemy::getAttackTimer() {
+    if (this->attackTimer.getElapsedTime().asMilliseconds() >= this->attackTimerMax) {
+        this->attackTimer.restart();
+        return true;
+    }
+    return false;
+}
+
+// overriding Individual commitAttack() method
+void Enemy::commitAttack(Individual& other) {
+   //std::cout << "Attacking" << std::endl;
+   //std::cout << "  Pre Attack: " << other.getTotalHealth() << std::endl;
+   float damage = other.getTotalHealth() - getAttackValue();
+   other.setTotalHealth(damage);
+   std::cout << "  Post Attack Player Health: " << other.getTotalHealth() << std::endl;
 }
 
 #endif  // ENEMY_H

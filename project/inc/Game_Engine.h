@@ -227,7 +227,7 @@ void Game_Engine::pollEvents() {
             case Event::KeyReleased:
                 // player attacking using the space bar
                 if (this->ev.key.code == Keyboard::Space) {
-                    if (exists(minotaur)) {
+                    if (exists(minotaur) && exists(player)) {
                         if (attacking) {
                             if (minotaur->getTotalHealth() > player->getAttackValue()) {
                                 player->commitAttack(*minotaur);
@@ -256,34 +256,36 @@ void Game_Engine::Update() {
 
     pollEvents();
 
-    // .Update() responds to keyboard input and updates the player in the respective direction
-    player->Update(deltaTime);
+    if (exists(player)) {
+        // .Update() responds to keyboard input and updates the player in the respective direction
+        player->Update(deltaTime);
 
-    // must call this after player.Update(), otherwise cammera stutters
-    player_view.setCenter(this->player->getIndividualPos());
+        // must call this after player.Update(), otherwise cammera stutters
+        player_view.setCenter(this->player->getIndividualPos());
 
-    // makes wall the immovable object to player
-    wall_one->ColliderCheck(player->GetCollider(), 1.0f);
-    wall_two->ColliderCheck(player->GetCollider(), 1.0f);
+        // makes wall the immovable object to player
+        wall_one->ColliderCheck(player->GetCollider(), 1.0f);
+        wall_two->ColliderCheck(player->GetCollider(), 1.0f);
+    }
+    if (exists(minotaur)) {
+        // updates the minotaur's information
+        minotaur->Update(deltaTime);
+
+        // makes wall the immovable object to minotaur
+        // a value of 1.0f is an immovable object, wheres 0.0f would move quickly
+        wall_one->ColliderCheck(minotaur->GetCollider(), 1.0f);
+        wall_two->ColliderCheck(minotaur->GetCollider(), 1.0f);
+    }
 
     // make sure mintaur exits before you utilize it
-    if (exists(minotaur)) {
-        
+    if (exists(minotaur) && exists(player)) {
+
         // if the player and the minotaur's field of vision collide, minotaur chase
         if (player->VisionColliderCheck(minotaur->GetCollider(), 0.0f))
         {
             //std::cout << "Player in View" << std::endl;
             minotaur->Chase(*player, deltaTime);
         }
-        else {
-            // updates the minotaur's information
-            minotaur->Update(deltaTime);
-        }
-
-        // makes wall the immovable object to minotaur
-        // a value of 1.0f is an immovable object, wheres 0.0f would move quickly
-        wall_one->ColliderCheck(minotaur->GetCollider(), 1.0f);
-        wall_two->ColliderCheck(minotaur->GetCollider(), 1.0f);
         
         // if player and enemy collide, proceed to attack each other
         if (player->ColliderCheck(minotaur->GetCollider(), 0.05)) {
@@ -295,13 +297,17 @@ void Game_Engine::Update() {
             else {
                 attacking = false;
             }
-            // minotaur attacks player, TODO slow down rate
+            // minotaur attacks player
             if (player->getTotalHealth() > minotaur->getAttackValue()) {
-                minotaur->commitAttack(*player);
+                minotaur->ConstantAttack(*player);
+            }
+            else {
+                player = nullptr;
+                delete player;
+                std::cout << "\nPlayer deleted" << std::endl;
             }
         }
-    }
-    
+    }    
 }
 
 void Game_Engine::Render() {
