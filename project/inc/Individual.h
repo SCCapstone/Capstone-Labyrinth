@@ -58,29 +58,27 @@ public:
    // takes in window reference, draws player
    void Draw(RenderWindow& window);
 
-   // returns player position, used when setting center view in Game_Engine
-   Vector2f getIndividualPos() { return body.getPosition(); }
-
-   // every 'solid' object in game needs this method for collision
-   Collider GetCollider() { return Collider(body, FoV); }
-
    // needed this method in this class, as referencing in Game_Engine would not work
    bool ColliderCheck(Collider other, float push);
 
    // checks if vision fields collide
    bool VisionColliderCheck(Collider other, float push);
-   
-   // accessors
-   int getTotalHealth() { return this->totalHealth; }
-   int getAttackValue() { return this->base_attackVal; }
-
-   // mutators
-   void setTotalHealth(float val) { this->totalHealth = val; }
-   void setAttackValue(float val) { this->base_attackVal = val; }
 
    // attack function
    void commitAttack(Individual& other);
 
+   
+   // accessors
+   int getTotalHealth() { return this->totalHealth; }
+   int getAttackValue() { return this->base_attackVal; }
+   float getSpeed() { return this->speed; }
+   Vector2f getIndividualPos() { return body.getPosition(); }
+   Collider GetCollider() { return Collider(body, FoV); }
+
+   // mutators
+   void setTotalHealth(int val) { this->totalHealth = val; }
+   void setAttackValue(int val) { this->base_attackVal = val; }
+   void setSpeed(float sp) { this->speed = sp; }
 };
 
 Individual::Individual(Texture* texture, Vector2u imageCount, float switchTime, float speed) :
@@ -106,7 +104,7 @@ Individual::Individual(Texture* texture, Vector2u imageCount, float switchTime, 
       FoV.setPosition(body.getPosition());
 }
 
-Individual::~Individual(){ }
+Individual::~Individual(){ /* empty */ }
 
 void Individual::Draw(RenderWindow& window) {
    // draw the new movement

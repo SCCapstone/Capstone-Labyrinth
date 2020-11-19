@@ -16,13 +16,7 @@ private:
     
 // public attributes
 public:
-    Enemy(Texture* texture, Vector2u imageCount, float switchTime, float speed) :
-        Individual(texture, imageCount, switchTime, speed) {
-        this->attackTimer.restart();
-
-        // this is in milliseconds
-        this->attackTimerMax = 1000;
-    }
+    Enemy(Texture* texture, Vector2u imageCount, float switchTime, float speed);
 
     ~Enemy();
 
@@ -37,8 +31,15 @@ public:
     const bool getAttackTimer();
 
     void commitAttack(Individual& other);
-
 };
+
+Enemy::Enemy(Texture* texture, Vector2u imageCount, float switchTime, float speed) :
+        Individual(texture, imageCount, switchTime, speed) {
+        this->attackTimer.restart();
+
+        // this is in milliseconds
+        this->attackTimerMax = 1000;
+}
 
 Enemy::~Enemy() { /* empty */ }
 

@@ -26,10 +26,10 @@ public:
 
     void Spawn(RenderWindow& window);
 
+    // TODO add chase
     void Chase(Player& player, float deltaTime);
 
     void Update(float deltaTime);
-    
 };
 
 Enemy_Spawner::Enemy_Spawner(int us_amount, int us_time, int attVal, Texture* texture, Vector2u imageCount, float switchTime, float speed) {

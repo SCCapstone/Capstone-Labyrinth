@@ -30,6 +30,9 @@ private:
 
 // public attributes
 public:
+    // rect to display animation
+    IntRect uvRect;
+
     /* constructor
      * only need pointer to texture for size
      * imageCount for number of images in sheet
@@ -45,9 +48,6 @@ public:
      * TODO add bool up and bool down (maybe?)
     */
     void Update(int row, float deltaTime, bool faceRight, bool down, bool up);
-
-    // rect to display animation
-    IntRect uvRect;
 };
 
 Animation::Animation(Texture* texture, Vector2u imageCount, float switchTime) {
