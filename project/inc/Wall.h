@@ -21,14 +21,13 @@ public:
     ~Wall();
 
     // takes in window reference, draws player
-   void Draw(sf::RenderWindow& window);
+    void Draw(sf::RenderWindow& window);
+
+    // needed this method in this class, as referencing in Game_Engine would not work
+    bool ColliderCheck(Collider other, float push);
 
     // every 'solid' object in game needs this method for collision
-   Collider GetCollider() { return Collider(wall, wallView); }
-
-   // needed this method in this class, as referencing in Game_Engine would not work
-   bool ColliderCheck(Collider other, float push);
-
+    Collider GetCollider() { return Collider(wall, wallView); }
 };
 
 Wall::Wall(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position) {

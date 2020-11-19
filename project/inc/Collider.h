@@ -19,6 +19,7 @@ private:
 // public attributes
 public:
     Collider(sf::RectangleShape& body_shape, sf::RectangleShape& fieldOfVision);
+
     ~Collider();
 
     /* Checks to see if two Collider objects are colliding
@@ -27,23 +28,21 @@ public:
      *     push = 1, other object will get 'pushed'
      */
     bool CheckCollision(Collider& other, float push);
+    
+    bool CheckVisionCollision(Collider& other, float push);
+
+    // this method allows us to 'push' moveable objects
+    void Move(float dx, float dy);
+
     // determine position of collidable object
     sf::Vector2f GetPosition() { return body.getPosition(); }
     // need this for AABB calculations
     sf::Vector2f GetHalfSize() { return body.getSize() / 2.0f; }
-    // this method allows us to 'push' moveable objects
-    void Move(float dx, float dy) { 
-        body.move(dx, dy); 
-        fOV.move(dx, dy);
-    }
     
-    bool CheckVisionCollision(Collider& other, float push);
     // determine position of collidable object
     sf::Vector2f GetVisionPosition() { return fOV.getPosition(); }
     // need this for AABB calculations
-    sf::Vector2f GetVisionHalfSize() { return fOV.getSize() / 2.0f; }
-    // this method allows us to 'push' moveable objects
-    
+    sf::Vector2f GetVisionHalfSize() { return fOV.getSize() / 2.0f; }   
 };
 
 Collider::Collider(sf::RectangleShape& body_shape, sf::RectangleShape& fieldOfVision) 
@@ -118,6 +117,11 @@ bool Collider::CheckVisionCollision(Collider& other, float push) {
         return true;
     }
     return false;
+}
+
+void Collider::Move(float dx, float dy) { 
+        body.move(dx, dy); 
+        fOV.move(dx, dy);
 }
 
 #endif  // COLLIDER_H

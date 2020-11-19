@@ -18,6 +18,8 @@ public:
     ~Player();
 
     void Update(float time);
+
+    void commitAttack(Individual& other);
 };
 
 Player::~Player() { /* empty */}
@@ -78,6 +80,14 @@ void Player::Update(float deltaTime) {
 
    // ensure players field of vision moves with them
    FoV.move(movement);
+}
+
+void Player::commitAttack(Individual& other) {
+   //std::cout << "Attacking" << std::endl;
+   //std::cout << "  Pre Attack: " << other.getTotalHealth() << std::endl;
+   float damage = other.getTotalHealth() - getAttackValue();
+   other.setTotalHealth(damage);
+   std::cout << "  Post Attack Enemy Health: " << other.getTotalHealth() << std::endl;
 }
 
 #endif  // PLAYER_H
