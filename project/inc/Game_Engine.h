@@ -214,8 +214,8 @@ void Game_Engine::initWalls() {
      * Vector2f(float, float):  position in the window
      */
     brickwall.loadFromFile("imgs/wall.png");
-    wall_one = new Wall(&brickwall, Vector2f(500.0f, 100.0f), Vector2f(500.0f, 200.0f));
-    wall_two = new Wall(&brickwall, Vector2f(500.0f, 100.0f), Vector2f(500.0f, 800.0f));
+    wall_one = new Wall(&brickwall, Vector2f(500.0f, 150.0f), Vector2f(500.0f, 200.0f));
+    wall_two = new Wall(&brickwall, Vector2f(500.0f, 150.0f), Vector2f(500.0f, 800.0f));
 }
 
 
@@ -248,7 +248,7 @@ void Game_Engine::pollEvents() {
             // window is resized
             case Event::Resized:
                 ResizeView(*window, player_view);
-                std::cout << "Window Resized" << std::endl;
+                //std::cout << "Window Resized" << std::endl;
                 break;
 
             // keys have been pressed

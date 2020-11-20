@@ -26,6 +26,10 @@ public:
 
     void Spawn(RenderWindow& window);
 
+    Enemy& getCurrentCollidingEnemy(Player& player);
+
+    //TODO add remove enemy method
+
     // TODO add chase
     void Chase(Player& player, float deltaTime);
 
@@ -50,23 +54,34 @@ Enemy_Spawner::~Enemy_Spawner() {
     delete enemies;
 }
 
-// responsible for dynamically allocating memory for all enemies and setting their attack values
+// responsible for dynamically allocating memory for all enemies, setting a random position, and setting their attack values
+// gets called in Game_Engine::initEnemies
 void Enemy_Spawner::Populate(Texture* texture, Vector2u imageCount, float switchTime, float speed, int attVal) {
     for (int i = 0; i < amount; i++) {
         enemies[i] = new Enemy(texture, imageCount, switchTime, speed);
         enemies[i]->setAttackValue(attVal);
+        enemies[i]->setRandPos();
     }
 }
 
-// responsible for placing all enemy objects randomly in window
+// responsible for placing all enemy objects in window
+// gets called in Game_Engine::Render
 void Enemy_Spawner::Spawn(RenderWindow& window) {
     for (int i = 0; i < amount; i++) {
-        enemies[i]->setRandPos();
-        //enemies[i]->Draw(window);
+        enemies[i]->Draw(window);
     }
 }
 
-// responsible for updating enemies (movement and animatio)
+Enemy& Enemy_Spawner::getCurrentCollidingEnemy(Player& player) {
+    for (int i = 0; i < amount; i++) {
+        if (player.ColliderCheck(enemies[i]->GetCollider(), 0.05)) {
+            return *enemies[i];
+        }
+    }
+}
+
+// responsible for updating enemies (movement and animation)
+// gets called in Game_Engine::Update
 void Enemy_Spawner::Update(float deltaTime) {
     for (int i = 0; i < amount; i++) {
         enemies[i]->Update(deltaTime);
