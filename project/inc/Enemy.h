@@ -20,7 +20,7 @@ public:
 
     ~Enemy();
 
-    void Update(float deltaTime);
+    void Update(float deltaTime, int rv);
 
     void setRandPos();
 
@@ -43,29 +43,29 @@ Enemy::Enemy(Texture* texture, Vector2u imageCount, float switchTime, float spee
 
 Enemy::~Enemy() { /* empty */ }
 
-void Enemy::Update(float deltaTime) {
+void Enemy::Update(float deltaTime, int rv) {
     Vector2f movement(0.0f, 0.0f);
 
-    srand((unsigned) time(0));
+    //srand((unsigned) time(0));
 
     // deciding random direction for npc to walk
-    int p1 = rand() % 5 + 1;
+    //int p1 = rand() % 5 + 1;
 
     // TODO add other directions
 
     // left
-    if (p1 == 4) 
+    if (rv == 4) 
         movement.x -= speed * deltaTime;
     // right
-    if (p1 == 2) 
+    if (rv == 2) 
         movement.x += speed * deltaTime;
     // up
-    if (p1 == 1) 
+    if (rv == 1) 
         movement.y -= speed * deltaTime;
     // down
-    if (p1 == 3)
+    if (rv == 3)
         movement.y += speed * deltaTime;
-    if (p1 == 5) {
+    if (rv == 5) {
         movement.x = 0.0f;
         movement.y = 0.0f;
     }

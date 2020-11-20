@@ -5,7 +5,7 @@
 #define GAME_ENGINE_H
 
 #include "inc/Player.h"
-#include "inc/Enemy.h"
+#include "inc/Enemy_Spawner.h"
 #include "inc/Wall.h"
 #include <ctime>
 
@@ -38,7 +38,7 @@ private:
     Texture base_movement;
 
     // variables for enemy character
-    Enemy* minotaur;
+    Enemy_Spawner* minotaurs;
     Texture min_texture;
 
     // temporary wall variables
@@ -60,7 +60,7 @@ private:
     void initWalls();
 
     // updates health enemy health status when player attacks
-    void PlayerAttackUpdate(Player*& aPlayer, Enemy*& anEnemy);
+    void PlayerAttackUpdate(Player*& aPlayer, Enemy* anEnemy);
 
     // updates contact settings between individuals and solid objects, like walls
     void WallContactUpdate(Individual* character, Wall* aWall, float push);
@@ -110,7 +110,7 @@ Game_Engine::~Game_Engine() {
     delete this->window;
 
     delete this->player;
-    delete this->minotaur;
+    //delete this->minotaurs;
 
     // temporary wall stuff
     delete this->wall_one;
@@ -140,6 +140,8 @@ void Game_Engine::initVariables() {
 
     // player is not attacking enemies by default
     attacking = false;
+
+    std::cout << "Initialized Variables" << std::endl;
 }
 
 void Game_Engine::initWindow() {
@@ -153,7 +155,9 @@ void Game_Engine::initWindow() {
 
     // sets player view and centers player in window
     player_view.setCenter(Vector2f(0.0f,0.0f));
-    player_view.setSize(Vector2f(videoMode.width, videoMode.height)); 
+    player_view.setSize(Vector2f(videoMode.width, videoMode.height));
+
+    std::cout << "Initialized Window\n" << std::endl;
 }
 
 void Game_Engine::initPlayer() {
@@ -171,36 +175,32 @@ void Game_Engine::initPlayer() {
     player = new Player(&base_movement, Vector2u(4, 4), 0.25f, 300.0f);
 
     // reports player statistics
-    std::cout << "Player Total Health: " << player->getTotalHealth() << std::endl;
-    std::cout << "Player Attack Value: " << player->getAttackValue() << "\n" << std::endl;
+    //std::cout << "Player Total Health: " << player->getTotalHealth() << std::endl;
+    //std::cout << "Player Attack Value: " << player->getAttackValue() << "\n" << std::endl;
+
+    std::cout << "Initialized Player" << std::endl;
 }
 
 void Game_Engine::initEnemies() {
-    this->minotaur = nullptr;
+    this->minotaurs = nullptr;
+
+    // for random positions
+    srand((unsigned) time(0));
 
     // loading sprite sheet
     min_texture.loadFromFile("imgs/minotaur.png");
 
     /* Initializing enemy
+     * 2:               how many enemies to spawn
+     * 20:              enemy attack value
      * &min_texture:    reference to texture
      * Vector2u(10, 5): sprite sheet is 10x5 images
      * 0.35f:           how fast the animations switch between images
      * 37.0f:          player speed in the relation to objects in the window
      */
-    minotaur = new Enemy(&min_texture, Vector2u(10, 5), 0.35f, 37.0f);
+    minotaurs = new Enemy_Spawner(2, 20, &min_texture, Vector2u(10, 5), 0.35f, 37.0f);
 
-    // for random positions
-    srand((unsigned) time(0));
-
-    // sets minotaurs position
-    minotaur->setRandPos();
-
-    // sets minotaur attack value
-    minotaur->setAttackValue(20.0f);
-
-    // reports enemy statistics
-    std::cout << "Enemy Total Health: " << minotaur->getTotalHealth() << std::endl;
-    std::cout << "Enemy Attack Val: " << minotaur->getAttackValue() << "\n" << std::endl;
+    std::cout << "Initialized Enemies" << std::endl;
 }
 
 void Game_Engine::initWalls() {
@@ -216,6 +216,8 @@ void Game_Engine::initWalls() {
     brickwall.loadFromFile("imgs/wall.png");
     wall_one = new Wall(&brickwall, Vector2f(500.0f, 150.0f), Vector2f(500.0f, 200.0f));
     wall_two = new Wall(&brickwall, Vector2f(500.0f, 150.0f), Vector2f(500.0f, 800.0f));
+
+    std::cout << "Initialized Walls" << std::endl;
 }
 
 
@@ -264,9 +266,9 @@ void Game_Engine::pollEvents() {
                 // player attacking using the space bar
                 if (this->ev.key.code == Keyboard::Space) {
                     // if both player and enemy exist, attack
-                    if (exists(minotaur) && exists(player)) {
-                        PlayerAttackUpdate(player, minotaur);
-                    }
+                    //if (exists(&minotaurs->getCurrentCollidingEnemy(*player)) && exists(player)) {
+                    //    PlayerAttackUpdate(player, &minotaurs->getCurrentCollidingEnemy(*player));
+                    //}
                 }
                 break;
 
@@ -277,7 +279,7 @@ void Game_Engine::pollEvents() {
     }
 }
 
-void Game_Engine::PlayerAttackUpdate(Player*& aPlayer, Enemy*& anEnemy) {
+void Game_Engine::PlayerAttackUpdate(Player*& aPlayer, Enemy* anEnemy) {
     if (attacking) {
         if (anEnemy->getTotalHealth() > aPlayer->getAttackValue()) {
             aPlayer->commitAttack(*anEnemy);
@@ -313,26 +315,27 @@ void Game_Engine::Update() {
         WallContactUpdate(player, wall_one, 1.0f);
         WallContactUpdate(player, wall_two, 1.0f);
     }
-    if (exists(minotaur)) {
+    if (!(minotaurs->Empty())) {
         // updates the minotaur's information
-        minotaur->Update(deltaTime);
+        minotaurs->Update(deltaTime);
 
         // makes wall the immovable object to minotaur
-        WallContactUpdate(minotaur, wall_one, 1.0f);
-        WallContactUpdate(minotaur, wall_two, 1.0f);
+        //WallContactUpdate(&minotaurs->getCurrentCollidingEnemy(*player), wall_one, 1.0f);
+        //WallContactUpdate(&minotaurs->getCurrentCollidingEnemy(*player), wall_two, 1.0f);
     }
 
+    /*
     // make sure player and minotaur exists before you utilize them
-    if (exists(minotaur) && exists(player)) {
+    if (exists(&minotaurs->getCurrentCollidingEnemy(*player)) && exists(player)) {
 
         // if the player and the minotaur's field of vision collide, minotaur chases player
-        if (player->VisionColliderCheck(minotaur->GetCollider(), 0.0f))
+        if (player->VisionColliderCheck((&minotaurs->getCurrentCollidingEnemy(*player))->GetCollider(), 0.0f))
         {
-            minotaur->Chase(*player, deltaTime);
+            (&minotaurs->getCurrentCollidingEnemy(*player))->Chase(*player, deltaTime);
         }
         
         // if player and enemy collide, proceed to attack each other
-        if (player->ColliderCheck(minotaur->GetCollider(), 0.05)) {
+        if (player->ColliderCheck((&minotaurs->getCurrentCollidingEnemy(*player))->GetCollider(), 0.05)) {
             if (Keyboard::isKeyPressed(Keyboard::Space)) {
                 attacking = true;
                 pollEvents();
@@ -341,8 +344,8 @@ void Game_Engine::Update() {
                 attacking = false;
             }
             // minotaur attacks player
-            if (player->getTotalHealth() > minotaur->getAttackValue()) {
-                minotaur->ConstantAttack(*player);
+            if (player->getTotalHealth() > (&minotaurs->getCurrentCollidingEnemy(*player))->getAttackValue()) {
+                (&minotaurs->getCurrentCollidingEnemy(*player))->ConstantAttack(*player);
             }
             else {
                 player = nullptr;
@@ -350,7 +353,8 @@ void Game_Engine::Update() {
                 std::cout << "\nPlayer deleted" << std::endl;
             }
         }
-    }    
+    }
+    */ 
 }
 
 void Game_Engine::Render() {
@@ -363,8 +367,8 @@ void Game_Engine::Render() {
     if (exists(player))
         player->Draw(*window);
 
-    if (exists(minotaur))
-        minotaur->Draw(*window);
+    if (!(minotaurs->Empty()))
+        minotaurs->Spawn(*window);
 
     // temporary wall stuff
     wall_one->Draw(*window);

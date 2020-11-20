@@ -5,6 +5,7 @@
 
 int main() {
     
+    srand((unsigned) time(0));
     Game_Engine game;
     while(game.running()) {
         game.Update();
