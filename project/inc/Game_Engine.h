@@ -330,27 +330,32 @@ void Game_Engine::Update() {
         // if the player and the minotaur's field of vision collide, minotaur chases player
         minotaurs->UpdateEnemyChase(*player, deltaTime);
         
-        /*
+        
         // if player and enemy collide, proceed to attack each other
-        if (player->ColliderCheck((&minotaurs->getCurrentCollidingEnemy(*player))->GetCollider(), 0.05)) {
-            if (Keyboard::isKeyPressed(Keyboard::Space)) {
-                attacking = true;
-                pollEvents();
-            }
-            else {
-                attacking = false;
-            }
-            // minotaur attacks player
-            if (player->getTotalHealth() > (&minotaurs->getCurrentCollidingEnemy(*player))->getAttackValue()) {
-                (&minotaurs->getCurrentCollidingEnemy(*player))->ConstantAttack(*player);
-            }
-            else {
-                player = nullptr;
-                delete player;
-                std::cout << "\nPlayer deleted" << std::endl;
+        for (int i = 0; i < minotaurs->getVectSize(); i++) {
+            if (player->ColliderCheck(minotaurs->getEnemy(i)->GetCollider(), 0.5f)) {
+                //TODO add player attack
+                if (Keyboard::isKeyPressed(Keyboard::Space)) {
+                    attacking = true;
+                    pollEvents();
+                }
+                else {
+                    attacking = false;
+                }
+
+                
+                // enemy attacks player
+                if (player->getTotalHealth() > minotaurs->getAttackValue()) {
+                    minotaurs->getEnemy(i)->ConstantAttack(*player);
+                }
+                else {
+                    player = nullptr;
+                    delete player;
+                    std::cout << "\nPlayer deleted" << std::endl;
+                }
             }
         }
-        */
+
     }
     
 }

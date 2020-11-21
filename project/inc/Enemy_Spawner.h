@@ -13,6 +13,7 @@ class Enemy_Spawner {
 // private attributes
 private:
 int amount;
+int attackValue;
 
 // vector of enemy pointer objects
 std::vector<Enemy*> enemies;
@@ -25,23 +26,20 @@ public:
 
     void Spawn(RenderWindow& window);
 
-    bool CurrentCollidingEnemy(Player& player);
-
     void UpdateEnemyChase(Player& player, float deltaTime);
 
     void UpdateWallCollisions(Wall* aWall, float push);
-    
+
+    Enemy* getEnemy(int index) { return enemies.at(index); }
 
     //TODO add remove enemy method
-
-    // TODO add chase
-    void Chase(Player& player, float deltaTime);
 
     void Update(float deltaTime);
 
     //accessors
     int getAmount() { return this->amount; }
     int getVectSize() { return enemies.size(); }
+    int getAttackValue() { return this->attackValue; }
 
     // checks for elements
     bool Empty() { return enemies.empty(); }
@@ -49,6 +47,7 @@ public:
 
 Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Texture* texture, Vector2u imageCount, float switchTime, float speed) {
     this->amount = us_amount;
+    this->attackValue = attVal;
 
     Populate(texture, imageCount, switchTime, speed, attVal); 
 }
@@ -83,15 +82,7 @@ void Enemy_Spawner::Spawn(RenderWindow& window) {
     }
 }
 
-bool Enemy_Spawner::CurrentCollidingEnemy(Player& player) {
-    for (int i = 0; i < amount; i++) {
-        if (player.ColliderCheck(enemies.at(i)->GetCollider(), 0.05)) {
-            return true;
-        }
-    }
-    return false;
-}
-
+// if player-enemy vision ranges collide, chase is implemented
 void Enemy_Spawner::UpdateEnemyChase(Player& player, float deltaTime) {
     for (int i = 0; i < amount; i++) {
         if (player.VisionColliderCheck(enemies.at(i)->GetCollider(), 0.0f)) {
@@ -100,6 +91,7 @@ void Enemy_Spawner::UpdateEnemyChase(Player& player, float deltaTime) {
     }
 }
 
+// ensures all enemies maintain proper collision with walls
 void Enemy_Spawner::UpdateWallCollisions(Wall* aWall, float push) {
     for (int i = 0; i < amount; i++) {
         aWall->ColliderCheck(enemies.at(i)->GetCollider(), push);
