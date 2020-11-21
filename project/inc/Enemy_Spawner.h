@@ -30,9 +30,12 @@ public:
 
     void UpdateWallCollisions(Wall* aWall, float push);
 
-    Enemy* getEnemy(int index) { return enemies.at(index); }
+    Enemy& getEnemy(int index) { return *enemies.at(index); }
+
+    void PlayerVSEnemy(Individual player);
 
     //TODO add remove enemy method
+    void deleteEnemy(int index);
 
     void Update(float deltaTime);
 
@@ -41,8 +44,11 @@ public:
     int getVectSize() { return enemies.size(); }
     int getAttackValue() { return this->attackValue; }
 
+    // mutators
+    void setAmount(int am) { this->amount = am; }
+
     // checks for elements
-    bool Empty() { return enemies.empty(); }
+    bool Empty() { return (amount == 0); }
 };
 
 Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Texture* texture, Vector2u imageCount, float switchTime, float speed) {
@@ -96,6 +102,27 @@ void Enemy_Spawner::UpdateWallCollisions(Wall* aWall, float push) {
     for (int i = 0; i < amount; i++) {
         aWall->ColliderCheck(enemies.at(i)->GetCollider(), push);
     }
+}
+
+void Enemy_Spawner::PlayerVSEnemy(Individual player) {
+    for (int i = 0; i < amount; i++) {
+        //std::cout << "true condition" << std::endl;
+        if (player.ColliderCheck(getEnemy(i).GetCollider(), 0.5f)) {
+            std::cout << "Player attacking" << std::endl;
+            if (getEnemy(i).getTotalHealth() > player.getAttackValue()) {
+                player.commitAttack(getEnemy(i));
+            }
+            else {
+                deleteEnemy(i);
+                std::cout << "\nEnemy deleted" << std::endl;
+            }
+        }
+    }
+}
+
+void Enemy_Spawner::deleteEnemy(int ind) {
+    enemies.erase(enemies.begin()+ind);
+    this->amount -= 1; 
 }
 
 // responsible for updating enemies (movement and animation)

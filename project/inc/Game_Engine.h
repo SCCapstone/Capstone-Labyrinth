@@ -60,7 +60,7 @@ private:
     void initWalls();
 
     // updates health enemy health status when player attacks
-    void PlayerAttackUpdate(Player*& aPlayer, Enemy* anEnemy);
+    void PlayerAttackUpdate(Player*& aPlayer, Enemy* anEnemy, int index);
 
     // updates contact settings between individuals and solid objects, like walls
     void WallContactUpdate(Individual* character, Wall* aWall, float push);
@@ -198,7 +198,7 @@ void Game_Engine::initEnemies() {
      * 0.35f:           how fast the animations switch between images
      * 37.0f:          player speed in the relation to objects in the window
      */
-    minotaurs = new Enemy_Spawner(2, 20, &min_texture, Vector2u(10, 5), 0.35f, 37.0f);
+    minotaurs = new Enemy_Spawner(3, 20, &min_texture, Vector2u(10, 5), 0.35f, 37.0f);
 
     std::cout << "Initialized Enemies" << std::endl;
 }
@@ -266,9 +266,10 @@ void Game_Engine::pollEvents() {
                 // player attacking using the space bar
                 if (this->ev.key.code == Keyboard::Space) {
                     // if both player and enemy exist, attack
-                    //if (exists(&minotaurs->getCurrentCollidingEnemy(*player)) && exists(player)) {
-                    //    PlayerAttackUpdate(player, &minotaurs->getCurrentCollidingEnemy(*player));
-                    //}
+                    if (!(minotaurs->Empty()) && exists(player)) {
+                        minotaurs->PlayerVSEnemy(*player);
+                        std::cout << "Space pressed" << std::endl;
+                    }
                 }
                 break;
 
@@ -279,14 +280,13 @@ void Game_Engine::pollEvents() {
     }
 }
 
-void Game_Engine::PlayerAttackUpdate(Player*& aPlayer, Enemy* anEnemy) {
+void Game_Engine::PlayerAttackUpdate(Player*& aPlayer, Enemy* anEnemy, int ind) {
     if (attacking) {
         if (anEnemy->getTotalHealth() > aPlayer->getAttackValue()) {
             aPlayer->commitAttack(*anEnemy);
         }
         else {
-            anEnemy = nullptr;
-            delete anEnemy;
+            minotaurs->deleteEnemy(ind);
             std::cout << "\nEnemy deleted" << std::endl;
         }
     }
@@ -333,27 +333,39 @@ void Game_Engine::Update() {
         
         // if player and enemy collide, proceed to attack each other
         for (int i = 0; i < minotaurs->getVectSize(); i++) {
-            if (player->ColliderCheck(minotaurs->getEnemy(i)->GetCollider(), 0.5f)) {
-                //TODO add player attack
+            if (player->ColliderCheck(minotaurs->getEnemy(i).GetCollider(), 0.5f)) {
+
+                // player attacking enemy
                 if (Keyboard::isKeyPressed(Keyboard::Space)) {
                     attacking = true;
-                    pollEvents();
+                    //pollEvents();
+                    if (minotaurs->getEnemy(i).getTotalHealth() > player->getAttackValue()) {
+                        player->commitAttack(minotaurs->getEnemy(i));
+                        break;
+                    }
+                    else {
+                        minotaurs->deleteEnemy(i);
+                        std::cout << "\nEnemy deleted" << std::endl;
+                        break;
+                    }
                 }
                 else {
                     attacking = false;
                 }
 
-                
-                // enemy attacks player
+                // enemy attacking player
                 if (player->getTotalHealth() > minotaurs->getAttackValue()) {
-                    minotaurs->getEnemy(i)->ConstantAttack(*player);
+                    minotaurs->getEnemy(i).ConstantAttack(*player);
+                    break;
                 }
                 else {
                     player = nullptr;
                     delete player;
                     std::cout << "\nPlayer deleted" << std::endl;
+                    break;
                 }
             }
+            
         }
 
     }
