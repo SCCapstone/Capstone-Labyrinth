@@ -6,6 +6,7 @@
 
 #include "Enemy.h"
 #include "Player.h"
+#include "Wall.h"
 #include <ctime>
 
 class Enemy_Spawner {
@@ -25,6 +26,11 @@ public:
     void Spawn(RenderWindow& window);
 
     bool CurrentCollidingEnemy(Player& player);
+
+    void UpdateEnemyChase(Player& player, float deltaTime);
+
+    void UpdateWallCollisions(Wall* aWall, float push);
+    
 
     //TODO add remove enemy method
 
@@ -84,6 +90,20 @@ bool Enemy_Spawner::CurrentCollidingEnemy(Player& player) {
         }
     }
     return false;
+}
+
+void Enemy_Spawner::UpdateEnemyChase(Player& player, float deltaTime) {
+    for (int i = 0; i < amount; i++) {
+        if (player.VisionColliderCheck(enemies.at(i)->GetCollider(), 0.0f)) {
+            enemies.at(i)->Chase(player, deltaTime);
+        }
+    }
+}
+
+void Enemy_Spawner::UpdateWallCollisions(Wall* aWall, float push) {
+    for (int i = 0; i < amount; i++) {
+        aWall->ColliderCheck(enemies.at(i)->GetCollider(), push);
+    }
 }
 
 // responsible for updating enemies (movement and animation)

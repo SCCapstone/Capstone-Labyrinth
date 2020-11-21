@@ -320,20 +320,17 @@ void Game_Engine::Update() {
         minotaurs->Update(deltaTime);
 
         // makes wall the immovable object to minotaur
-        //WallContactUpdate(&minotaurs->getCurrentCollidingEnemy(*player), wall_one, 1.0f);
-        //WallContactUpdate(&minotaurs->getCurrentCollidingEnemy(*player), wall_two, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_one, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_two, 1.0f);
     }
 
-    /*
     // make sure player and minotaur exists before you utilize them
-    if (exists(&minotaurs->getCurrentCollidingEnemy(*player)) && exists(player)) {
+    if (!(minotaurs->Empty()) && exists(player)) {
 
         // if the player and the minotaur's field of vision collide, minotaur chases player
-        if (player->VisionColliderCheck((&minotaurs->getCurrentCollidingEnemy(*player))->GetCollider(), 0.0f))
-        {
-            (&minotaurs->getCurrentCollidingEnemy(*player))->Chase(*player, deltaTime);
-        }
+        minotaurs->UpdateEnemyChase(*player, deltaTime);
         
+        /*
         // if player and enemy collide, proceed to attack each other
         if (player->ColliderCheck((&minotaurs->getCurrentCollidingEnemy(*player))->GetCollider(), 0.05)) {
             if (Keyboard::isKeyPressed(Keyboard::Space)) {
@@ -353,8 +350,9 @@ void Game_Engine::Update() {
                 std::cout << "\nPlayer deleted" << std::endl;
             }
         }
+        */
     }
-    */ 
+    
 }
 
 void Game_Engine::Render() {
