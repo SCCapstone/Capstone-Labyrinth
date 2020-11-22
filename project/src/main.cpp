@@ -1,5 +1,5 @@
 /* Copyright 2020 Samuel Dunny */
-/* Main game class */
+/* Main game */
 
 #include "inc/Game_Engine.h"
 

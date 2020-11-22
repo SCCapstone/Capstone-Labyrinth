@@ -34,11 +34,12 @@ public:
     // this method allows us to 'push' moveable objects
     void Move(float dx, float dy);
 
+    bool IsColliding(Collider& other);
+
     // determine position of collidable object
     sf::Vector2f GetPosition() { return body.getPosition(); }
     // need this for AABB calculations
     sf::Vector2f GetHalfSize() { return body.getSize() / 2.0f; }
-    
     // determine position of collidable object
     sf::Vector2f GetVisionPosition() { return fOV.getPosition(); }
     // need this for AABB calculations
@@ -122,6 +123,27 @@ bool Collider::CheckVisionCollision(Collider& other, float push) {
 void Collider::Move(float dx, float dy) { 
         body.move(dx, dy); 
         fOV.move(dx, dy);
+}
+
+bool Collider::IsColliding(Collider& other) {
+    // getting 'others' coordinates
+    sf::Vector2f otherPosition = other.GetPosition();
+    sf::Vector2f otherHalfSize = other.GetHalfSize();
+
+    // getting our objects coordinates
+    sf::Vector2f thisPosition = GetPosition();
+    sf::Vector2f thisHalfSize = GetHalfSize();
+
+    float deltaX = otherPosition.x - thisPosition.x;
+    float deltaY = otherPosition.y - thisPosition.y;
+
+    float intersectX = abs(deltaX) - (otherHalfSize.x + thisHalfSize.x);
+    float intersectY = abs(deltaY) - (otherHalfSize.y + thisHalfSize.y);
+
+    if ((intersectX < 0.0f) && (intersectY < 0.0f)) {
+        return true;
+    }
+    return false;
 }
 
 #endif  // COLLIDER_H

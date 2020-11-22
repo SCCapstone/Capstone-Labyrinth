@@ -11,8 +11,8 @@ class Enemy : public Individual {
 // private attributes
 private:
     // used to time out attacks for enemies
-    sf::Clock attackTimer;
-    sf::Int32 attackTimerMax;
+    sf::Clock enemy_attackTimer;
+    sf::Int32 enemy_attackTimerMax;
     
 // public attributes
 public:
@@ -20,7 +20,7 @@ public:
 
     ~Enemy();
 
-    void Update(float deltaTime);
+    void Update(float deltaTime, int rv);
 
     void setRandPos();
 
@@ -35,37 +35,37 @@ public:
 
 Enemy::Enemy(Texture* texture, Vector2u imageCount, float switchTime, float speed) :
         Individual(texture, imageCount, switchTime, speed) {
-        this->attackTimer.restart();
+    this->enemy_attackTimer.restart();
 
-        // this is in milliseconds
-        this->attackTimerMax = 1000;
+    // this is in milliseconds (enemy attacks every 3 seconds)
+    this->enemy_attackTimerMax = 1000;
 }
 
 Enemy::~Enemy() { /* empty */ }
 
-void Enemy::Update(float deltaTime) {
+void Enemy::Update(float deltaTime, int rv) {
     Vector2f movement(0.0f, 0.0f);
 
-    srand((unsigned) time(0));
+    //srand((unsigned) time(0));
 
     // deciding random direction for npc to walk
-    int p1 = rand() % 5 + 1;
+    //int p1 = rand() % 5 + 1;
 
     // TODO add other directions
 
     // left
-    if (p1 == 4) 
+    if (rv == 4) 
         movement.x -= speed * deltaTime;
     // right
-    if (p1 == 2) 
+    if (rv == 2) 
         movement.x += speed * deltaTime;
     // up
-    if (p1 == 1) 
+    if (rv == 1) 
         movement.y -= speed * deltaTime;
     // down
-    if (p1 == 3)
+    if (rv == 3)
         movement.y += speed * deltaTime;
-    if (p1 == 5) {
+    if (rv == 5) {
         movement.x = 0.0f;
         movement.y = 0.0f;
     }
@@ -193,16 +193,14 @@ void Enemy::Chase(Player& player, float deltaTime) {
 
 void Enemy::ConstantAttack(Individual& other) {
     if (getAttackTimer()) {
-        if (other.getTotalHealth() > getAttackValue()) {
-            commitAttack(other);
-        }
+        commitAttack(other);        
     }
 }
 
 // this funciton returns true if it is time for enemy to attack 
 const bool Enemy::getAttackTimer() {
-    if (this->attackTimer.getElapsedTime().asMilliseconds() >= this->attackTimerMax) {
-        this->attackTimer.restart();
+    if (this->enemy_attackTimer.getElapsedTime().asMilliseconds() >= this->enemy_attackTimerMax) {
+        this->enemy_attackTimer.restart();
         return true;
     }
     return false;
