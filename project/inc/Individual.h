@@ -63,12 +63,6 @@ public:
 
    // checks if vision fields collide
    bool VisionColliderCheck(Collider other, float push);
-
-   bool isColliding(Collider other);
-
-   // attack function
-   void commitAttack(Individual& other);
-
    
    // accessors
    int getTotalHealth() { return this->totalHealth; }
@@ -123,18 +117,6 @@ bool Individual::ColliderCheck(Collider other, float push) {
 bool Individual::VisionColliderCheck(Collider other, float push) {
     // returns the FoV's collider, checks with other
     return GetCollider().CheckVisionCollision(other, push);
-}
-
-bool Individual::isColliding(Collider other) {
-   return GetCollider().isColliding(other);
-}
-
-void Individual::commitAttack(Individual& other) {
-   //std::cout << "Attacking" << std::endl;
-   //std::cout << "  Pre Attack: " << other.getTotalHealth() << std::endl;
-   float damage = other.getTotalHealth() - getAttackValue();
-   other.setTotalHealth(damage);
-   std::cout << "  Post Attack Health: " << other.getTotalHealth() << std::endl;
 }
 
 #endif  // INDIVIDUAL_H

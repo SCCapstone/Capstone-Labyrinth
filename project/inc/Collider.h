@@ -31,16 +31,15 @@ public:
     
     bool CheckVisionCollision(Collider& other, float push);
 
-    bool isColliding(Collider& other);
-
     // this method allows us to 'push' moveable objects
     void Move(float dx, float dy);
+
+    bool IsColliding(Collider& other);
 
     // determine position of collidable object
     sf::Vector2f GetPosition() { return body.getPosition(); }
     // need this for AABB calculations
     sf::Vector2f GetHalfSize() { return body.getSize() / 2.0f; }
-    
     // determine position of collidable object
     sf::Vector2f GetVisionPosition() { return fOV.getPosition(); }
     // need this for AABB calculations
@@ -121,7 +120,12 @@ bool Collider::CheckVisionCollision(Collider& other, float push) {
     return false;
 }
 
-bool Collider::isColliding(Collider& other) {
+void Collider::Move(float dx, float dy) { 
+        body.move(dx, dy); 
+        fOV.move(dx, dy);
+}
+
+bool Collider::IsColliding(Collider& other) {
     // getting 'others' coordinates
     sf::Vector2f otherPosition = other.GetPosition();
     sf::Vector2f otherHalfSize = other.GetHalfSize();
@@ -136,15 +140,10 @@ bool Collider::isColliding(Collider& other) {
     float intersectX = abs(deltaX) - (otherHalfSize.x + thisHalfSize.x);
     float intersectY = abs(deltaY) - (otherHalfSize.y + thisHalfSize.y);
 
-    if ((intersectX < 0.0f) && (intersectY < 0.0f))
+    if ((intersectX < 0.0f) && (intersectY < 0.0f)) {
         return true;
-    else
-        return false;
-}
-
-void Collider::Move(float dx, float dy) { 
-        body.move(dx, dy); 
-        fOV.move(dx, dy);
+    }
+    return false;
 }
 
 #endif  // COLLIDER_H
