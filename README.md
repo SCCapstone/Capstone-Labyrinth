@@ -20,6 +20,7 @@ N/A
 
 ## Running
 
+& cd project
 $ make clean  
 $ make game  
 $ ./game
