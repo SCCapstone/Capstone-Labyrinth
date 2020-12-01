@@ -20,6 +20,7 @@ N/A
 
 ## Running
 
+& cd project
 $ make clean  
 $ make game  
 $ ./game
@@ -44,6 +45,6 @@ N/A
 
 Kurt Walker: wkurt37@gmail.com (843-781-0097)  
 Caila Buckhaults: caila.buckhaults@gmail.com (803-409-8477)  
-Noah Wartzack: wartzack@email.sc.edu (10-336-6049)  
+Noah Wartzack: wartzack@email.sc.edu (410-336-6049)  
 Carson Stabell: cstabell@email.sc.edu (803-339-9495)  
 Samuel Dunny: sdunny@email.sc.edu (843-330-1257)  

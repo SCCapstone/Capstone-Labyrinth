@@ -30,6 +30,9 @@ private:
 
 // public attributes
 public:
+    // rect to display animation
+    IntRect uvRect;
+
     /* constructor
      * only need pointer to texture for size
      * imageCount for number of images in sheet
@@ -40,19 +43,11 @@ public:
     //destructor
     ~Animation();
 
-    // mutators
-    void setAnimationTexture(Texture* texture);
-    void setImageCount(Vector2u imageCount);
-    void setSwitchTime(float switchTime);
-
     /* update function (takes in image and time difference) 
      * bool faceRight is used to determine if the character is facing right
      * TODO add bool up and bool down (maybe?)
     */
     void Update(int row, float deltaTime, bool faceRight, bool down, bool up);
-
-    // rect to display animation
-    IntRect uvRect;
 };
 
 Animation::Animation(Texture* texture, Vector2u imageCount, float switchTime) {
@@ -73,23 +68,6 @@ Animation::Animation(Texture* texture, Vector2u imageCount, float switchTime) {
 }
 
 Animation::~Animation() { /* empty */}
-
-// mutators
-void Animation::setAnimationTexture(Texture* texture) {
-    // setting animation width to texture width
-    uvRect.width = texture->getSize().x / float(imageCount.x);
-
-    // setting animation height to texture height
-    uvRect.height = texture->getSize().y / float(imageCount.y);
-}
-
-void Animation::setImageCount(Vector2u imageCount) {
-    this->imageCount = imageCount;
-}
-
-void Animation::setSwitchTime(float switchTime) {
-    this->switchTime = switchTime;
-}
 
 void Animation::Update(int row, float deltaTime, bool faceRight, bool down, bool up) {
     currentImage.y = row;
