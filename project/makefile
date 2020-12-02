@@ -3,6 +3,7 @@
 CC = g++  # use g++ compiler
 
 FLAGS = -c
+FLAGS += -g 	   # compile with debugging
 FLAGS += -std=c++17  # compile with C++ 17 standard
 FLAGS += -Wall       # compile with all warnings
 FLAGS += -I .        # compile with project directory on #include system path
