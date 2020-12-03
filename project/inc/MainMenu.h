@@ -49,7 +49,13 @@ MainMenu::~MainMenu()
 void MainMenu::initMainMenu(float width, float height)
 {
       this->window = new sf::RenderWindow(sf::VideoMode(width,height), "Main Menu");
-      this->menu = new Menu(width, height);
+      this->menu = new Menu(width, height, 3);
+
+      //Sets default perams for main menu Text
+      menu->setText(0, "Play");
+      menu->setText(1, "Options");
+      menu->setText(2, "Exit");
+
 }
 
 void MainMenu::update()
@@ -69,6 +75,28 @@ void MainMenu::update()
 
                         case sf::Keyboard::Down:
                         menu->MoveDown();
+                        break;
+
+                        case sf::Keyboard::Enter:
+                        switch(menu->getSelection())
+                        {
+                              case 0:
+                              //Play is just close window rn
+                              window->close();
+                              break;
+
+                              case 1:
+                              //Do the options screen
+                              break;
+
+                              case 2:
+                              //Time to exit, have to make it different from play somehow
+                              window->close();
+                              break;
+
+                              default:
+                              break;
+                        }
                         break;
 
                         default:

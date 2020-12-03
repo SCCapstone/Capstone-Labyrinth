@@ -2,33 +2,39 @@
 /* Menu class (in header file) */
 
 #include "SFML/Graphics.hpp"
+#include <vector>
+#include <iostream>
 
-#define MAX_NUMBER_OF_ITEMS 3
+#define DEFAULT_NUMBER_OF_ITEMS 3
 
 class Menu
 {
       public:
       Menu();
       Menu(float width, float height);
+      Menu(float width, float height, int size);
       ~Menu();
 
       void draw(sf::RenderWindow &window);
       void MoveUp();
       void MoveDown();
 
+      void setText(int selectionn, std::string words);
+      int getSelection();
+
       private:
       int selectedItemIndex;
+      int menuSize;
       sf::Font font;
-      sf::Text menu[MAX_NUMBER_OF_ITEMS];
+      std::vector<sf::Text> textMenu;
+
       const float DEFAULT_WIDTH = 600;
       const float DEFAULT_HEIGHT = 600;
 
 };
 
-Menu::Menu()
-{
-      Menu(DEFAULT_WIDTH,DEFAULT_HEIGHT);
-}
+Menu::Menu() : Menu::Menu(DEFAULT_WIDTH, DEFAULT_HEIGHT) {}
+
 Menu::Menu(float width, float height)
 {
       if(!font.loadFromFile("text/NotPapayrus.ttf"))
@@ -36,20 +42,46 @@ Menu::Menu(float width, float height)
 
       selectedItemIndex = 0;
 
-      menu[0].setFont(font);
-      menu[0].setColor(sf::Color::Red);
-      menu[0].setString("Play");
-      menu[0].setPosition(sf::Vector2f(width/2, height/(MAX_NUMBER_OF_ITEMS + 1) * 1));
+      menuSize = DEFAULT_NUMBER_OF_ITEMS;
+      textMenu.resize(menuSize);
 
-      menu[1].setFont(font);
-      menu[1].setColor(sf::Color::White);
-      menu[1].setString("Options");
-      menu[1].setPosition(sf::Vector2f(width/2, height/(MAX_NUMBER_OF_ITEMS + 1) * 2));
+      textMenu[0].setFont(font);
+      textMenu[0].setColor(sf::Color::White);
+      textMenu[0].setString("Play");
+      textMenu[0].setPosition(sf::Vector2f(width/2, height/(menuSize + 1) * 1));
 
-      menu[2].setFont(font);
-      menu[2].setColor(sf::Color::White);
-      menu[2].setString("Exit");
-      menu[2].setPosition(sf::Vector2f(width/2, height/(MAX_NUMBER_OF_ITEMS + 1) * 3));
+      textMenu[1].setFont(font);
+      textMenu[1].setColor(sf::Color::White);
+      textMenu[1].setString("Options");
+      textMenu[1].setPosition(sf::Vector2f(width/2, height/(menuSize + 1) * 2));
+
+      textMenu[2].setFont(font);
+      textMenu[2].setColor(sf::Color::White);
+      textMenu[2].setString("Exit");
+      textMenu[2].setPosition(sf::Vector2f(width/2, height/(menuSize + 1) * 3));
+}
+
+//Handles textMenu with varying textMenu options
+Menu::Menu(float width, float height, int size)
+{
+      if(!font.loadFromFile("text/NotPapayrus.ttf"))
+      {std::cout << "Could not load text" << std::endl;}
+
+      menuSize = size;
+      
+      textMenu.assign(menuSize, sf::Text());
+
+      for(int i = 0; i < menuSize; i++)
+      {
+            textMenu[i].setFont(font);
+            textMenu[i].setColor(sf::Color::White);
+            textMenu[i].setString("Null");
+            textMenu[i].setPosition(sf::Vector2f(width/2, height/(menuSize + 1) * (i+1)));
+      }
+
+      //Sets first entry as default selection and makes red
+      selectedItemIndex = 0;
+      textMenu[0].setColor(sf::Color::Red);
 }
 
 Menu::~Menu()
@@ -57,9 +89,9 @@ Menu::~Menu()
 
 void Menu::draw(sf::RenderWindow &window)
 {
-      for(int i = 0; i < MAX_NUMBER_OF_ITEMS; i++)
+      for(int i = 0; i < menuSize; i++)
       {
-            window.draw(menu[i]);
+            window.draw(textMenu[i]);
       }
 }
 
@@ -67,18 +99,28 @@ void Menu::MoveUp()
 {
       if(selectedItemIndex-1 >= 0)
       {
-            menu[selectedItemIndex].setColor(sf::Color::White);
+            textMenu[selectedItemIndex].setColor(sf::Color::White);
             selectedItemIndex--;
-            menu[selectedItemIndex].setColor(sf::Color::Red);
+            textMenu[selectedItemIndex].setColor(sf::Color::Red);
       }
 }
 
 void Menu::MoveDown()
 {
-      if(selectedItemIndex+1 < MAX_NUMBER_OF_ITEMS)
+      if(selectedItemIndex+1 < menuSize)
       {
-            menu[selectedItemIndex].setColor(sf::Color::White);
+            textMenu[selectedItemIndex].setColor(sf::Color::White);
             selectedItemIndex++;
-            menu[selectedItemIndex].setColor(sf::Color::Red);
+            textMenu[selectedItemIndex].setColor(sf::Color::Red);
       }
+}
+
+void Menu::setText(int selection, std::string words)
+{
+      textMenu[selection].setString(words);
+}
+
+int Menu::getSelection()
+{
+      return selectedItemIndex;
 }
