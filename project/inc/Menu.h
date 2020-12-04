@@ -24,6 +24,9 @@ class Menu
 
       void setText(int selectionn, std::string words);
       int getSelection();
+      void setPos(int, sf::Vector2f);
+      void setOri(int, sf::Vector2f);
+      void setCharSize(int, int);
 
       private:
       int selectedItemIndex;
@@ -126,6 +129,21 @@ void Menu::setText(int selection, std::string words)
 int Menu::getSelection()
 {
       return selectedItemIndex;
+}
+
+void Menu::setPos(int select, sf::Vector2f pos)
+{
+      textMenu[select].setPosition(pos);
+}
+
+void Menu::setOri(int select, sf::Vector2f pos)
+{
+      textMenu[select].setOrigin(pos);
+}
+
+void Menu::setCharSize(int select, int size)
+{
+      textMenu[select].setCharacterSize(size);
 }
 
 #endif
