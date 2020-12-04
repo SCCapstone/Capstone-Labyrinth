@@ -1,6 +1,9 @@
 /* Copyright 2020 Carson Stabell */
 /* Menu class (in header file) */
 
+#ifndef MENU_H
+#define MENU_H
+
 #include "SFML/Graphics.hpp"
 #include <vector>
 #include <iostream>
@@ -124,3 +127,5 @@ int Menu::getSelection()
 {
       return selectedItemIndex;
 }
+
+#endif

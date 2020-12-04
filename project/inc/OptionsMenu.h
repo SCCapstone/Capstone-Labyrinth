@@ -1,14 +1,13 @@
 /* Copyright 2020 Carson Stabell */
-/* Main Menu class (in header file) */
+/* Options Menu class (in header file) */
 
-#ifndef MAINMENU_H
-#define MAINMENU_H
+#ifndef OPTIONSMENU_H
+#define OPTIONSMENU_H
 
 #include "SFML/Graphics.hpp"
 #include "Menu.h"
-#include "OptionsMenu.h"
 
-class MainMenu
+class OptionsMenu
 {
       private:
       sf::RenderWindow* window;
@@ -16,14 +15,13 @@ class MainMenu
       const float DEFAULT_WIDTH = 600;
       const float DEFAULT_HEIGHT = 600;
 
-      void initMainMenu(float width, float height);
-      void runOptionsMenu();
+      void initOptionsMenu(float width, float height);
 
 
       public:
-      MainMenu();
-      MainMenu(float width, float height);
-      ~MainMenu();
+      OptionsMenu();
+      OptionsMenu(float width, float height);
+      ~OptionsMenu();
 
       int update();
       void render();
@@ -35,32 +33,31 @@ class MainMenu
       
 };
 
-MainMenu::MainMenu()
+OptionsMenu::OptionsMenu()
 {
-      initMainMenu(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+      initOptionsMenu(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 }
-MainMenu::MainMenu(float width, float height)
+OptionsMenu::OptionsMenu(float width, float height)
 {
-      initMainMenu(width, height);
+      initOptionsMenu(width, height);
 }
-MainMenu::~MainMenu()
+OptionsMenu::~OptionsMenu()
 {
       //Do the destructing
 }
 
-void MainMenu::initMainMenu(float width, float height)
+void OptionsMenu::initOptionsMenu(float width, float height)
 {
-      this->window = new sf::RenderWindow(sf::VideoMode(width,height), "Main Menu");
-      this->menu = new Menu(width, height, 3);
+      this->window = new sf::RenderWindow(sf::VideoMode(width,height), "Options Menu");
+      this->menu = new Menu(width, height, 2);
 
       //Sets default perams for main menu Text
-      menu->setText(0, "Play");
-      menu->setText(1, "Options");
-      menu->setText(2, "Exit");
+      menu->setText(0, "Sssshhhhh Pretend there's options");
+      menu->setText(1, "Exit");
 
 }
 
-int MainMenu::update()
+int OptionsMenu::update()
 {
       sf::Event event;
 
@@ -89,21 +86,15 @@ int MainMenu::update()
                         switch(menu->getSelection())
                         {
                               case 0:
-                              //Play is just close window rn
+                              //Sssssshhhh options soon
+                              break;
+
+                              case 1:
+                              //Exit to Main menu
                               window->close();
                               return 0;
                               break;
 
-                              case 1:
-                              //Do the options screen
-                              runOptionsMenu();
-                              break;
-
-                              case 2:
-                              //Time to exit, have to make it different from play somehow
-                              window->close();
-                              return 1;
-                              break;
 
                               default:
                               break;
@@ -124,7 +115,7 @@ int MainMenu::update()
       }
       return -1;
 }
-void MainMenu::render()
+void OptionsMenu::render()
 {
       window->clear();
 
@@ -133,15 +124,4 @@ void MainMenu::render()
       window->display();
 }
 
-void MainMenu::runOptionsMenu()
-{
-      OptionsMenu options;
-      int optionsReturn = -1;
-      while(options.running())
-      {
-            options.update();
-            options.render();
-      }
-}
-
-#endif //MAINMENU_H
+#endif //OPTIONSMENU_H
