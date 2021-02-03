@@ -14,11 +14,11 @@ N/A
 
 Dowload the source code, navigate to the Game Folder, and run the Game.exe to play
 
-# Deployment
+## Deployment
 
 N/A
 
-# Testing
+## Testing
 
 N/A
 
@@ -30,7 +30,7 @@ N/A
 
 N/A
 
-# Authors
+## Authors
 
 Kurt Walker: wkurt37@gmail.com (843-781-0097)  
 Caila Buckhaults: caila.buckhaults@gmail.com (803-409-8477)  
