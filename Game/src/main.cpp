@@ -37,14 +37,8 @@ void runMainMenu()
 }
 
 
-
-
-
-
-
 //Begin Main
 int main() {
-
 	runMainMenu();
 	return 0;
 }
