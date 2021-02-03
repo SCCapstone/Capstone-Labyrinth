@@ -12,7 +12,7 @@ N/A
 
 ## Running
 
-Dowload the source code, navigate to the Game Folder, and run the Game.exe to play
+Dowload the source code (.zip), navigate to the Game Folder, and run the Game.exe to play
 
 ## Deployment
 
