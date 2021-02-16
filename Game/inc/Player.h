@@ -59,11 +59,11 @@ void Player::Update(float deltaTime) {
 
    // idle animation
    if (movement.x == 0.0f && movement.y == 0.0f)
-      row = 0;
+      row = 1;
    else {
       // running left and right animations
       if (movement.x != 0.0f) {
-         row = 2;
+         row = 3;
          if (movement.x > 0.0f)
             faceRight = true;
          else
@@ -71,13 +71,13 @@ void Player::Update(float deltaTime) {
       }
       // moving down
       if (movement.y > 0.0f){
-         row = 0;
+         row = 1;
          movingDown = true;
          movingUp = false;
       }
       // moving up
       if (movement.y < 0.0f){
-         row = 3;
+         row = 0;
          movingUp = true;
          movingDown = false;
       }

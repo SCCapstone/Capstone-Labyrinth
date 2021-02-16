@@ -212,7 +212,7 @@ void Game_Engine::initPlayer() {
     this->player = nullptr;
 
     // loading sprite sheet
-    base_movement.loadFromFile("imgs/base_movement.png");
+    base_movement.loadFromFile("imgs/running_updated.png");
 
     /* Initializing player
      * &base_movement:  reference to texture
@@ -220,7 +220,7 @@ void Game_Engine::initPlayer() {
      * 0.25f:           how fast the animations switch between images
      * 300.0f:          player speed in the relation to objects in the window
      */
-    player = new Player(&base_movement, Vector2u(4, 4), 0.25f, 300.0f);
+    player = new Player(&base_movement, Vector2u(12, 4), 0.05f, 300.0f);
 
     std::cout << "[2] Initialized Player" << std::endl;
 
