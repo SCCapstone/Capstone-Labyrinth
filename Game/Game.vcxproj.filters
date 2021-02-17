@@ -23,5 +23,29 @@
     <Image Include="imgs\title_logo.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="imgs\running_updated.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="imgs\base_movement.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="imgs\blank_button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="imgs\minotaur.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="imgs\shielded_minotaur.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="imgs\skeleton.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="imgs\trees_chest.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="imgs\wall.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
