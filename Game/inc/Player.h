@@ -15,7 +15,7 @@ private:
   
 // public attributes
 public:
-    Player(Texture* texture, Vector2u imageCount, float switchTime, float speed);
+    Player(Texture* texture, Vector2u imageCount, float switchTime, float speed, int health);
 
     ~Player();
 
@@ -28,15 +28,15 @@ public:
     const bool getAttackTimer();
 };
 
-Player::Player(Texture* texture, Vector2u imageCount, float switchTime, float speed):
+Player::Player(Texture* texture, Vector2u imageCount, float switchTime, float speed, int health):
         Individual(texture, imageCount, switchTime, speed) {
    this->player_attackTimer.restart();
 
    // this is in milliseconds (player attacks every second)
    this->player_attackTimerMax = 150;
 
-   setTotalHealth(300);
-   setOriginalHealth(300);
+   setTotalHealth(health);
+   setOriginalHealth(health);
 }
 
 Player::~Player() {/* empty */}
@@ -121,7 +121,7 @@ void Player::Update(float deltaTime) {
 
    // update the health bar rectangle
    // healthbar.setTextureRect(rect);
-   hb->setTextureRectangle(animation.uvRect);
+   hb->setTextureRectangle();
 
    // move the character
    body.move(movement);

@@ -27,10 +27,6 @@ private:
     // what row of the sprite sheet we are using
     unsigned int row;
 
-    // determine which way to move health bar
-    bool movingUp;
-    bool movingDown;
-
     // public attributes
 public:
     // Constructor
@@ -47,7 +43,7 @@ public:
 
     void Move(Vector2f movement);
 
-    void setTextureRectangle(IntRect &rect);
+    void setTextureRectangle();
 };
 
 HealthBar::HealthBar(RectangleShape* body, Vector2f dimensions, Texture* texture, Vector2u imageCount, float switchTime, float speed) :
@@ -68,7 +64,7 @@ HealthBar::HealthBar(RectangleShape* body, Vector2f dimensions, Texture* texture
 HealthBar::~HealthBar() { /* empty */}
 
 void HealthBar::Update(unsigned int row, float deltaTime) {
-    health_anim.Update(row, deltaTime, false, false, false);
+    health_anim.Update(row, deltaTime, true, false, false);
 }
 
 void HealthBar::Draw(RenderWindow& window) {
@@ -79,8 +75,8 @@ void HealthBar::Move(Vector2f movement) {
     healthbar.move(movement);
 }
 
-void HealthBar::setTextureRectangle(IntRect& rect) {
-    healthbar.setTextureRect(rect);
+void HealthBar::setTextureRectangle() {
+    healthbar.setTextureRect(health_anim.uvRect);
 }
 
 #endif  // HEALTHBAR_H

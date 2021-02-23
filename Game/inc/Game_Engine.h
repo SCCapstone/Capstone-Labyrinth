@@ -23,7 +23,7 @@ using sf::Color;
  */
 
 // how many minotaurs to spawn
-const static int minotaur_amount = 0;
+const static int minotaur_amount = 2;
 
 class Game_Engine {
 // private attributes
@@ -219,8 +219,9 @@ void Game_Engine::initPlayer() {
      * Vector2u(12, 4):     sprite sheet is 12x4 images
      * 0.05f:               how fast the animations switch between images
      * 300.0f:              player speed in the relation to objects in the window
+     * 200:                 player total health (initial)
      */
-    player = new Player(&base_movement, Vector2u(12, 4), 0.05f, 300.0f);
+    player = new Player(&base_movement, Vector2u(12, 4), 0.05f, 300.0f, 200);
 
     std::cout << "[2] Initialized Player" << std::endl;
 

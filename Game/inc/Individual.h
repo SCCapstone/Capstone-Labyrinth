@@ -49,7 +49,7 @@ protected:
 
    int base_attackVal = 10;
    int totalHealth = 100;
-   int orig_health = totalHealth;
+   int orig_health = 100;
 
 // public attributes
 public:
