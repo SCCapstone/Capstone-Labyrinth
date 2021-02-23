@@ -77,6 +77,7 @@ public:
    int getOrignalHealth() { return this->orig_health; }
    int getAttackValue() { return this->base_attackVal; }
    float getSpeed() { return this->speed; }
+   float getHealthPercent() { return ((float(this->totalHealth) / float(this->orig_health)) * 100.0f);  }
    Vector2f getIndividualPos() { return body.getPosition(); }
    Collider GetCollider() { return Collider(body, FoV); }
 

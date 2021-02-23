@@ -219,6 +219,8 @@ void Enemy::commitAttack(Individual& other) {
    float damage = other.getTotalHealth() - getAttackValue();
    other.setTotalHealth(damage);
    std::cout << "  Post Attack Player Health: " << other.getTotalHealth() << std::endl;
+   std::cout << "       Original Player Health: " << other.getOrignalHealth() << std::endl;
+   std::cout << "       Player Health Percentage: " << other.getHealthPercent() << std::endl;
 }
 
 #endif  // ENEMY_H

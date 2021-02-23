@@ -82,8 +82,7 @@ void Player::Update(float deltaTime) {
          movingUp = true;
          movingDown = false;
       }
-      // intentionally empty
-      else {}
+      else {/* intentionally empty */}
    }
 
    /* conditions for health bar 
@@ -93,21 +92,18 @@ void Player::Update(float deltaTime) {
     *   21% - 40%   = 25% bar
     *   0% - 20%    = empty bar
     */
-   int perc = (int)((getTotalHealth() / getOrignalHealth()) * 100);
-   if (perc <= 100 && perc > 81) {
+   float perc = getHealthPercent();
+   if (perc > 81.0)
        hb_row = 4;
-   }
-   else if (perc <= 80 && perc > 61) {
+   if (perc <= 80.0 && perc > 61.0)
        hb_row = 3;
-   }
-   else if (perc <= 60 && perc > 41) {
+   if (perc <= 60.0 && perc > 41.0)
        hb_row = 2;
-   }
-   else if (perc <= 40 && perc > 21) {
+   if (perc <= 40.0 && perc > 21.0)
        hb_row = 1;
-   }
-   else
+   if (perc <= 20)
        hb_row = 0;
+   else {/* intentionally empty */ }
 
    // update the animation
    animation.Update(row, deltaTime, faceRight, movingDown, movingUp);
@@ -120,7 +116,7 @@ void Player::Update(float deltaTime) {
    body.setTextureRect(animation.uvRect);
 
    // update the health bar rectangle
-   // healthbar.setTextureRect(rect);
+   // healthbar.setTextureRect(health_anim.uvRect);
    hb->setTextureRectangle();
 
    // move the character
