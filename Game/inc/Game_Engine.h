@@ -23,7 +23,7 @@ using sf::Color;
  */
 
 // how many minotaurs to spawn
-const static int minotaur_amount = 3;
+const static int minotaur_amount = 0;
 
 class Game_Engine {
 // private attributes
@@ -215,10 +215,10 @@ void Game_Engine::initPlayer() {
     base_movement.loadFromFile("imgs/running_updated.png");
 
     /* Initializing player
-     * &base_movement:  reference to texture
-     * Vector2u(4, 4):  sprite sheet is 4x4 images
-     * 0.25f:           how fast the animations switch between images
-     * 300.0f:          player speed in the relation to objects in the window
+     * &base_movement:      reference to texture
+     * Vector2u(12, 4):     sprite sheet is 12x4 images
+     * 0.05f:               how fast the animations switch between images
+     * 300.0f:              player speed in the relation to objects in the window
      */
     player = new Player(&base_movement, Vector2u(12, 4), 0.05f, 300.0f);
 

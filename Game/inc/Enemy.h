@@ -5,6 +5,7 @@
 #define ENEMY_H
 
 #include "Individual.h"
+
 // #include <unistd.h>	// doesn't port to windows
 #include <io.h>
 
@@ -40,6 +41,10 @@ Enemy::Enemy(Texture* texture, Vector2u imageCount, float switchTime, float spee
 
     // this is in milliseconds (enemy attacks every 3 seconds)
     this->enemy_attackTimerMax = 1000;
+
+    // instantiating a new health bar
+    health_text.loadFromFile("imgs/healthbar.png");
+    hb = new HealthBar(&body, Vector2f(body_width, body_height), &health_text, Vector2u(1, 5), 0.05f, speed);
 }
 
 Enemy::~Enemy() { /* empty */ }

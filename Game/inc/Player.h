@@ -33,9 +33,10 @@ Player::Player(Texture* texture, Vector2u imageCount, float switchTime, float sp
    this->player_attackTimer.restart();
 
    // this is in milliseconds (player attacks every second)
-   this->player_attackTimerMax = 100;
+   this->player_attackTimerMax = 150;
 
    setTotalHealth(300);
+   setOriginalHealth(300);
 }
 
 Player::~Player() {/* empty */}
@@ -43,7 +44,7 @@ Player::~Player() {/* empty */}
 void Player::Update(float deltaTime) {
    Vector2f movement(0.0f, 0.0f);
 
-   // TODO add other directions
+   // update movement based on key press
    if (Keyboard::isKeyPressed(Keyboard::Left)) {
       movement.x -= speed * deltaTime;
    }
@@ -85,26 +86,61 @@ void Player::Update(float deltaTime) {
       else {}
    }
 
+   /* conditions for health bar 
+    *   100% - 81%  = full bar [4]
+    *   61% - 80%   = 75% bar
+    *   41% - 60%   = 50% bar
+    *   21% - 40%   = 25% bar
+    *   0% - 20%    = empty bar
+    */
+   int perc = (int)((getTotalHealth() / getOrignalHealth()) * 100);
+   if (perc <= 100 && perc > 81) {
+       hb_row = 4;
+   }
+   else if (perc <= 80 && perc > 61) {
+       hb_row = 3;
+   }
+   else if (perc <= 60 && perc > 41) {
+       hb_row = 2;
+   }
+   else if (perc <= 40 && perc > 21) {
+       hb_row = 1;
+   }
+   else
+       hb_row = 0;
+
    // update the animation
    animation.Update(row, deltaTime, faceRight, movingDown, movingUp);
 
+   // update health bar animation
+   // health_anim.Update(hb_row, deltaTime, false, true, true);
+   hb->Update(hb_row, deltaTime);
+
    // update the character rectangle
    body.setTextureRect(animation.uvRect);
+
+   // update the health bar rectangle
+   // healthbar.setTextureRect(rect);
+   hb->setTextureRectangle(animation.uvRect);
 
    // move the character
    body.move(movement);
 
    // ensure players field of vision moves with them
    FoV.move(movement);
+
+   // move health bar along with player
+   // healthbar.move(movement);
+   hb->Move(movement);
 }
 
 void Player::Attack(Individual& other) {
    if (getAttackTimer()) {
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-         if (other.getTotalHealth() > getAttackValue()) {
-            commitAttack(other);
-         }
-      }
+       if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+           if (other.getTotalHealth() > getAttackValue()) {
+               commitAttack(other);
+           }
+       }
     }
 }
 

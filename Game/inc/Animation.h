@@ -73,6 +73,7 @@ void Animation::Update(int row, float deltaTime, bool faceRight, bool down, bool
     currentImage.y = row;
     totalTime += deltaTime;
 
+    // progress row animation (think of it as frames in a reel)
     if (totalTime >= switchTime) {
         totalTime -= switchTime;
         currentImage.x++;

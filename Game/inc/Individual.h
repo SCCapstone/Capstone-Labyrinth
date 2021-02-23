@@ -6,6 +6,7 @@
 
 #include "Animation.h"
 #include "Collider.h"
+#include "HealthBar.h"
 
 // from sf library
 using sf::RenderWindow;
@@ -25,6 +26,12 @@ protected:
    RectangleShape body;
    RectangleShape FoV;
 
+   // declare new health bar object
+   HealthBar* hb;
+   // loading sprite sheet
+   Texture health_text;
+   unsigned int hb_row;
+
    // creating instance of animation (to animate body)
    Animation animation;
 
@@ -42,6 +49,7 @@ protected:
 
    int base_attackVal = 10;
    int totalHealth = 100;
+   int orig_health = totalHealth;
 
 // public attributes
 public:
@@ -66,6 +74,7 @@ public:
    
    // accessors
    int getTotalHealth() { return this->totalHealth; }
+   int getOrignalHealth() { return this->orig_health; }
    int getAttackValue() { return this->base_attackVal; }
    float getSpeed() { return this->speed; }
    Vector2f getIndividualPos() { return body.getPosition(); }
@@ -73,6 +82,7 @@ public:
 
    // mutators
    void setTotalHealth(int val) { this->totalHealth = val; }
+   void setOriginalHealth(int val) { this->orig_health = val; }
    void setAttackValue(int val) { this->base_attackVal = val; }
    void setSpeed(float sp) { this->speed = sp; }
 };
@@ -88,7 +98,6 @@ Individual::Individual(Texture* texture, Vector2u imageCount, float switchTime, 
 
       body.setSize(Vector2f(body_width, body_height));
       body.setOrigin(body.getSize() / 2.0f);
-
       body.setPosition(500, 500);
       body.setTexture(texture);
 
@@ -98,6 +107,10 @@ Individual::Individual(Texture* texture, Vector2u imageCount, float switchTime, 
       FoV.setOutlineThickness(1.0f);
       FoV.setOutlineColor(sf::Color::Green);
       FoV.setPosition(body.getPosition());
+
+      // instantiating a new health bar
+      health_text.loadFromFile("imgs/healthbar.png");
+      hb = new HealthBar(&body, Vector2f(body_width, body_height), &health_text, Vector2u(1, 5), switchTime, speed);
 }
 
 Individual::~Individual(){ /* empty */ }
@@ -106,6 +119,9 @@ void Individual::Draw(RenderWindow& window) {
    // draw the new movement
    window.draw(body);
    window.draw(FoV);
+
+   // draw health bar
+   hb->Draw(window);
 }
 
 // wall_one->GetCollider().CheckCollision(player->GetCollider(), 0.0f);
