@@ -25,13 +25,13 @@ private:
 
 // public attributes
 public:
-    Enemy_Spawner(int us_amount, int attVal, Texture* texture, Vector2u imageCount, float switchTime, float speed);
+    Enemy_Spawner(int us_amount, int attVal, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health);
 
     ~Enemy_Spawner();
 
     void Update(float deltaTime);
 
-    void Populate(Texture* texture, Vector2u imageCount, float switchTime, float speed, int attVal);
+    void Populate(Texture* texture, Vector2u imageCount, float switchTime, float speed, int attVal, int health);
 
     void Spawn(RenderWindow& window);
 
@@ -68,12 +68,12 @@ public:
  * UpdateWallCollsion:  ensures all enemies maintain proper collision with walls
  * deleteEnemy:          erases enemy at given index
  */
-Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Texture* texture, Vector2u imageCount, float switchTime, float speed) {
+Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health) {
     this->amount = us_amount;
     this->attackValue = attVal;
     this->killPlayer = false;
 
-    Populate(texture, imageCount, switchTime, speed, attVal); 
+    Populate(texture, imageCount, switchTime, speed, attVal, health); 
 }
 
 Enemy_Spawner::~Enemy_Spawner() {
@@ -90,10 +90,10 @@ void Enemy_Spawner::Update(float deltaTime) {
     }
 }
 
-void Enemy_Spawner::Populate(Texture* texture, Vector2u imageCount, float switchTime, float speed, int attVal) {
+void Enemy_Spawner::Populate(Texture* texture, Vector2u imageCount, float switchTime, float speed, int attVal, int health) {
     //srand((unsigned) time(0));
     for (int i = 0; i < amount; i++) {
-        Enemy* nE = new Enemy(texture, imageCount, switchTime, speed);
+        Enemy* nE = new Enemy(texture, imageCount, switchTime, speed, health);
         nE->setAttackValue(attVal);
         nE->setRandPos();
         enemies.push_back(nE);

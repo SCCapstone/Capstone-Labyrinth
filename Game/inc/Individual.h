@@ -118,8 +118,8 @@ Individual::Individual(Texture* texture, Vector2u imageCount, float switchTime, 
       FoV.setPosition(body.getPosition());
 
       // instantiating a new health bar
-      health_text.loadFromFile("imgs/healthbar.png");
-      hb = new HealthBar(&body, Vector2f(body_width, body_height), &health_text, Vector2u(1, 5), switchTime, speed);
+      health_text.loadFromFile("imgs/healthBarv3.png");
+      hb = new HealthBar(&body, Vector2f(body_width, body_height), &health_text, Vector2u(1, 10), switchTime, speed);
 }
 
 Individual::~Individual(){ /* empty */ }
@@ -135,23 +135,39 @@ void Individual::Draw(RenderWindow& window) {
 
 void Individual::UpdateHealthBar(float deltaTime) {
     /* conditions for health bar
-    *   100% - 81%  = full bar [4]
-    *   61% - 80%   = 75% bar
-    *   41% - 60%   = 50% bar
-    *   21% - 40%   = 25% bar
-    *   0% - 20%    = empty bar
+    *   > 91%       = full bar [0]
+    *   90%  - 81%  = [1]
+    *   80%  - 71%  = [2]
+    *   70%  - 61%  = [3]
+    *   60%  - 51%  = [4]
+    *   50%  - 41%  = [5]
+    *   40%  - 31%  = [6]
+    *   30%  - 21%  = [7]
+    *   20%  - 11%  = [8]
+    *   10%  - 1%   = [9]
+    *   1% <        = [10]
     */
     float perc = getHealthPercent();
-    if (perc > 81.0)
-        hb_row = 4;
-    if (perc <= 80.0 && perc > 61.0)
-        hb_row = 3;
-    if (perc <= 60.0 && perc > 41.0)
-        hb_row = 2;
-    if (perc <= 40.0 && perc > 21.0)
-        hb_row = 1;
-    if (perc <= 20)
+    if (perc > 91.0)
         hb_row = 0;
+    if (perc <= 90.0 && perc > 81.0)
+        hb_row = 1;
+    if (perc <= 80.0 && perc > 71.0)
+        hb_row = 2;
+    if (perc <= 70.0 && perc > 61.0)
+        hb_row = 3;
+    if (perc <= 60.0 && perc > 51.0)
+        hb_row = 4;
+    if (perc <= 50.0 && perc > 41.0)
+        hb_row = 5;
+    if (perc <= 40.0 && perc > 31.0)
+        hb_row = 6;
+    if (perc <= 30.0 && perc > 21.0)
+        hb_row = 7;
+    if (perc <= 20.0 && perc > 11.0)
+        hb_row = 8;
+    if (perc <= 10.0)
+        hb_row = 9;
     else {/* intentionally empty */ }
 
     // update health bar animation

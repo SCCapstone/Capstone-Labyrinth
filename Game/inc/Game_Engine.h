@@ -247,8 +247,9 @@ void Game_Engine::initEnemies() {
      * Vector2u(10, 5): sprite sheet is 10x5 images
      * 0.35f:           how fast the animations switch between images
      * 37.0f:          player speed in the relation to objects in the window
+     * 300              enemy health
      */
-    minotaurs = new Enemy_Spawner(minotaur_amount, 20, &min_texture, Vector2u(10, 5), 0.35f, 37.0f);
+    minotaurs = new Enemy_Spawner(minotaur_amount, 20, &min_texture, Vector2u(10, 5), 0.35f, 37.0f, 150);
 }
 
 void Game_Engine::initWalls() {

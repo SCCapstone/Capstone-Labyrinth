@@ -55,10 +55,10 @@ HealthBar::HealthBar(RectangleShape* body, Vector2f dimensions, Texture* texture
 
     this->speed = speed;
 
-    // default row is 4 (full health)
-    row = 4;
+    // default row is 0 (full health)
+    row = 0;
 
-    healthbar.setSize(Vector2f(dimensions.x, dimensions.y/3.0f));
+    healthbar.setSize(Vector2f(dimensions.x*1.5f, dimensions.y/7.0f));
     healthbar.setOrigin(healthbar.getSize() / 2.0f);
     healthbar.setTexture(texture);
     // set health bar position above player
