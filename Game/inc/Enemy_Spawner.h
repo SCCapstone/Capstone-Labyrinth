@@ -111,6 +111,7 @@ void Enemy_Spawner::Spawn(RenderWindow& window) {
 
 void Enemy_Spawner::UpdateEnemyChase(Player& player, float deltaTime) {
     for (int i = 0; i < (int) enemies.size(); i++) {
+        // 0.0f to show that field of view is not hard contact
         if (player.VisionColliderCheck(enemies.at(i)->GetCollider(), 0.0f)) {
             enemies.at(i)->Chase(player, deltaTime);
         }
@@ -119,6 +120,7 @@ void Enemy_Spawner::UpdateEnemyChase(Player& player, float deltaTime) {
 
 void Enemy_Spawner::UpdateEnemyContact(Player& player) {
     for (int i = 0; i < (int) enemies.size(); i++) {
+        // 0.5f to show that enemies and player have same force on each other
         if (player.ColliderCheck(getEnemy(i)->GetCollider(), 0.5f)) {
 
             // player attacking enemy

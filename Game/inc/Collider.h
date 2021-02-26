@@ -61,9 +61,11 @@ bool Collider::CheckCollision(Collider& other, float push) {
     sf::Vector2f thisPosition = GetPosition();
     sf::Vector2f thisHalfSize = GetHalfSize();
 
+    // calculating difference (distance) between colliders
     float deltaX = otherPosition.x - thisPosition.x;
     float deltaY = otherPosition.y - thisPosition.y;
 
+    // calculate the bounds of an 'intersection' (-# means intersection)
     float intersectX = abs(deltaX) - (otherHalfSize.x + thisHalfSize.x);
     float intersectY = abs(deltaY) - (otherHalfSize.y + thisHalfSize.y);
 
