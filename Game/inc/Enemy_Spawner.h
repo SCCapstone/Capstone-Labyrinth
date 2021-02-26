@@ -35,6 +35,8 @@ public:
 
     void Spawn(RenderWindow& window);
 
+    void UpdateHealthBarContact(Player& player);
+
     void UpdateEnemyChase(Player& player, float deltaTime);
 
     void UpdateEnemyContact(Player& player);
@@ -106,6 +108,13 @@ void Enemy_Spawner::Populate(Texture* texture, Vector2u imageCount, float switch
 void Enemy_Spawner::Spawn(RenderWindow& window) {
     for (int i = 0; i < amount; i++) {
         enemies.at(i)->Draw(window);
+    }
+}
+
+void Enemy_Spawner::UpdateHealthBarContact(Player& player) {
+    for (int i = 0; i < (int) enemies.size(); i++) {
+        // 0.0f to show that healthbar is not hard contact
+        player.HealthBarColliderCheck(enemies.at(i)->GetCollider(), 0.0f);
     }
 }
 

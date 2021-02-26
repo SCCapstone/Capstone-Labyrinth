@@ -85,39 +85,16 @@ void Player::Update(float deltaTime) {
       else {/* intentionally empty */}
    }
 
-   /* conditions for health bar 
-    *   100% - 81%  = full bar [4]
-    *   61% - 80%   = 75% bar
-    *   41% - 60%   = 50% bar
-    *   21% - 40%   = 25% bar
-    *   0% - 20%    = empty bar
-    */
-   float perc = getHealthPercent();
-   if (perc > 81.0)
-       hb_row = 4;
-   if (perc <= 80.0 && perc > 61.0)
-       hb_row = 3;
-   if (perc <= 60.0 && perc > 41.0)
-       hb_row = 2;
-   if (perc <= 40.0 && perc > 21.0)
-       hb_row = 1;
-   if (perc <= 20)
-       hb_row = 0;
-   else {/* intentionally empty */ }
+   
 
    // update the animation
    animation.Update(row, deltaTime, faceRight, movingDown, movingUp);
 
-   // update health bar animation
-   // health_anim.Update(hb_row, deltaTime, false, true, true);
-   hb->Update(hb_row, deltaTime);
-
    // update the character rectangle
    body.setTextureRect(animation.uvRect);
 
-   // update the health bar rectangle
-   // healthbar.setTextureRect(health_anim.uvRect);
-   hb->setTextureRectangle();
+   // update the health bar
+   UpdateHealthBar(deltaTime);
 
    // move the character
    body.move(movement);

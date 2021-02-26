@@ -108,13 +108,16 @@ void Enemy::Update(float deltaTime, int rv) {
 
    // update the character rectangle
    body.setTextureRect(animation.uvRect);
-   FoV.setTextureRect(animation.uvRect);
+
+   UpdateHealthBar(deltaTime);
 
    // move the character
    body.move(movement);
 
    // move the characters field of vision
    FoV.move(movement);
+
+   hb->Move(movement);
 }
 
 void Enemy::setRandPos() {
@@ -130,6 +133,9 @@ void Enemy::setRandPos() {
 
     // ensure enemy's outline spawns with enemy
     FoV.setPosition(body.getPosition());
+
+    // setting health bar's positon to match enemies
+    hb->setPos(body.getPosition());
 }
 
 void Enemy::Chase(Player& player, float deltaTime) {
@@ -188,13 +194,17 @@ void Enemy::Chase(Player& player, float deltaTime) {
 
     // update the character rectangle
     body.setTextureRect(animation.uvRect);
-    FoV.setTextureRect(animation.uvRect);
+
+    UpdateHealthBar(deltaTime);
 
     // move the character
     body.move(movement);
 
     // move the characters field of vision
     FoV.move(movement);
+
+    // move the enemies healthbar
+    hb->Move(movement);
 }
 
 void Enemy::ConstantAttack(Individual& other) {

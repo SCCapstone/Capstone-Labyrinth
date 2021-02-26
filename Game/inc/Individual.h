@@ -28,7 +28,7 @@ protected:
 
    // declare new health bar object
    HealthBar* hb;
-   // loading sprite sheet
+   // loading health bar sprite sheet
    Texture health_text;
    unsigned int hb_row;
 
@@ -66,11 +66,16 @@ public:
    // takes in window reference, draws player
    void Draw(RenderWindow& window);
 
+   void UpdateHealthBar(float deltaTime);
+
    // needed this method in this class, as referencing in Game_Engine would not work
    bool ColliderCheck(Collider other, float push);
 
    // checks if vision fields collide
    bool VisionColliderCheck(Collider other, float push);
+
+   // checks if health bar fields collide
+   bool HealthBarColliderCheck(Collider other, float push);
    
    // accessors
    int getTotalHealth() { return this->totalHealth; }
@@ -79,7 +84,7 @@ public:
    float getSpeed() { return this->speed; }
    float getHealthPercent() { return ((float(this->totalHealth) / float(this->orig_health)) * 100.0f);  }
    Vector2f getIndividualPos() { return body.getPosition(); }
-   Collider GetCollider() { return Collider(body, FoV); }
+   Collider GetCollider() { return Collider(body, FoV, hb->getHealthRect()); }
 
    // mutators
    void setTotalHealth(int val) { this->totalHealth = val; }
@@ -95,7 +100,10 @@ Individual::Individual(Texture* texture, Vector2u imageCount, float switchTime, 
 
       // default row is 0
       row = 0;
+      hb_row = 0;
       faceRight = true;
+      movingDown = false;
+      movingUp = false;
 
       body.setSize(Vector2f(body_width, body_height));
       body.setOrigin(body.getSize() / 2.0f);
@@ -125,6 +133,36 @@ void Individual::Draw(RenderWindow& window) {
    hb->Draw(window);
 }
 
+void Individual::UpdateHealthBar(float deltaTime) {
+    /* conditions for health bar
+    *   100% - 81%  = full bar [4]
+    *   61% - 80%   = 75% bar
+    *   41% - 60%   = 50% bar
+    *   21% - 40%   = 25% bar
+    *   0% - 20%    = empty bar
+    */
+    float perc = getHealthPercent();
+    if (perc > 81.0)
+        hb_row = 4;
+    if (perc <= 80.0 && perc > 61.0)
+        hb_row = 3;
+    if (perc <= 60.0 && perc > 41.0)
+        hb_row = 2;
+    if (perc <= 40.0 && perc > 21.0)
+        hb_row = 1;
+    if (perc <= 20)
+        hb_row = 0;
+    else {/* intentionally empty */ }
+
+    // update health bar animation
+    // health_anim.Update(hb_row, deltaTime, false, true, true);
+    hb->Update(hb_row, deltaTime);
+
+    // update the health bar rectangle
+    // healthbar.setTextureRect(health_anim.uvRect);
+    hb->setTextureRectangle();
+}
+
 // wall_one->GetCollider().CheckCollision(player->GetCollider(), 0.0f);
 bool Individual::ColliderCheck(Collider other, float push) {
     // returns the body's collider, checks with other's collider
@@ -134,6 +172,11 @@ bool Individual::ColliderCheck(Collider other, float push) {
 bool Individual::VisionColliderCheck(Collider other, float push) {
     // returns the FoV's collider, checks with other
     return GetCollider().CheckVisionCollision(other, push);
+}
+
+bool Individual::HealthBarColliderCheck(Collider other, float push) {
+    // returns the body's collider, checks with other's collider
+    return GetCollider().CheckHealthBarCollision(other, push);
 }
 
 #endif  // INDIVIDUAL_H

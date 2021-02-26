@@ -149,6 +149,7 @@ void Game_Engine::Update() {
 
     // make sure player and minotaur exists before you utilize them
     if (!(minotaurs->Empty()) && exists(player)) {
+        minotaurs->UpdateHealthBarContact(*player);
 
         // if the player and the enemy's field of vision collide, enemy chases player
         minotaurs->UpdateEnemyChase(*player, deltaTime);

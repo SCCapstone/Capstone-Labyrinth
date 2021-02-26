@@ -44,6 +44,10 @@ public:
     void Move(Vector2f movement);
 
     void setTextureRectangle();
+
+    void setPos(Vector2f position);
+
+    RectangleShape& getHealthRect() { return healthbar; }
 };
 
 HealthBar::HealthBar(RectangleShape* body, Vector2f dimensions, Texture* texture, Vector2u imageCount, float switchTime, float speed) :
@@ -58,7 +62,7 @@ HealthBar::HealthBar(RectangleShape* body, Vector2f dimensions, Texture* texture
     healthbar.setOrigin(healthbar.getSize() / 2.0f);
     healthbar.setTexture(texture);
     // set health bar position above player
-    healthbar.setPosition(body->getPosition().x, body->getPosition().y - (2.0f*dimensions.y/3.0f));
+    healthbar.setPosition(body->getPosition().x, body->getPosition().y - (3.0f*dimensions.y/4.0f));
 }
 
 HealthBar::~HealthBar() { /* empty */}
@@ -79,4 +83,7 @@ void HealthBar::setTextureRectangle() {
     healthbar.setTextureRect(health_anim.uvRect);
 }
 
+void HealthBar::setPos(Vector2f position) {
+    healthbar.setPosition(position);
+}
 #endif  // HEALTHBAR_H

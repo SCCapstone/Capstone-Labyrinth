@@ -15,10 +15,11 @@ class Collider {
 private:
     sf::RectangleShape& body;
     sf::RectangleShape& fOV;
+    sf::RectangleShape& hb;
 
 // public attributes
 public:
-    Collider(sf::RectangleShape& body_shape, sf::RectangleShape& fieldOfVision);
+    Collider(sf::RectangleShape& body_shape, sf::RectangleShape& fieldOfVision, sf::RectangleShape& hbar);
 
     ~Collider();
 
@@ -30,6 +31,8 @@ public:
     bool CheckCollision(Collider& other, float push);
     
     bool CheckVisionCollision(Collider& other, float push);
+
+    bool CheckHealthBarCollision(Collider& other, float push);
 
     // this method allows us to 'push' moveable objects
     void Move(float dx, float dy);
@@ -43,11 +46,15 @@ public:
     // determine position of collidable object
     sf::Vector2f GetVisionPosition() { return fOV.getPosition(); }
     // need this for AABB calculations
-    sf::Vector2f GetVisionHalfSize() { return fOV.getSize() / 2.0f; }   
+    sf::Vector2f GetVisionHalfSize() { return fOV.getSize() / 2.0f; }
+    // determine position of collidable object
+    sf::Vector2f GetHBPosition() { return hb.getPosition(); }
+    // need this for AABB calculations
+    sf::Vector2f GetHBHalfSize() { return hb.getSize() / 2.0f; }
 };
 
-Collider::Collider(sf::RectangleShape& body_shape, sf::RectangleShape& fieldOfVision) 
-    : body(body_shape), fOV(fieldOfVision) {}
+Collider::Collider(sf::RectangleShape& body_shape, sf::RectangleShape& fieldOfVision, sf::RectangleShape& hbar)
+    : body(body_shape), fOV(fieldOfVision), hb(hbar) {}
 
 Collider::~Collider() { /* empty */ }
 
@@ -122,9 +129,36 @@ bool Collider::CheckVisionCollision(Collider& other, float push) {
     return false;
 }
 
+bool Collider::CheckHealthBarCollision(Collider& other, float push) {
+    // getting 'others' coordinates
+    sf::Vector2f otherPosition = other.GetHBPosition();
+    sf::Vector2f otherHalfSize = other.GetHBHalfSize();
+
+    // getting our objects coordinates
+    sf::Vector2f thisPosition = GetHBPosition();
+    sf::Vector2f thisHalfSize = GetHBHalfSize();
+
+    // calculating difference (distance) between colliders
+    float deltaX = otherPosition.x - thisPosition.x;
+    float deltaY = otherPosition.y - thisPosition.y;
+
+    // calculate the bounds of an 'intersection' (-# means intersection)
+    float intersectX = abs(deltaX) - (otherHalfSize.x + thisHalfSize.x);
+    float intersectY = abs(deltaY) - (otherHalfSize.y + thisHalfSize.y);
+
+    // returns true if health bar is colliding
+    if ((intersectX < 0.0f) && (intersectY < 0.0f)) {
+        return true;
+    }
+    return false;
+}
+
 void Collider::Move(float dx, float dy) { 
-        body.move(dx, dy); 
+        body.move(dx, dy);
+
+        // need this to proportinally move all pieces the same speed
         fOV.move(dx, dy);
+        hb.move(dx, dy);
 }
 
 bool Collider::IsColliding(Collider& other) {
