@@ -42,4 +42,3 @@ int main() {
 	runMainMenu();
 	return 0;
 }
-

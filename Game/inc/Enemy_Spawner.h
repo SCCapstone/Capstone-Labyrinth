@@ -25,15 +25,17 @@ private:
 
 // public attributes
 public:
-    Enemy_Spawner(int us_amount, int attVal, Texture* texture, Vector2u imageCount, float switchTime, float speed);
+    Enemy_Spawner(int us_amount, int attVal, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health);
 
     ~Enemy_Spawner();
 
     void Update(float deltaTime);
 
-    void Populate(Texture* texture, Vector2u imageCount, float switchTime, float speed, int attVal);
+    void Populate(Texture* texture, Vector2u imageCount, float switchTime, float speed, int attVal, int health);
 
     void Spawn(RenderWindow& window);
+
+    void UpdateHealthBarContact(Player& player);
 
     void UpdateEnemyChase(Player& player, float deltaTime);
 
@@ -66,12 +68,12 @@ public:
  * UpdateWallCollsion:  ensures all enemies maintain proper collision with walls
  * deleteEnemy:          erases enemy at given index
  */
-Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Texture* texture, Vector2u imageCount, float switchTime, float speed) {
+Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health) {
     this->amount = us_amount;
     this->attackValue = attVal;
     this->killPlayer = false;
 
-    Populate(texture, imageCount, switchTime, speed, attVal); 
+    Populate(texture, imageCount, switchTime, speed, attVal, health); 
 }
 
 Enemy_Spawner::~Enemy_Spawner() {
@@ -88,10 +90,10 @@ void Enemy_Spawner::Update(float deltaTime) {
     }
 }
 
-void Enemy_Spawner::Populate(Texture* texture, Vector2u imageCount, float switchTime, float speed, int attVal) {
+void Enemy_Spawner::Populate(Texture* texture, Vector2u imageCount, float switchTime, float speed, int attVal, int health) {
     //srand((unsigned) time(0));
     for (int i = 0; i < amount; i++) {
-        Enemy* nE = new Enemy(texture, imageCount, switchTime, speed);
+        Enemy* nE = new Enemy(texture, imageCount, switchTime, speed, health);
         nE->setAttackValue(attVal);
         nE->setRandPos();
         enemies.push_back(nE);
@@ -109,8 +111,16 @@ void Enemy_Spawner::Spawn(RenderWindow& window) {
     }
 }
 
+void Enemy_Spawner::UpdateHealthBarContact(Player& player) {
+    for (int i = 0; i < (int) enemies.size(); i++) {
+        // 0.0f to show that healthbar is not hard contact
+        player.HealthBarColliderCheck(enemies.at(i)->GetCollider(), 0.0f);
+    }
+}
+
 void Enemy_Spawner::UpdateEnemyChase(Player& player, float deltaTime) {
     for (int i = 0; i < (int) enemies.size(); i++) {
+        // 0.0f to show that field of view is not hard contact
         if (player.VisionColliderCheck(enemies.at(i)->GetCollider(), 0.0f)) {
             enemies.at(i)->Chase(player, deltaTime);
         }
@@ -119,6 +129,7 @@ void Enemy_Spawner::UpdateEnemyChase(Player& player, float deltaTime) {
 
 void Enemy_Spawner::UpdateEnemyContact(Player& player) {
     for (int i = 0; i < (int) enemies.size(); i++) {
+        // 0.5f to show that enemies and player have same force on each other
         if (player.ColliderCheck(getEnemy(i)->GetCollider(), 0.5f)) {
 
             // player attacking enemy

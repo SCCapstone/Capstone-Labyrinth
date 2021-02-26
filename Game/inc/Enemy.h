@@ -5,6 +5,7 @@
 #define ENEMY_H
 
 #include "Individual.h"
+
 // #include <unistd.h>	// doesn't port to windows
 #include <io.h>
 
@@ -17,7 +18,7 @@ private:
     
 // public attributes
 public:
-    Enemy(Texture* texture, Vector2u imageCount, float switchTime, float speed);
+    Enemy(Texture* texture, Vector2u imageCount, float switchTime, float speed, int health);
 
     ~Enemy();
 
@@ -34,12 +35,15 @@ public:
     void commitAttack(Individual& other);
 };
 
-Enemy::Enemy(Texture* texture, Vector2u imageCount, float switchTime, float speed) :
+Enemy::Enemy(Texture* texture, Vector2u imageCount, float switchTime, float speed, int health) :
         Individual(texture, imageCount, switchTime, speed) {
     this->enemy_attackTimer.restart();
 
     // this is in milliseconds (enemy attacks every 3 seconds)
     this->enemy_attackTimerMax = 1000;
+
+    setTotalHealth(health);
+    setOriginalHealth(health);
 }
 
 Enemy::~Enemy() { /* empty */ }
@@ -98,18 +102,64 @@ void Enemy::Update(float deltaTime, int rv) {
         // intentionally empty
         else {}
     }
-    // update the animation
+
+    /* conditions for health bar
+    *   > 91%       = full bar [0]
+    *   90%  - 81%  = [1]
+    *   80%  - 71%  = [2]
+    *   70%  - 61%  = [3]
+    *   60%  - 51%  = [4]
+    *   50%  - 41%  = [5]
+    *   40%  - 31%  = [6]
+    *   30%  - 21%  = [7]
+    *   20%  - 11%  = [8]
+    *   10%  - 1%   = [9]
+    *   1% <        = [10]
+    */
+    float perc = getHealthPercent();
+    if (perc > 91.0)
+        hb_row = 0;
+    if (perc <= 90.0 && perc > 81.0)
+        hb_row = 1;
+    if (perc <= 80.0 && perc > 71.0)
+        hb_row = 2;
+    if (perc <= 70.0 && perc > 61.0)
+        hb_row = 3;
+    if (perc <= 60.0 && perc > 51.0)
+        hb_row = 4;
+    if (perc <= 50.0 && perc > 41.0)
+        hb_row = 5;
+    if (perc <= 40.0 && perc > 31.0)
+        hb_row = 6;
+    if (perc <= 30.0 && perc > 21.0)
+        hb_row = 7;
+    if (perc <= 20.0 && perc > 11.0)
+        hb_row = 8;
+    if (perc <= 10.0)
+        hb_row = 9;
+    else {/* intentionally empty */ }
+
+   // update the animation
    animation.Update(row, deltaTime, faceRight, movingDown, movingUp);
+
+   // update health bar animation
+    // health_anim.Update(hb_row, deltaTime, false, true, true);
+   hb->Update(hb_row, deltaTime);
 
    // update the character rectangle
    body.setTextureRect(animation.uvRect);
-   FoV.setTextureRect(animation.uvRect);
+
+   // update the health bar rectangle
+   // healthbar.setTextureRect(health_anim.uvRect);
+   hb->setTextureRectangle();
 
    // move the character
    body.move(movement);
 
    // move the characters field of vision
    FoV.move(movement);
+
+   hb->Move(movement);
 }
 
 void Enemy::setRandPos() {
@@ -125,6 +175,9 @@ void Enemy::setRandPos() {
 
     // ensure enemy's outline spawns with enemy
     FoV.setPosition(body.getPosition());
+
+    // setting health bar's positon to match enemies
+    hb->setPos(body.getPosition());
 }
 
 void Enemy::Chase(Player& player, float deltaTime) {
@@ -178,18 +231,65 @@ void Enemy::Chase(Player& player, float deltaTime) {
         // intentionally empty
         else {}
     }
+
+    /* conditions for health bar
+    *   > 91%       = full bar [0]
+    *   90%  - 81%  = [1]
+    *   80%  - 71%  = [2]
+    *   70%  - 61%  = [3]
+    *   60%  - 51%  = [4]
+    *   50%  - 41%  = [5]
+    *   40%  - 31%  = [6]
+    *   30%  - 21%  = [7]
+    *   20%  - 11%  = [8]
+    *   10%  - 1%   = [9]
+    *   1% <        = [10]
+    */
+    float perc = getHealthPercent();
+    if (perc > 91.0)
+        hb_row = 0;
+    if (perc <= 90.0 && perc > 81.0)
+        hb_row = 1;
+    if (perc <= 80.0 && perc > 71.0)
+        hb_row = 2;
+    if (perc <= 70.0 && perc > 61.0)
+        hb_row = 3;
+    if (perc <= 60.0 && perc > 51.0)
+        hb_row = 4;
+    if (perc <= 50.0 && perc > 41.0)
+        hb_row = 5;
+    if (perc <= 40.0 && perc > 31.0)
+        hb_row = 6;
+    if (perc <= 30.0 && perc > 21.0)
+        hb_row = 7;
+    if (perc <= 20.0 && perc > 11.0)
+        hb_row = 8;
+    if (perc <= 10.0)
+        hb_row = 9;
+    else {/* intentionally empty */ }
+
     // update the animation
     animation.Update(row, deltaTime, faceRight, movingDown, movingUp);
 
+    // update health bar animation
+    // health_anim.Update(hb_row, deltaTime, false, true, true);
+    hb->Update(hb_row, deltaTime);
+
     // update the character rectangle
     body.setTextureRect(animation.uvRect);
-    FoV.setTextureRect(animation.uvRect);
+
+    // update the health bar rectangle
+    // healthbar.setTextureRect(health_anim.uvRect);
+    hb->setTextureRectangle();
 
     // move the character
     body.move(movement);
 
     // move the characters field of vision
     FoV.move(movement);
+
+    // move the enemies healthbar
+    hb->Move(movement);
 }
 
 void Enemy::ConstantAttack(Individual& other) {
@@ -214,6 +314,8 @@ void Enemy::commitAttack(Individual& other) {
    float damage = other.getTotalHealth() - getAttackValue();
    other.setTotalHealth(damage);
    std::cout << "  Post Attack Player Health: " << other.getTotalHealth() << std::endl;
+   std::cout << "       Original Player Health: " << other.getOrignalHealth() << std::endl;
+   std::cout << "       Player Health Percentage: " << other.getHealthPercent() << std::endl;
 }
 
 #endif  // ENEMY_H

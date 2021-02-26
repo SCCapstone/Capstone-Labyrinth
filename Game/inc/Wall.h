@@ -15,6 +15,9 @@ private:
     // useless, needed for collider call
     sf::RectangleShape wallView;
 
+    // useless, needed for collider call
+    sf::RectangleShape wallHB;
+
 // public attributes
 public:
     Wall(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position);
@@ -27,7 +30,7 @@ public:
     bool ColliderCheck(Collider other, float push);
 
     // every 'solid' object in game needs this method for collision
-    Collider GetCollider() { return Collider(wall, wallView); }
+    Collider GetCollider() { return Collider(wall, wallView, wallHB); }
 };
 
 Wall::Wall(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position) {

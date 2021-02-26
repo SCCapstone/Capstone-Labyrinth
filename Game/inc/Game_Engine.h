@@ -23,7 +23,7 @@ using sf::Color;
  */
 
 // how many minotaurs to spawn
-const static int minotaur_amount = 3;
+const static int minotaur_amount = 2;
 
 class Game_Engine {
 // private attributes
@@ -149,6 +149,7 @@ void Game_Engine::Update() {
 
     // make sure player and minotaur exists before you utilize them
     if (!(minotaurs->Empty()) && exists(player)) {
+        minotaurs->UpdateHealthBarContact(*player);
 
         // if the player and the enemy's field of vision collide, enemy chases player
         minotaurs->UpdateEnemyChase(*player, deltaTime);
@@ -215,12 +216,13 @@ void Game_Engine::initPlayer() {
     base_movement.loadFromFile("imgs/running_updated.png");
 
     /* Initializing player
-     * &base_movement:  reference to texture
-     * Vector2u(4, 4):  sprite sheet is 4x4 images
-     * 0.25f:           how fast the animations switch between images
-     * 300.0f:          player speed in the relation to objects in the window
+     * &base_movement:      reference to texture
+     * Vector2u(12, 4):     sprite sheet is 12x4 images
+     * 0.05f:               how fast the animations switch between images
+     * 300.0f:              player speed in the relation to objects in the window
+     * 200:                 player total health (initial)
      */
-    player = new Player(&base_movement, Vector2u(12, 4), 0.05f, 300.0f);
+    player = new Player(&base_movement, Vector2u(12, 4), 0.05f, 300.0f, 200);
 
     std::cout << "[2] Initialized Player" << std::endl;
 
@@ -245,8 +247,9 @@ void Game_Engine::initEnemies() {
      * Vector2u(10, 5): sprite sheet is 10x5 images
      * 0.35f:           how fast the animations switch between images
      * 37.0f:          player speed in the relation to objects in the window
+     * 300              enemy health
      */
-    minotaurs = new Enemy_Spawner(minotaur_amount, 20, &min_texture, Vector2u(10, 5), 0.35f, 37.0f);
+    minotaurs = new Enemy_Spawner(minotaur_amount, 20, &min_texture, Vector2u(10, 5), 0.35f, 37.0f, 150);
 }
 
 void Game_Engine::initWalls() {
