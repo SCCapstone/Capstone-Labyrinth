@@ -4,11 +4,11 @@ This is the README.md for the Capstone Labyrinth Maze game, designed for desktop
 
 ## External Requirements
 
-N/A
+The Capstone Labyrinth Game comes will all necessary libraries. No external reequirements.
 
 ## Setup  
 
-N/A
+When pulling and building the source code, the Game.exe should build in the Game/ directory. If this is not the case, simply build the project, and place it in the Game/ directory
 
 ## Running
 
