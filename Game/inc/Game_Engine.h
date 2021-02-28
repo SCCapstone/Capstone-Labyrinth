@@ -783,7 +783,7 @@ void Game_Engine::initWalls() {
      * Vector2f(float, float):  position in the window
      */
 
-    int scale = 250.0f;
+    float scale = 250.0f;
 
     brickwall.loadFromFile("imgs/wall.png");
     //wall_one = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(500.0f, 200.0f));
