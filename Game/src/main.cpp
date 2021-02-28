@@ -4,16 +4,17 @@
 #include "../inc/Game_Engine.h"
 #include "../inc/MainMenu.h"
 
-void runGame_Engine()
+bool runGame_Engine()
 {
 	Game_Engine game;
 	while (game.running()) {
 		game.Update();
 		game.Render();
 	}
+	return true; //Default code placeholder to exit to Main Menu
 }
 
-void runMainMenu()
+bool runMainMenu()
 {
 	MainMenu mainMenu;
 	int mainMenuExitCode = -1;
@@ -25,20 +26,24 @@ void runMainMenu()
 	switch (mainMenuExitCode) //Will return what to run
 	{
 	case 0: //0 will be to run Game engine
-		runGame_Engine();
+		if (runGame_Engine()); {
+			return true;
+		}
 		break;
 
 	case 1: //1 will be to exit and stop game
+		return false;
 		break;
 
 	default:
 		break;
 	}
+	return false;
 }
 
 
 //Begin Main
 int main() {
-	runMainMenu();
+	while (runMainMenu()) {};
 	return 0;
 }
