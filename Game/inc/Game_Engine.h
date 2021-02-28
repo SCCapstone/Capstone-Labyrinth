@@ -175,11 +175,53 @@ void Game_Engine::Update() {
         player_view.setCenter(this->player->getIndividualPos());
 
         // makes wall the immovable object to player
-        
 
 
-        WallContactUpdate(player, wall_one, 1.0f);
-        WallContactUpdate(player, wall_two, 1.0f);
+        //WallContactUpdate(player, wall_one, 1.0f);
+        //WallContactUpdate(player, wall_two, 1.0f);
+
+        WallContactUpdate(player, wall_I1, 1.0f);
+        WallContactUpdate(player, wall_B2, 1.0f);
+        WallContactUpdate(player, wall_D2, 1.0f);
+        WallContactUpdate(player, wall_F2, 1.0f);
+        WallContactUpdate(player, wall_K2, 1.0f);
+        WallContactUpdate(player, wall_N2, 1.0f);
+        WallContactUpdate(player, wall_Q2, 1.0f);
+        WallContactUpdate(player, wall_E3, 1.0f);
+        WallContactUpdate(player, wall_H3, 1.0f);
+        WallContactUpdate(player, wall_O3, 1.0f);
+        WallContactUpdate(player, wall_D4, 1.0f);
+        WallContactUpdate(player, wall_K4, 1.0f);
+        WallContactUpdate(player, wall_R4, 1.0f);
+        WallContactUpdate(player, wall_A5, 1.0f);
+        WallContactUpdate(player, wall_G5, 1.0f);
+        WallContactUpdate(player, wall_J5, 1.0f);
+        WallContactUpdate(player, wall_N5, 1.0f);
+        WallContactUpdate(player, wall_P5, 1.0f);
+        WallContactUpdate(player, wall_D6, 1.0f);
+        WallContactUpdate(player, wall_K6, 1.0f);
+        WallContactUpdate(player, wall_S6, 1.0f);
+        WallContactUpdate(player, wall_E7, 1.0f);
+        WallContactUpdate(player, wall_G7, 1.0f);
+        WallContactUpdate(player, wall_N7, 1.0f);
+        WallContactUpdate(player, wall_P7, 1.0f);
+        WallContactUpdate(player, wall_C8, 1.0f);
+        WallContactUpdate(player, wall_H8, 1.0f);
+        WallContactUpdate(player, wall_J8, 1.0f);
+        WallContactUpdate(player, wall_R8, 1.0f);
+        WallContactUpdate(player, wall_E9, 1.0f);
+        WallContactUpdate(player, wall_L9, 1.0f);
+        WallContactUpdate(player, wall_O9, 1.0f);
+        WallContactUpdate(player, wall_G10, 1.0f);
+        WallContactUpdate(player, wall_J10, 1.0f);
+        WallContactUpdate(player, wall_P10, 1.0f);
+        WallContactUpdate(player, wall_D11, 1.0f);
+        WallContactUpdate(player, wall_M11, 1.0f);
+        WallContactUpdate(player, wall_G12, 1.0f);
+        WallContactUpdate(player, wall_J12, 1.0f);
+        WallContactUpdate(player, wall_N12, 1.0f);
+        WallContactUpdate(player, wall_F13, 1.0f);
+
     }
 
     // update enemy information if any exist
@@ -188,8 +230,52 @@ void Game_Engine::Update() {
         minotaurs->Update(deltaTime);
 
         // makes wall the immovable object to minotaur
-        minotaurs->UpdateWallCollisions(wall_one, 1.0f);
-        minotaurs->UpdateWallCollisions(wall_two, 1.0f);
+
+        //minotaurs->UpdateWallCollisions(wall_one, 1.0f);
+        //minotaurs->UpdateWallCollisions(wall_two, 1.0f);
+
+        minotaurs->UpdateWallCollisions(wall_I1, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_B2, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_D2, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_F2, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_K2, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_N2, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_Q2, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_E3, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_H3, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_O3, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_D4, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_K4, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_R4, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_A5, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_G5, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_J5, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_N5, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_P5, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_D6, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_K6, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_S6, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_E7, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_G7, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_N7, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_P7, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_C8, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_H8, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_J8, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_R8, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_E9, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_L9, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_O9, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_G10, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_J10, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_P10, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_D11, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_M11, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_G12, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_J12, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_N12, 1.0f);
+        minotaurs->UpdateWallCollisions(wall_F13, 1.0f);
+
     }
 
     // make sure player and minotaur exists before you utilize them
