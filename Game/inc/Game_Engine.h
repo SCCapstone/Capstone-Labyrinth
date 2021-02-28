@@ -155,8 +155,49 @@ Game_Engine::~Game_Engine() {
     // dont need destructor for enemies
 
     // temporary wall stuff
-    delete this->wall_one;
-    delete this->wall_two;
+    //delete this->wall_one;
+    //delete this->wall_two;
+    delete this->wall_I1;
+    delete this->wall_B2;
+    delete this->wall_D2;
+    delete this->wall_F2;
+    delete this->wall_K2;
+    delete this->wall_N2;
+    delete this->wall_Q2;
+    delete this->wall_E3;
+    delete this->wall_H3;
+    delete this->wall_O3;
+    delete this->wall_D4;
+    delete this->wall_K4;
+    delete this->wall_R4;
+    delete this->wall_A5;
+    delete this->wall_G5;
+    delete this->wall_J5;
+    delete this->wall_N5;
+    delete this->wall_P5;
+    delete this->wall_D6;
+    delete this->wall_K6;
+    delete this->wall_S6;
+    delete this->wall_E7;
+    delete this->wall_G7;
+    delete this->wall_N7;
+    delete this->wall_P7;
+    delete this->wall_C8;
+    delete this->wall_H8;
+    delete this->wall_J8;
+    delete this->wall_R8;
+    delete this->wall_E9;
+    delete this->wall_L9;
+    delete this->wall_O9;
+    delete this->wall_G10;
+    delete this->wall_J10;
+    delete this->wall_P10;
+    delete this->wall_D11;
+    delete this->wall_M11;
+    delete this->wall_G12;
+    delete this->wall_J12;
+    delete this->wall_N12;
+    delete this->wall_F13;
 }
 
 void Game_Engine::Update() {
@@ -310,8 +351,49 @@ void Game_Engine::Render() {
         minotaurs->Spawn(*window);
 
     // temporary wall stuff
-    wall_one->Draw(*window);
-    wall_two->Draw(*window);
+    //wall_one->Draw(*window);
+    //wall_two->Draw(*window);
+    wall_I1->Draw(*window);
+    wall_B2->Draw(*window);
+    wall_D2->Draw(*window);
+    wall_F2->Draw(*window);
+    wall_K2->Draw(*window);
+    wall_N2->Draw(*window);
+    wall_Q2->Draw(*window);
+    wall_E3->Draw(*window);
+    wall_H3->Draw(*window);
+    wall_O3->Draw(*window);
+    wall_D4->Draw(*window);
+    wall_K4->Draw(*window);
+    wall_R4->Draw(*window);
+    wall_A5->Draw(*window);
+    wall_G5->Draw(*window);
+    wall_J5->Draw(*window);
+    wall_N5->Draw(*window);
+    wall_P5->Draw(*window);
+    wall_D6->Draw(*window);
+    wall_K6->Draw(*window);
+    wall_S6->Draw(*window);
+    wall_E7->Draw(*window);
+    wall_G7->Draw(*window);
+    wall_N7->Draw(*window);
+    wall_P7->Draw(*window);
+    wall_C8->Draw(*window);
+    wall_H8->Draw(*window);
+    wall_J8->Draw(*window);
+    wall_R8->Draw(*window);
+    wall_E9->Draw(*window);
+    wall_L9->Draw(*window);
+    wall_O9->Draw(*window);
+    wall_G10->Draw(*window);
+    wall_J10->Draw(*window);
+    wall_P10->Draw(*window);
+    wall_D11->Draw(*window);
+    wall_M11->Draw(*window);
+    wall_G12->Draw(*window);
+    wall_J12->Draw(*window);
+    wall_N12->Draw(*window);
+    wall_F13->Draw(*window);
 
     window->display();
 }
@@ -385,8 +467,51 @@ void Game_Engine::initEnemies() {
 
 void Game_Engine::initWalls() {
     // temporary wall stuff
-    this->wall_one = nullptr;
-    this->wall_two = nullptr;
+    //this->wall_one = nullptr;
+    //this->wall_two = nullptr;
+    this->wall_I1 = nullptr;
+    this->wall_B2 = nullptr;
+    this->wall_D2 = nullptr;
+    this->wall_F2 = nullptr;
+    this->wall_K2 = nullptr;
+    this->wall_N2 = nullptr;
+    this->wall_Q2 = nullptr;
+    this->wall_E3 = nullptr;
+    this->wall_H3 = nullptr;
+    this->wall_O3 = nullptr;
+    this->wall_D4 = nullptr;
+    this->wall_K4 = nullptr;
+    this->wall_R4 = nullptr;
+    this->wall_A5 = nullptr;
+    this->wall_G5 = nullptr;
+    this->wall_J5 = nullptr;
+    this->wall_N5 = nullptr;
+    this->wall_P5 = nullptr;
+    this->wall_D6 = nullptr;
+    this->wall_K6 = nullptr;
+    this->wall_S6 = nullptr;
+    this->wall_E7 = nullptr;
+    this->wall_G7 = nullptr;
+    this->wall_N7 = nullptr;
+    this->wall_P7 = nullptr;
+    this->wall_C8 = nullptr;
+    this->wall_H8 = nullptr;
+    this->wall_J8 = nullptr;
+    this->wall_R8 = nullptr;
+    this->wall_E9 = nullptr;
+    this->wall_L9 = nullptr;
+    this->wall_O9 = nullptr;
+    this->wall_G10 = nullptr;
+    this->wall_J10 = nullptr;
+    this->wall_P10 = nullptr;
+    this->wall_D11 = nullptr;
+    this->wall_M11 = nullptr;
+    this->wall_G12 = nullptr;
+    this->wall_J12 = nullptr;
+    this->wall_N12 = nullptr;
+    this->wall_F13 = nullptr;
+
+
 
     /* Initializing walls
      * &brickwall:              reference to texture
