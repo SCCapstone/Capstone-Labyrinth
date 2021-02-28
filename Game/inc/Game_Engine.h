@@ -397,8 +397,50 @@ void Game_Engine::initWalls() {
     int scale = 250.0f;
 
     brickwall.loadFromFile("imgs/wall.png");
-    wall_one = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(500.0f, 200.0f));
-    wall_two = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(500.0f, 800.0f));
+    //wall_one = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(500.0f, 200.0f));
+    //wall_two = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(500.0f, 800.0f));
+    wall_I1 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(1.0f*scale, 9.0f*scale));
+    wall_B2 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(2.0f*scale, 2.0f*scale));
+    wall_D2 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(2.0f*scale, 4.0f*scale));
+    wall_F2 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(2.0f*scale, 6.0f*scale));
+    wall_K2 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(2.0f*scale, 11.0f*scale));
+    wall_N2 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(2.0f*scale, 14.0f*scale));
+    wall_Q2 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(2.0f*scale, 17.0f*scale));
+    wall_E3 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(3.0f*scale, 5.0f*scale));
+    wall_H3 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(3.0f*scale, 8.0f*scale));
+    wall_O3 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(3.0f*scale, 15.0f*scale));
+    wall_D4 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(4.0f*scale, 4.0f*scale));
+    wall_K4 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(4.0f*scale, 11.0f*scale));
+    wall_R4 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(4.0f*scale, 16.0f*scale));
+    wall_A5 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(5.0f*scale, 1.0f*scale));
+    wall_G5 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(5.0f*scale, 7.0f*scale));
+    wall_J5 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(5.0f*scale, 12.0f*scale));
+    wall_N5 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(5.0f*scale, 14.0f*scale));
+    wall_P5 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(5.0f*scale, 16.0f*scale));
+    wall_D6 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(6.0f*scale, 4.0f*scale));
+    wall_K6 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(6.0f*scale, 11.0f*scale));
+    wall_S6 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(6.0f*scale, 19.0f*scale));
+    wall_E7 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(7.0f*scale, 5.0f*scale));
+    wall_G7 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(7.0f*scale, 7.0f*scale));
+    wall_N7 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(7.0f*scale, 14.0f*scale));
+    wall_P7 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(7.0f*scale, 16.0f*scale));
+    wall_C8 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(8.0f*scale, 3.0f*scale));
+    wall_H8 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(8.0f*scale, 8.0f*scale));
+    wall_J8 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(8.0f*scale, 10.0f*scale));
+    wall_R8 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(8.0f*scale, 16.0f*scale));
+    wall_E9 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(9.0f*scale, 5.0f*scale));
+    wall_L9 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(9.0f*scale, 12.0f*scale));
+    wall_O9 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(9.0f*scale, 15.0f*scale));
+    wall_G10 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(10.0f*scale, 7.0f*scale));
+    wall_J10 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(10.0f*scale, 10.0f*scale));
+    wall_P10 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(10.0f*scale, 16.0f*scale));
+    wall_D11 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(11.0f*scale, 4.0f*scale));
+    wall_M11 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(11.0f*scale, 13.0f*scale));
+    wall_G12 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(12.0f*scale, 7.0f*scale));
+    wall_J12 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(12.0f*scale, 10.0f*scale));
+    wall_N12 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(12.0f*scale, 14.0f*scale));
+    wall_F13 = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(13.0f*scale, 6.0f*scale));
+
 
     std::cout << "[4] Initialized Walls" << std::endl;
 }
