@@ -12,6 +12,8 @@ class OptionsMenu
       private:
       sf::RenderWindow* window;
       Menu* menu;
+      sf::Texture backgroundTex;
+      sf::Sprite background;
       const float DEFAULT_WIDTH = 600;
       const float DEFAULT_HEIGHT = 600;
 
@@ -49,12 +51,21 @@ OptionsMenu::~OptionsMenu()
 void OptionsMenu::initOptionsMenu(float width, float height)
 {
       this->window = new sf::RenderWindow(sf::VideoMode(width,height), "Options Menu");
-      this->menu = new Menu(width, height, 2);
+      this->menu = new Menu(width, height, 5);
 
       //Sets default perams for main menu Text
-      menu->setText(0, "Sssshhhhh Pretend there's options");
-      menu->setText(1, "Exit");
+      menu->setText(0, "Effects");
+      menu->setText(1, "Music");
+      menu->setText(2, "Graphics");
+      menu->setText(3, "Size");
+      menu->setText(4, "Exit");
 
+      if (!(backgroundTex.loadFromFile("imgs/options_background.png")))
+      {
+          std::cout << "Background did not load" << std::endl;
+      }
+      background.setTexture(backgroundTex);
+      background.setScale(2.5, 2.5);
 }
 
 int OptionsMenu::update()
@@ -89,7 +100,7 @@ int OptionsMenu::update()
                               //Sssssshhhh options soon
                               break;
 
-                              case 1:
+                              case 4:
                               //Exit to Main menu
                               window->close();
                               return 0;
@@ -118,8 +129,9 @@ int OptionsMenu::update()
 void OptionsMenu::render()
 {
       window->clear();
+      window->draw(background);
 
-      menu->draw(*window);
+      menu->render(*window);
 
       window->display();
 }
