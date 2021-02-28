@@ -45,8 +45,50 @@ private:
     Texture min_texture;
 
     // wall variables
-    Wall* wall_one;
-    Wall* wall_two;
+    //Wall* wall_one;
+    //Wall* wall_two;
+    Wall* wall_I1;
+    Wall* wall_B2;
+    Wall* wall_D2;
+    Wall* wall_F2;
+    Wall* wall_K2;
+    Wall* wall_N2;
+    Wall* wall_Q2;
+    Wall* wall_E3;
+    Wall* wall_H3;
+    Wall* wall_O3;
+    Wall* wall_D4;
+    Wall* wall_K4;
+    Wall* wall_R4;
+    Wall* wall_A5;
+    Wall* wall_G5;
+    Wall* wall_J5;
+    Wall* wall_N5;
+    Wall* wall_P5;
+    Wall* wall_D6;
+    Wall* wall_K6;
+    Wall* wall_S6;
+    Wall* wall_E7;
+    Wall* wall_G7;
+    Wall* wall_N7;
+    Wall* wall_P7;
+    Wall* wall_C8;
+    Wall* wall_H8;
+    Wall* wall_J8;
+    Wall* wall_R8;
+    Wall* wall_E9;
+    Wall* wall_L9;
+    Wall* wall_O9;
+    Wall* wall_G10;
+    Wall* wall_J10;
+    Wall* wall_P10;
+    Wall* wall_D11;
+    Wall* wall_M11;
+    Wall* wall_G12;
+    Wall* wall_J12;
+    Wall* wall_N12;
+    Wall* wall_F13;
+
     Texture brickwall;
 
     // using these so animation runs at same rate irrespective of machine
@@ -133,6 +175,9 @@ void Game_Engine::Update() {
         player_view.setCenter(this->player->getIndividualPos());
 
         // makes wall the immovable object to player
+        
+
+
         WallContactUpdate(player, wall_one, 1.0f);
         WallContactUpdate(player, wall_two, 1.0f);
     }
@@ -262,9 +307,12 @@ void Game_Engine::initWalls() {
      * Vector2f(float, float):  size of object
      * Vector2f(float, float):  position in the window
      */
+
+    int scale = 250.0f;
+
     brickwall.loadFromFile("imgs/wall.png");
-    wall_one = new Wall(&brickwall, Vector2f(500.0f, 150.0f), Vector2f(500.0f, 200.0f));
-    wall_two = new Wall(&brickwall, Vector2f(500.0f, 150.0f), Vector2f(500.0f, 800.0f));
+    wall_one = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(500.0f, 200.0f));
+    wall_two = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(500.0f, 800.0f));
 
     std::cout << "[4] Initialized Walls" << std::endl;
 }
