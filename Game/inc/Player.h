@@ -35,6 +35,10 @@ Player::Player(Texture* texture, Vector2u imageCount, float switchTime, float sp
    // this is in milliseconds (player attacks every second)
    this->player_attackTimerMax = 150;
 
+   body.setPosition(0.0f,0.0f);
+   FoV.setPosition(body.getPosition());
+   hb->setPos(sf::Vector2f(body.getPosition().x, body.getPosition().y - (3.0f * body.getSize().y / 4.0f)));
+
    setTotalHealth(health);
    setOriginalHealth(health);
 }
