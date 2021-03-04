@@ -31,6 +31,9 @@ public:
 
     // every 'solid' object in game needs this method for collision
     Collider GetCollider() { return Collider(wall, wallView, wallHB); }
+
+    // mutator
+    void SetPosition(Vector2f pos) { wall.setPosition(pos); }
 };
 
 Wall::Wall(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position) {

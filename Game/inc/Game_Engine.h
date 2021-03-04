@@ -6,8 +6,7 @@
 
 #include "Player.h"
 #include "Enemy_Spawner.h"
-#include "Wall.h"
-#include "Wall_UpperCorner.h"
+#include "Wall_Corner.h"
 #include <ctime>
 
 using sf::View;
@@ -48,7 +47,8 @@ private:
     // wall variables
     //Wall* wall_I1;
 
-    Wall_UpperCorner* wup;
+    Wall_Corner* w_up;
+    Wall_Corner* w_low;
 
     Texture brickwall;
 
@@ -119,7 +119,8 @@ Game_Engine::~Game_Engine() {
     //delete this->wall_one;
     //delete this->wall_two;
     //delete this->wall_I1;
-    delete this->wup;
+    delete this->w_up;
+    delete this->w_low;
 }
 
 void Game_Engine::Update() {
@@ -145,7 +146,8 @@ void Game_Engine::Update() {
 
         //WallContactUpdate(player, wall_I1, 1.0f);
         //WallContactUpdate(player, wl, 1.0f);
-        wup->ColliderCheck(player->GetCollider(), 1.0f);
+        w_up->ColliderCheck(player->GetCollider(), 1.0f);
+        w_low->ColliderCheck(player->GetCollider(), 1.0f);
     }
 
     // update enemy information if any exist
@@ -158,7 +160,8 @@ void Game_Engine::Update() {
         //minotaurs->UpdateWallCollisions(wall_one, 1.0f);
         //minotaurs->UpdateWallCollisions(wall_two, 1.0f);
 
-        minotaurs->UpdateWallCollisions(wup, 1.0f);
+        minotaurs->UpdateWallCollisions(w_up, 1.0f);
+        minotaurs->UpdateWallCollisions(w_low, 1.0f);
         // TODO change wall stuff in enemy spawner
     }
 
@@ -197,7 +200,8 @@ void Game_Engine::Render() {
     //wall_one->Draw(*window);
     //wall_two->Draw(*window);
     //wall_I1->Draw(*window);
-    wup->Draw(*window);
+    w_up->Draw(*window);
+    w_low->Draw(*window);
 
     window->display();
 }
@@ -274,7 +278,8 @@ void Game_Engine::initWalls() {
     //this->wall_one = nullptr;
     //this->wall_two = nullptr;
     //this->wall_I1 = nullptr;
-    this->wup = nullptr;
+    this->w_up = nullptr;
+    this->w_low = nullptr;
 
     /* Initializing walls
      * &brickwall:              reference to texture
@@ -289,7 +294,8 @@ void Game_Engine::initWalls() {
     //wall_two = new Wall(&brickwall, Vector2f(2.0f*scale, 1.0f*scale), Vector2f(500.0f, 800.0f));
     //wall_I1 = new Wall(&brickwall, Vector2f(1.0f*scale, 1.0f*scale), Vector2f(1.0f*scale, 3.0f*scale));
 
-    wup = new Wall_UpperCorner(&brickwall, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(1.0f * scale, 4.0f * scale), true);
+    w_up = new Wall_Corner(&brickwall, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(1.0f * scale, 4.0f * scale), false, true);
+    w_low = new Wall_Corner(&brickwall, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(1.0f * scale, -2.0f * scale), true, false);
     
     std::cout << "[4] Initialized Walls" << std::endl;
 }
