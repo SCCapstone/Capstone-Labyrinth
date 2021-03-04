@@ -4,7 +4,7 @@ This is the README.md for the Capstone Labyrinth Maze game, designed for desktop
 
 ## External Requirements
 
-The Capstone Labyrinth Game comes will all necessary libraries. No external reequirements.
+The Capstone Labyrinth Game comes will all necessary libraries. No external requirements.
 
 ## Setup  
 
