@@ -1,5 +1,5 @@
 /* Copyright 2020 Samuel Dunny */
-/* Player class (in header file) */
+/* Enemy class (in header file) */
 
 #ifndef ENEMY_H
 #define ENEMY_H
@@ -33,6 +33,13 @@ public:
     const bool getAttackTimer();
 
     void commitAttack(Individual& other);
+
+    void setEnemySize(Vector2f size) { 
+        body.setSize(size);
+        body.setOrigin(body.getSize() / 2.0f);
+        FoV.setSize((3.0f * body.getSize(), 2.0f * body.getSize()));
+        FoV.setOrigin(FoV.getSize() / 2.0f);
+    }
 };
 
 Enemy::Enemy(Texture* texture, Vector2u imageCount, float switchTime, float speed, int health) :
@@ -50,13 +57,6 @@ Enemy::~Enemy() { /* empty */ }
 
 void Enemy::Update(float deltaTime, int rv) {
     Vector2f movement(0.0f, 0.0f);
-
-    //srand((unsigned) time(0));
-
-    // deciding random direction for npc to walk
-    //int p1 = rand() % 5 + 1;
-
-    // TODO add other directions
 
     // left
     if (rv == 4) 
@@ -141,32 +141,22 @@ void Enemy::Update(float deltaTime, int rv) {
 
    // update the animation
    animation.Update(row, deltaTime, faceRight, movingDown, movingUp);
-
    // update health bar animation
-    // health_anim.Update(hb_row, deltaTime, false, true, true);
    hb->Update(hb_row, deltaTime);
 
-   // update the character rectangle
-   body.setTextureRect(animation.uvRect);
+   body.setTextureRect(animation.uvRect);   // update the character rectangle
+   hb->setTextureRectangle();               // update the health bar rectangle
 
-   // update the health bar rectangle
-   // healthbar.setTextureRect(health_anim.uvRect);
-   hb->setTextureRectangle();
-
-   // move the character
-   body.move(movement);
-
-   // move the characters field of vision
-   FoV.move(movement);
-
-   hb->Move(movement);
+   body.move(movement);     // move the character
+   FoV.move(movement);      // move the characters field of vision
+   hb->Move(movement);      // move the enemies healthbar
 }
 
 void Enemy::setRandPos() {
 
     // finding two random spawn coordinates
-    int p1 = rand() % 1000 + 1;
-    int p2 = rand() % 1000 + 1;
+    float p1 = rand() % 1000 + 1;
+    float p2 = rand() % 1000 + 1;
 
     body.setPosition(p1, p2);
 
@@ -177,7 +167,7 @@ void Enemy::setRandPos() {
     FoV.setPosition(body.getPosition());
 
     // setting health bar's positon to match enemies
-    hb->setPos(body.getPosition());
+    hb->setPos(sf::Vector2f(body.getPosition().x, body.getPosition().y - (3.0f * body.getSize().y / 4.0f)));
 }
 
 void Enemy::Chase(Player& player, float deltaTime) {
@@ -270,26 +260,15 @@ void Enemy::Chase(Player& player, float deltaTime) {
 
     // update the animation
     animation.Update(row, deltaTime, faceRight, movingDown, movingUp);
-
     // update health bar animation
-    // health_anim.Update(hb_row, deltaTime, false, true, true);
     hb->Update(hb_row, deltaTime);
 
-    // update the character rectangle
-    body.setTextureRect(animation.uvRect);
+    body.setTextureRect(animation.uvRect);  // update the character rectangle
+    hb->setTextureRectangle();              // update the health bar rectangle
 
-    // update the health bar rectangle
-    // healthbar.setTextureRect(health_anim.uvRect);
-    hb->setTextureRectangle();
-
-    // move the character
-    body.move(movement);
-
-    // move the characters field of vision
-    FoV.move(movement);
-
-    // move the enemies healthbar
-    hb->Move(movement);
+    body.move(movement);    // move the character
+    FoV.move(movement);     // move the characters field of vision
+    hb->Move(movement);     // move the enemies healthbar
 }
 
 void Enemy::ConstantAttack(Individual& other) {
