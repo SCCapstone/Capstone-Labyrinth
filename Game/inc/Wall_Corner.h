@@ -1,13 +1,16 @@
 /* Copyright 2021 Samuel Dunny */
 /* Wall_Corner class (in header file) */
 
-#ifndef WALL_CORNER
-#define WALL_CORNER
+#ifndef WALL_CORNER_H
+#define WALL_CORNER_H
 
 #include "WallBuilder.h"
 
-/*
- * will construct and draw the following
+/* This class publicly inherits from WallBuilder
+*   - uses polymorphism for instantiation
+*   - creates 4 different corner orientations of 3 wall segments (listed below)
+*   - placement of segement is always based on segment 2
+*   - diagram of configuration and wall segment labels
  
     2     3             3     2             1                         1
     @@@@  @@@@          @@@@  @@@@          @@@@                      @@@@
@@ -24,7 +27,6 @@
     True                False               True                False
     faceUp =            faceUp =            faceUp =            faceUp =
     False               False               True                True
-
  */
 
 class Wall_Corner: public WallBuilder {
@@ -34,11 +36,14 @@ private:
     bool faceUp;
 
 public:
+    // constructor
     Wall_Corner(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position, bool faceRight, bool faceUp);
 
+    // destructor
     ~Wall_Corner();
 };
 
+// constructs Wall_Corner by passing 3/5 parameters to WallBuilder (polymorphism)
 Wall_Corner::Wall_Corner(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position, bool fRight, bool fUp):
     WallBuilder(texture, size, position) {
     // lower corner
@@ -87,6 +92,7 @@ Wall_Corner::Wall_Corner(sf::Texture* texture, sf::Vector2f size, sf::Vector2f p
     }
 }
 
+// empty destructor (handled in Game_Engine)
 Wall_Corner::~Wall_Corner() { /* empty */ }
 
-#endif  // WALL_CORNER
+#endif  // WALL_CORNER_H

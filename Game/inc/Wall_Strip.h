@@ -1,37 +1,32 @@
 /* Copyright 2021 Samuel Dunny */
 /* Wall_Strip (in header file) */
 
-#ifndef WALL_STRIP
-#define WALL_STRIP
+#ifndef WALL_STRIP_H
+#define WALL_STRIP_H
 
 #include "WallBuilder.h"
 
-/*
- * will construct and draw the following
+/* This class publicly inherits from WallBuilder
+*   - uses polymorphism for instantiation
+*   - creates horizontal or vertical strip of 3 wall segments (listed below)
+*   - placement of segement is always based on segment 2
+*   - diagram of configuration and wall segment labels
 
    1     2     3
-   @@@@  @@@@  @@@@
-   @  @  @  @  @  @
-   @  @  @  @  @  @
-   @@@@  @@@@  @@@@
+   @@@@  @@@@  @@@@          @@@@ 1    horizontal =
+   @  @  @  @  @  @          @  @      False
+   @  @  @  @  @  @          @  @
+   @@@@  @@@@  @@@@    or    @@@@
 
-          or
+   horizontal =              @@@@ 2
+   True                      @  @
+                             @  @
+                             @@@@
 
-   @@@@ 1
-   @  @
-   @  @
-   @@@@
-
-   @@@@ 2
-   @  @
-   @  @
-   @@@@
-
-   @@@@ 3
-   @  @
-   @  @
-   @@@@
-
+                             @@@@ 3
+                             @  @
+                             @  @
+                             @@@@
  */
 
 class Wall_Strip: public WallBuilder {
@@ -40,11 +35,14 @@ private:
     bool horizontal;
 
 public:
+    // constructor
     Wall_Strip(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position, bool horiz);
 
+    // destructor
     ~Wall_Strip();
 };
 
+// constructs Wall_Strip by passing 3/4 parameters to WallBuilder (polymorphism)
 Wall_Strip::Wall_Strip(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position, bool hor):
     WallBuilder(texture, size, position) {
     // horizontal strip
@@ -74,6 +72,7 @@ Wall_Strip::Wall_Strip(sf::Texture* texture, sf::Vector2f size, sf::Vector2f pos
     }
 }
 
+// empty destructor (handled in Game_Engine)
 Wall_Strip::~Wall_Strip() { /* empty */ }
 
-#endif  // WALL_CORNER
+#endif  // WALL_STRIP_H
