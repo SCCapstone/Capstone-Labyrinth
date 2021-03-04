@@ -6,7 +6,7 @@
 
 #include "Enemy.h"
 #include "Player.h"
-#include "Wall.h"
+#include "Wall_UpperCorner.h"
 #include <ctime>
 
 class Enemy_Spawner {
@@ -41,7 +41,7 @@ public:
 
     void UpdateEnemyContact(Player& player);
 
-    void UpdateWallCollisions(Wall* aWall, float push);
+    void UpdateWallCollisions(Wall_UpperCorner* aWall, float push);
 
     //accessors
     int getAmount() { return this->amount; }
@@ -154,7 +154,8 @@ void Enemy_Spawner::UpdateEnemyContact(Player& player) {
     }
 }
 
-void Enemy_Spawner::UpdateWallCollisions(Wall* aWall, float push) {
+// TODO figure out a way to update contact with all wall types
+void Enemy_Spawner::UpdateWallCollisions(Wall_UpperCorner* aWall, float push) {
     for (int i = 0; i < amount; i++) {
         aWall->ColliderCheck(enemies.at(i)->GetCollider(), push);
     }
