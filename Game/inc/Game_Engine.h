@@ -1,12 +1,13 @@
 /* Copyright 2020 Samuel Dunny */
-/* Game Engine class (in header file) */
+/* Game_Engine class (in header file) */
 
 #ifndef GAME_ENGINE_H
 #define GAME_ENGINE_H
 
 #include "Player.h"
 #include "Enemy_Spawner.h"
-#include "Wall.h"
+#include "Wall_Corner.h"
+#include "Wall_Strip.h"
 #include <ctime>
 
 using sf::View;
@@ -19,11 +20,14 @@ using sf::Color;
  * Creates window
  * Creates player
  * Creates enemy spawner
- * Creates 2 wall instances
+ * Creates various wall instances (TODO make MazeBuilder)
  */
 
 // how many minotaurs to spawn
-const static int minotaur_amount = 2;
+const static int minotaur_amount = 0;
+
+// factor to see more maze
+const static int zoomOutFactor = 3;
 
 class Game_Engine {
 // private attributes
@@ -45,9 +49,12 @@ private:
     Texture min_texture;
 
     // wall variables
-    Wall* wall_one;
-    Wall* wall_two;
-    Texture brickwall;
+    WallBuilder* w_str1;
+    WallBuilder* w_low1;
+    WallBuilder* w_low2;
+    WallBuilder* w_str2;
+    Texture brickwall_small;
+    Texture brickwall_big;
 
     // using these so animation runs at same rate irrespective of machine
     float deltaTime;
@@ -60,40 +67,39 @@ private:
     void initWalls();
     void initWindow();
 
+    // function to keep ratio accurate in event of window resizing
     void ResizeView(const RenderWindow& window, View& view);
 
+    // function responsible for catching and dealing with all Events
     void pollEvents();
 
-    void WallContactUpdate(Individual* character, Wall* aWall, float push);
+    // function to update contact between walls and player (syntactic sugar)
+    void WallContactUpdate(Individual* character, WallBuilder* aWall, float push);
 
     // function to test if Individuals exist (player, enemy, etc.)
     bool exists(Individual* other) {
       if (other != nullptr)
          return true;
       return false;
-   }
+    }
     
 // public attributes 
 public:
-    Game_Engine();
+    
+    Game_Engine();      // constructor
+    ~Game_Engine();     // destructor
+    void Update();      // updates all game objects, states (contact, attack, moving)
+    void Render();      // renders all objects and states in window
 
-    ~Game_Engine();
-
-    void Update();
-
-    void Render();
-
-    // accessors, returns true if window is still open
-    const bool running() const {
-        return window->isOpen();
-    }
+    // accessor, returns true if window is still open
+    const bool running() const { return window->isOpen(); }
 };
 
 /* Public Functions in order:
- * Game_Engine:     default constructor, calls all initializer functions
- * ~Game_Engine:    destructor, deletes dynamic objects
- * Update:          updates all game logic (interations between players, enemies, the environment, and movement in the window)
- * Render:          draws and displays all game objects (player, enemies, walls)
+ * Game_Engine():   default constructor, calls all initializer functions
+ * ~Game_Engine():  destructor, deletes dynamic objects
+ * Update():        updates all game logic (interactions between players, enemies, the environment, and movement in the window)
+ * Render():        draws and displays all game objects (player, enemies, walls)
  */
 Game_Engine::Game_Engine() {
     std::cout << "-----STARTING INITIALIZATION-----" << std::endl;
@@ -105,16 +111,20 @@ Game_Engine::Game_Engine() {
     std::cout << "-----INITIALIZATION FINISHED-----\n" << std::endl;
 }
 
-Game_Engine::~Game_Engine() { 
+Game_Engine::~Game_Engine() {
+    // Window destructor
     delete this->window;
 
+    // Player destructor
     delete this->player;
 
     // dont need destructor for enemies
 
-    // temporary wall stuff
-    delete this->wall_one;
-    delete this->wall_two;
+    // WallBuilder children destructors
+    delete this->w_str1;
+    delete this->w_low1;
+    delete this->w_low2;
+    delete this->w_str2;
 }
 
 void Game_Engine::Update() {
@@ -133,8 +143,10 @@ void Game_Engine::Update() {
         player_view.setCenter(this->player->getIndividualPos());
 
         // makes wall the immovable object to player
-        WallContactUpdate(player, wall_one, 1.0f);
-        WallContactUpdate(player, wall_two, 1.0f);
+        WallContactUpdate(player, w_str1, 1.0f);
+        WallContactUpdate(player, w_low1, 1.0f);
+        WallContactUpdate(player, w_low2, 1.0f);
+        WallContactUpdate(player, w_str2, 1.0f);
     }
 
     // update enemy information if any exist
@@ -143,8 +155,10 @@ void Game_Engine::Update() {
         minotaurs->Update(deltaTime);
 
         // makes wall the immovable object to minotaur
-        minotaurs->UpdateWallCollisions(wall_one, 1.0f);
-        minotaurs->UpdateWallCollisions(wall_two, 1.0f);
+        minotaurs->UpdateWallCollisions(w_str1, 1.0f);
+        minotaurs->UpdateWallCollisions(w_low1, 1.0f);
+        minotaurs->UpdateWallCollisions(w_low2, 1.0f);
+        minotaurs->UpdateWallCollisions(w_str2, 1.0f);
     }
 
     // make sure player and minotaur exists before you utilize them
@@ -170,18 +184,24 @@ void Game_Engine::Render() {
     // clears window
     window->clear(Color(150, 150, 150));
 
+    // centers window view on player
     window->setView(player_view);
     
+    // draws all walls
+    w_str1->Draw(*window);
+    w_low1->Draw(*window);
+    w_low2->Draw(*window);
+    w_str2->Draw(*window);
+
+    // draws player (if it exists)
     if (exists(player))
         player->Draw(*window);
 
+    // draws enemies (if they exist)
     if (!(minotaurs->Empty()))
         minotaurs->Spawn(*window);
 
-    // temporary wall stuff
-    wall_one->Draw(*window);
-    wall_two->Draw(*window);
-
+    // display all drawn objects
     window->display();
 }
 
@@ -249,23 +269,46 @@ void Game_Engine::initEnemies() {
      * 37.0f:          player speed in the relation to objects in the window
      * 300              enemy health
      */
-    minotaurs = new Enemy_Spawner(minotaur_amount, 20, &min_texture, Vector2u(10, 5), 0.35f, 37.0f, 150);
+    minotaurs = new Enemy_Spawner(minotaur_amount, 20, Vector2f(125.0f,175.0f), &min_texture, Vector2u(10, 5), 0.35f, 37.0f, 150);
 }
 
 void Game_Engine::initWalls() {
-    // temporary wall stuff
-    this->wall_one = nullptr;
-    this->wall_two = nullptr;
+    // ensure all instance variables are empty
+    this->w_str1 = nullptr;
+    this->w_low1 = nullptr;
+    this->w_low2 = nullptr;
+    this->w_str2 = nullptr;
+
+    // scales values to window
+    float scale = 250.0f;
+
+    // load wall texture from img/ directory
+    brickwall_small.loadFromFile("imgs/wall.png");
+    brickwall_big.loadFromFile("imgs/wall_texture.png");
 
     /* Initializing walls
      * &brickwall:              reference to texture
      * Vector2f(float, float):  size of object
      * Vector2f(float, float):  position in the window
+     * 
+     * Wall_Corner:
+     * bool:                    if corner is facing right
+     * bool:                    if corner is facing up
+     * 
+     * Wall_Strip:
+     * bool:                    if strip is horizontal
      */
-    brickwall.loadFromFile("imgs/wall.png");
-    wall_one = new Wall(&brickwall, Vector2f(500.0f, 150.0f), Vector2f(500.0f, 200.0f));
-    wall_two = new Wall(&brickwall, Vector2f(500.0f, 150.0f), Vector2f(500.0f, 800.0f));
+    
+    // straight line (horizontal)
+    w_str1 = new Wall_Strip(&brickwall_big, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(2.0f * scale, 0.0f * scale), true);
 
+    // russian G
+    w_low1 = new Wall_Corner(&brickwall_big, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(0.0f * scale, 0.0f * scale), true, false);
+    w_low2 = new Wall_Corner(&brickwall_big, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(2.0f * scale, 2.0f * scale), true, false);
+
+    // straight line (vertical)
+    w_str2 = new Wall_Strip(&brickwall_big, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(0.0f * scale, 2.0f * scale), false);
+    
     std::cout << "[4] Initialized Walls" << std::endl;
 }
 
@@ -280,26 +323,24 @@ void Game_Engine::initWindow() {
 
     // sets player view and centers player in window
     player_view.setCenter(Vector2f(0.0f,0.0f));
-    player_view.setSize(Vector2f(videoMode.width, videoMode.height));
+    player_view.setSize(Vector2f(videoMode.width * zoomOutFactor, videoMode.height * zoomOutFactor));
 
     std::cout << "[5] Initialized Window" << std::endl;
 }
 
 
-// ResizeView function, used to keep proportions in event of window resizing
-void Game_Engine::ResizeView(const RenderWindow& window, View& view) {
-    // calculating aspect ratio
-    float aspectRatio = float(window.getSize().x) / float (window.getSize().y);
-    view.setSize(videoMode.width * aspectRatio, videoMode.height);
-}
-
 
 /* Game Driver functions in order:
- * pollEvents():            gets called in Update(), constantly checks for events (pressing keys, lifting keys, exiting window)
- * WallContactUpdate():     gets called in Update(), updates the contact settings between Individuals and the walls
- * Update():                main driver of this class, updates all game objects (position, health, settings)
- * Render():                main drawing function of this class, draws all updated objects
+ * pollEvents():                        gets called in Update(), constantly checks for events (pressing keys, lifting keys, exiting window)
+ * WallContactUpdate():                 gets called in Update(), updates the contact settings between Individuals and the walls
+ * ResizeView(RenderWindow&, View&):    used to keep proportions in event of window resizing
  */
+void Game_Engine::ResizeView(const RenderWindow& window, View& view) {
+    // calculating aspect ratio
+    float aspectRatio = float(window.getSize().x) / float(window.getSize().y);
+    view.setSize(videoMode.width * aspectRatio * zoomOutFactor, videoMode.height * zoomOutFactor);
+}
+
 void Game_Engine::pollEvents() {
     // polls for window close event
     while(window->pollEvent(ev)) {
@@ -332,7 +373,7 @@ void Game_Engine::pollEvents() {
     }
 }
 
-void Game_Engine::WallContactUpdate(Individual* character, Wall* aWall, float push) {
+void Game_Engine::WallContactUpdate(Individual* character, WallBuilder* aWall, float push) {
     // a value of 1.0f is an immovable object, wheres 0.0f would move quickly
     aWall->ColliderCheck(character->GetCollider(), push);
 }

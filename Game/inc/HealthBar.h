@@ -62,7 +62,7 @@ HealthBar::HealthBar(RectangleShape* body, Vector2f dimensions, Texture* texture
     healthbar.setOrigin(healthbar.getSize() / 2.0f);
     healthbar.setTexture(texture);
     // set health bar position above player
-    healthbar.setPosition(body->getPosition().x, body->getPosition().y - (3.0f*dimensions.y/4.0f));
+    healthbar.setPosition(body->getPosition().x, body->getPosition().y - (4.0f*dimensions.y/5.0f));
 }
 
 HealthBar::~HealthBar() { /* empty */}

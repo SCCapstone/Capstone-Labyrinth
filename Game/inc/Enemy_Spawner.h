@@ -6,7 +6,7 @@
 
 #include "Enemy.h"
 #include "Player.h"
-#include "Wall.h"
+#include "WallBuilder.h"
 #include <ctime>
 
 class Enemy_Spawner {
@@ -14,6 +14,7 @@ class Enemy_Spawner {
 private:
     int amount;
     int attackValue;
+    Vector2f size;
 
     // true if player needs to be killed
     bool killPlayer;
@@ -25,7 +26,7 @@ private:
 
 // public attributes
 public:
-    Enemy_Spawner(int us_amount, int attVal, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health);
+    Enemy_Spawner(int us_amount, int attVal, Vector2f size, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health);
 
     ~Enemy_Spawner();
 
@@ -41,7 +42,7 @@ public:
 
     void UpdateEnemyContact(Player& player);
 
-    void UpdateWallCollisions(Wall* aWall, float push);
+    void UpdateWallCollisions(WallBuilder* aWall, float push);
 
     //accessors
     int getAmount() { return this->amount; }
@@ -68,9 +69,10 @@ public:
  * UpdateWallCollsion:  ensures all enemies maintain proper collision with walls
  * deleteEnemy:          erases enemy at given index
  */
-Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health) {
+Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Vector2f size, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health) {
     this->amount = us_amount;
     this->attackValue = attVal;
+    this->size = size;
     this->killPlayer = false;
 
     Populate(texture, imageCount, switchTime, speed, attVal, health); 
@@ -95,6 +97,7 @@ void Enemy_Spawner::Populate(Texture* texture, Vector2u imageCount, float switch
     for (int i = 0; i < amount; i++) {
         Enemy* nE = new Enemy(texture, imageCount, switchTime, speed, health);
         nE->setAttackValue(attVal);
+        nE->setEnemySize(size);
         nE->setRandPos();
         enemies.push_back(nE);
     }
@@ -154,7 +157,7 @@ void Enemy_Spawner::UpdateEnemyContact(Player& player) {
     }
 }
 
-void Enemy_Spawner::UpdateWallCollisions(Wall* aWall, float push) {
+void Enemy_Spawner::UpdateWallCollisions(WallBuilder* aWall, float push) {
     for (int i = 0; i < amount; i++) {
         aWall->ColliderCheck(enemies.at(i)->GetCollider(), push);
     }
