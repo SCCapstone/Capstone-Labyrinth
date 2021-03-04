@@ -21,17 +21,20 @@ class MainMenu
 
       //Sprite Stuff
       sf::Texture titleTex;
-      sf::Texture bButtonTex; //blank button texture
+//      sf::Texture bButtonTex; //blank button texture
       sf::Sprite* title;
-      std::vector<sf::Sprite> buttons;
+ //     std::vector<sf::Sprite> buttons;
+      sf::Texture backgroundTex;
+      sf::Sprite background;
 
-      void initMainMenu(float width, float height, int numMenuItems);
+      void initMainMenu(float width, float height, int numMenuItems, sf::RenderWindow* win);
       void runOptionsMenu();
 
 
       public:
       MainMenu();
       MainMenu(float width, float height);
+      MainMenu(sf::RenderWindow* win);
       ~MainMenu();
 
       int update();
@@ -46,29 +49,39 @@ class MainMenu
 
 MainMenu::MainMenu()
 {
-      initMainMenu(DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_NUM_MENU_ITEMS);
+      initMainMenu(DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_NUM_MENU_ITEMS, NULL);
 }
 MainMenu::MainMenu(float width, float height)
 {
-      initMainMenu(width, height, DEFAULT_NUM_MENU_ITEMS);
+      initMainMenu(width, height, DEFAULT_NUM_MENU_ITEMS, NULL);
+}
+MainMenu::MainMenu(sf::RenderWindow* win)
+{
+    initMainMenu(0, 0, DEFAULT_NUM_MENU_ITEMS, win);
 }
 MainMenu::~MainMenu()
 {
       //Do the destructing
 }
-
-void MainMenu::initMainMenu(float width, float height, int numMenuItems)
+#pragma optimize("", off)
+void MainMenu::initMainMenu(float width, float height, int numMenuItems, sf::RenderWindow* win)
 {
-      this->window = new sf::RenderWindow(sf::VideoMode(width,height), "Main Menu");
+    if (win != NULL) {
+        this->window = win;
+        width = window->getSize().x;
+        height = window->getSize().y;
+    }
+    else {
+        this->window = new sf::RenderWindow(sf::VideoMode(width, height), "Main Menu");
+    }
       this->menu = new Menu(width, height, numMenuItems);
 
       //Sets default perams for main menu Text
       menu->setText(0, "Enter the Labyrinth");
-      menu->setText(1, "Options");
+      menu->setText(1, "Options ");
       menu->setText(2, "Surrender to the Labyrinth");
-
       float middle = width/3 - 20.0f; //just gets the middle, not dynamic yet
-      //Setup the Title
+     //Setup the Title
       if(!(titleTex.loadFromFile("imgs/title_logo.png")))
       {std::cout << "Title did not load" << std::endl;}
       title = new sf::Sprite();
@@ -76,7 +89,7 @@ void MainMenu::initMainMenu(float width, float height, int numMenuItems)
       title->setScale(1.5, 1.5);
       title->setOrigin(sf::Vector2f(20.0f, 20.0f));
       title->setPosition(sf::Vector2f(middle, 0.0F));
-
+      /*
       //Setup buttons
       if(!(bButtonTex.loadFromFile("imgs/blank_button.png")))
       {std::cout << "Blank Button did not load" << std::endl;}
@@ -88,13 +101,20 @@ void MainMenu::initMainMenu(float width, float height, int numMenuItems)
             buttons[i].setOrigin(sf::Vector2f(25.0f, 50.0f));
             buttons[i].setScale(1.2f, 1.2f);
             menu->setCharSize(i, 20);
-      }
+      }*/
       menu->setPos(0, sf::Vector2f(middle + 40.0f, height/5 * (0+2) + 11.0f));
       menu->setPos(1, sf::Vector2f(middle + 85.0f, height/5 * (1+2) + 11.0f));
       menu->setPos(2, sf::Vector2f(middle + 10.0f, height/5 * (2+2) + 11.0f));
-
       
+      if (!(backgroundTex.loadFromFile("imgs/wall.png")))
+      {
+          std::cout << "Background did not load" << std::endl;
+      }
+      background.setTexture(backgroundTex);
+      background.setScale(15, 15);
 }
+#pragma optimize("", on)
+
 
 int MainMenu::update()
 {
@@ -163,13 +183,15 @@ int MainMenu::update()
 void MainMenu::render()
 {
       window->clear();
+      window->draw(background);
       
       window->draw(*title);
-      for(int i = 0; i < buttons.size(); i++)
+      /*for(int i = 0; i < buttons.size(); i++)
       {
             window->draw(buttons[i]);
             menu->draw(*window);
-      }
+      }*/
+      menu->render(*window);
 
       window->display();
 }

@@ -44,9 +44,11 @@ protected:
    // whether the player is facing left or right (used so we dont have to create left and right animations)
    bool faceRight;
 
+   // whether the player is moving upwards or downwards
    bool movingUp;
    bool movingDown;
 
+   // default attack, original health, and initial total health
    int base_attackVal = 10;
    int totalHealth = 100;
    int orig_health = 100;
@@ -110,6 +112,8 @@ Individual::Individual(Texture* texture, Vector2u imageCount, float switchTime, 
       body.setPosition(500, 500);
       body.setTexture(texture);
 
+      //body.getSize();
+
       FoV.setSize(Vector2f(3.0f * body_width, 2.0f * body_height));
       FoV.setOrigin(FoV.getSize() / 2.0f);
       FoV.setFillColor(sf::Color::Transparent);
@@ -119,7 +123,7 @@ Individual::Individual(Texture* texture, Vector2u imageCount, float switchTime, 
 
       // instantiating a new health bar
       health_text.loadFromFile("imgs/healthBarv3.png");
-      hb = new HealthBar(&body, Vector2f(body_width, body_height), &health_text, Vector2u(1, 10), switchTime, speed);
+      hb = new HealthBar(&body, body.getSize(), &health_text, Vector2u(1, 10), switchTime, speed);
 }
 
 Individual::~Individual(){ /* empty */ }

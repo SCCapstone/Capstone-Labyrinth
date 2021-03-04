@@ -35,6 +35,10 @@ Player::Player(Texture* texture, Vector2u imageCount, float switchTime, float sp
    // this is in milliseconds (player attacks every second)
    this->player_attackTimerMax = 150;
 
+   body.setPosition(0.0f,0.0f);
+   FoV.setPosition(body.getPosition());
+   hb->setPos(sf::Vector2f(body.getPosition().x, body.getPosition().y - (3.0f * body.getSize().y / 4.0f)));
+
    setTotalHealth(health);
    setOriginalHealth(health);
 }
@@ -123,27 +127,16 @@ void Player::Update(float deltaTime) {
 
    // update the animation
    animation.Update(row, deltaTime, faceRight, movingDown, movingUp);
-
    // update health bar animation
-   // health_anim.Update(hb_row, deltaTime, false, true, true);
    hb->Update(hb_row, deltaTime);
 
-   // update the character rectangle
-   body.setTextureRect(animation.uvRect);
+   
+   body.setTextureRect(animation.uvRect);   // update the character rectangle
+   hb->setTextureRectangle();               // update the health bar rectangle
 
-   // update the health bar rectangle
-   // healthbar.setTextureRect(health_anim.uvRect);
-   hb->setTextureRectangle();
-
-   // move the character
-   body.move(movement);
-
-   // ensure players field of vision moves with them
-   FoV.move(movement);
-
-   // move health bar along with player
-   // healthbar.move(movement);
-   hb->Move(movement);
+   body.move(movement); // move the character
+   FoV.move(movement);  // ensure players field of vision moves with them
+   hb->Move(movement);  // move health bar along with player
 }
 
 void Player::Attack(Individual& other) {

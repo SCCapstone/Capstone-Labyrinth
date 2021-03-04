@@ -8,7 +8,7 @@ The Capstone Labyrinth Game comes will all necessary libraries. No external reeq
 
 ## Setup  
 
-When pulling and building the source code, the Game.exe should build in the Game/ directory. If this is not the case, simply build the project, and place it in the Game/ directory
+When pulling and building the source code, the Game.exe should build in the Game/ directory. If this is not the case, simply build the project, and place Game.exe in the Game/ directory
 
 ## Running
 
