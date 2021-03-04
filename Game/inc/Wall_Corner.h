@@ -1,7 +1,5 @@
-/* Copyright 2020 Samuel Dunny */
-/* Wall class (in header file) */
-
-//TODO probably delete
+/* Copyright 2021 Samuel Dunny */
+/* Wall_Corner class (in header file) */
 
 #ifndef WALL_CORNER
 #define WALL_CORNER
@@ -64,7 +62,6 @@ Wall_Corner::Wall_Corner(sf::Texture* texture, sf::Vector2f size, sf::Vector2f p
             wall3->SetPosition(sf::Vector2f(position.x - size.x, position.y));
             this->faceRight = false;
         }
-
     }
     // upper corner
     else {

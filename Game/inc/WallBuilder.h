@@ -1,7 +1,5 @@
-/* Copyright 2020 Samuel Dunny */
-/* Wall class (in header file) */
-
-//TODO probably delete
+/* Copyright 2021 Samuel Dunny */
+/* WallBuilder (in header file) */
 
 #ifndef WALLBUILDER
 #define WALLBUILDER
@@ -11,7 +9,7 @@
 /* Purpose:
  *  This class instantiates 3 walls, and this class's children
  *  will be able to modify the configuration of those 3 walls to create
- *  essentially maze building blocks (step up singular walls)
+ *  essentially maze building blocks (step up from singular walls)
  */
 
 class WallBuilder {

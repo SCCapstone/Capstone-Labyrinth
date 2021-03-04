@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Enemy_Spawner.h"
 #include "Wall_Corner.h"
+#include "Wall_Strip.h"
 #include <ctime>
 
 using sf::View;
@@ -47,8 +48,9 @@ private:
     // wall variables
     //Wall* wall_I1;
 
-    Wall_Corner* w_up;
-    Wall_Corner* w_low;
+    WallBuilder* w_up;
+    WallBuilder* w_low;
+    WallBuilder* w_str;
 
     Texture brickwall;
 
@@ -67,7 +69,7 @@ private:
 
     void pollEvents();
 
-    void WallContactUpdate(Individual* character, Wall* aWall, float push);
+    void WallContactUpdate(Individual* character, WallBuilder* aWall, float push);
 
     // function to test if Individuals exist (player, enemy, etc.)
     bool exists(Individual* other) {
@@ -121,6 +123,7 @@ Game_Engine::~Game_Engine() {
     //delete this->wall_I1;
     delete this->w_up;
     delete this->w_low;
+    delete this->w_str;
 }
 
 void Game_Engine::Update() {
@@ -146,8 +149,14 @@ void Game_Engine::Update() {
 
         //WallContactUpdate(player, wall_I1, 1.0f);
         //WallContactUpdate(player, wl, 1.0f);
-        w_up->ColliderCheck(player->GetCollider(), 1.0f);
-        w_low->ColliderCheck(player->GetCollider(), 1.0f);
+        
+        //w_up->ColliderCheck(player->GetCollider(), 1.0f);
+        //w_low->ColliderCheck(player->GetCollider(), 1.0f);
+        //w_str->ColliderCheck(player->GetCollider(), 1.0f);
+
+        WallContactUpdate(player, w_up, 1.0f);
+        WallContactUpdate(player, w_low, 1.0f);
+        WallContactUpdate(player, w_str, 1.0f);
     }
 
     // update enemy information if any exist
@@ -162,6 +171,7 @@ void Game_Engine::Update() {
 
         minotaurs->UpdateWallCollisions(w_up, 1.0f);
         minotaurs->UpdateWallCollisions(w_low, 1.0f);
+        minotaurs->UpdateWallCollisions(w_str, 1.0f);
         // TODO change wall stuff in enemy spawner
     }
 
@@ -202,6 +212,7 @@ void Game_Engine::Render() {
     //wall_I1->Draw(*window);
     w_up->Draw(*window);
     w_low->Draw(*window);
+    w_str->Draw(*window);
 
     window->display();
 }
@@ -280,6 +291,7 @@ void Game_Engine::initWalls() {
     //this->wall_I1 = nullptr;
     this->w_up = nullptr;
     this->w_low = nullptr;
+    this->w_str = nullptr;
 
     /* Initializing walls
      * &brickwall:              reference to texture
@@ -295,7 +307,8 @@ void Game_Engine::initWalls() {
     //wall_I1 = new Wall(&brickwall, Vector2f(1.0f*scale, 1.0f*scale), Vector2f(1.0f*scale, 3.0f*scale));
 
     w_up = new Wall_Corner(&brickwall, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(1.0f * scale, 4.0f * scale), false, true);
-    w_low = new Wall_Corner(&brickwall, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(1.0f * scale, -2.0f * scale), true, false);
+    w_low = new Wall_Corner(&brickwall, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(1.0f * scale, -1.0f * scale), true, false);
+    w_str = new Wall_Strip(&brickwall, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(3.0f * scale, 2.0f * scale), true);
     
     std::cout << "[4] Initialized Walls" << std::endl;
 }
@@ -363,7 +376,7 @@ void Game_Engine::pollEvents() {
     }
 }
 
-void Game_Engine::WallContactUpdate(Individual* character, Wall* aWall, float push) {
+void Game_Engine::WallContactUpdate(Individual* character, WallBuilder* aWall, float push) {
     // a value of 1.0f is an immovable object, wheres 0.0f would move quickly
     aWall->ColliderCheck(character->GetCollider(), push);
 }
