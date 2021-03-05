@@ -6,7 +6,7 @@
 
 #include "Enemy.h"
 #include "Player.h"
-#include "WallBuilder.h"
+#include "Maze_Component.h"
 #include <ctime>
 
 class Enemy_Spawner {
@@ -42,7 +42,7 @@ public:
 
     void UpdateEnemyContact(Player& player);
 
-    void UpdateWallCollisions(WallBuilder* aWall, float push);
+    void UpdateWallCollisions(Maze_Component* aWall, float push);
 
     //accessors
     int getAmount() { return this->amount; }
@@ -157,7 +157,7 @@ void Enemy_Spawner::UpdateEnemyContact(Player& player) {
     }
 }
 
-void Enemy_Spawner::UpdateWallCollisions(WallBuilder* aWall, float push) {
+void Enemy_Spawner::UpdateWallCollisions(Maze_Component* aWall, float push) {
     for (int i = 0; i < amount; i++) {
         aWall->ColliderCheck(enemies.at(i)->GetCollider(), push);
     }

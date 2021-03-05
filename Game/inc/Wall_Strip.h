@@ -4,9 +4,9 @@
 #ifndef WALL_STRIP_H
 #define WALL_STRIP_H
 
-#include "WallBuilder.h"
+#include "Wall_Component.h"
 
-/* This class publicly inherits from WallBuilder
+/* This class publicly inherits from Wall_Component
 *   - uses polymorphism for instantiation
 *   - creates horizontal or vertical strip of 3 wall segments (listed below)
 *   - placement of segement is always based on segment 2
@@ -29,7 +29,7 @@
                              @@@@
  */
 
-class Wall_Strip: public WallBuilder {
+class Wall_Strip: public Wall_Component {
 private:
     // conditions for the strip orientation (not necessary, might use later)
     bool horizontal;
@@ -42,9 +42,9 @@ public:
     ~Wall_Strip();
 };
 
-// constructs Wall_Strip by passing 3/4 parameters to WallBuilder (polymorphism)
+// constructs Wall_Strip by passing 3/4 parameters to Wall_Component (polymorphism)
 Wall_Strip::Wall_Strip(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position, bool hor):
-    WallBuilder(texture, size, position) {
+    Wall_Component(texture, size, position) {
     // horizontal strip
     if (hor) {
         // wall1 will always be to the left of wall2

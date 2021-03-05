@@ -34,6 +34,9 @@ public:
 
     // mutator
     void SetPosition(Vector2f pos) { wall.setPosition(pos); }
+
+    // accessor
+    Vector2f GetPosition() { return wall.getPosition();  }
 };
 
 Wall::Wall(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position) {

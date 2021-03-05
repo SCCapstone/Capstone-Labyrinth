@@ -8,6 +8,7 @@
 #include "Enemy_Spawner.h"
 #include "Wall_Corner.h"
 #include "Wall_Strip.h"
+#include "Maze_Corner.h"
 #include <ctime>
 
 using sf::View;
@@ -49,11 +50,10 @@ private:
     Texture min_texture;
 
     // wall variables
-    WallBuilder* w_str1;
-    WallBuilder* w_low1;
-    WallBuilder* w_low2;
-    WallBuilder* w_str2;
-    Texture brickwall_small;
+    Maze_Component* rd;
+    Maze_Component* ru;
+    Maze_Component* ld;
+    Maze_Component* lu;
     Texture brickwall_big;
 
     // using these so animation runs at same rate irrespective of machine
@@ -74,7 +74,7 @@ private:
     void pollEvents();
 
     // function to update contact between walls and player (syntactic sugar)
-    void WallContactUpdate(Individual* character, WallBuilder* aWall, float push);
+    void WallContactUpdate(Individual* character, Maze_Component* aWall, float push);
 
     // function to test if Individuals exist (player, enemy, etc.)
     bool exists(Individual* other) {
@@ -121,10 +121,10 @@ Game_Engine::~Game_Engine() {
     // dont need destructor for enemies
 
     // WallBuilder children destructors
-    delete this->w_str1;
-    delete this->w_low1;
-    delete this->w_low2;
-    delete this->w_str2;
+    delete this->rd;
+    delete this->ru;
+    delete this->ld;
+    delete this->lu;
 }
 
 void Game_Engine::Update() {
@@ -143,10 +143,10 @@ void Game_Engine::Update() {
         player_view.setCenter(this->player->getIndividualPos());
 
         // makes wall the immovable object to player
-        WallContactUpdate(player, w_str1, 1.0f);
-        WallContactUpdate(player, w_low1, 1.0f);
-        WallContactUpdate(player, w_low2, 1.0f);
-        WallContactUpdate(player, w_str2, 1.0f);
+        WallContactUpdate(player, rd, 1.0f);
+        WallContactUpdate(player, ru, 1.0f);
+        WallContactUpdate(player, ld, 1.0f);
+        WallContactUpdate(player, lu, 1.0f);
     }
 
     // update enemy information if any exist
@@ -155,10 +155,10 @@ void Game_Engine::Update() {
         minotaurs->Update(deltaTime);
 
         // makes wall the immovable object to minotaur
-        minotaurs->UpdateWallCollisions(w_str1, 1.0f);
-        minotaurs->UpdateWallCollisions(w_low1, 1.0f);
-        minotaurs->UpdateWallCollisions(w_low2, 1.0f);
-        minotaurs->UpdateWallCollisions(w_str2, 1.0f);
+        minotaurs->UpdateWallCollisions(rd, 1.0f);
+        minotaurs->UpdateWallCollisions(ru, 1.0f);
+        minotaurs->UpdateWallCollisions(ld, 1.0f);
+        minotaurs->UpdateWallCollisions(lu, 1.0f);
     }
 
     // make sure player and minotaur exists before you utilize them
@@ -188,10 +188,10 @@ void Game_Engine::Render() {
     window->setView(player_view);
     
     // draws all walls
-    w_str1->Draw(*window);
-    w_low1->Draw(*window);
-    w_low2->Draw(*window);
-    w_str2->Draw(*window);
+    rd->Draw(*window);
+    ru->Draw(*window);
+    ld->Draw(*window);
+    lu->Draw(*window);
 
     // draws player (if it exists)
     if (exists(player))
@@ -274,40 +274,29 @@ void Game_Engine::initEnemies() {
 
 void Game_Engine::initWalls() {
     // ensure all instance variables are empty
-    this->w_str1 = nullptr;
-    this->w_low1 = nullptr;
-    this->w_low2 = nullptr;
-    this->w_str2 = nullptr;
+    this->rd = nullptr;
+    this->ru = nullptr;
+    this->ld = nullptr;
+    this->lu = nullptr;
 
     // scales values to window
-    float scale = 250.0f;
+    //float scale = 250.0f;
 
     // load wall texture from img/ directory
-    brickwall_small.loadFromFile("imgs/wall.png");
     brickwall_big.loadFromFile("imgs/wall_texture.png");
 
     /* Initializing walls
      * &brickwall:              reference to texture
      * Vector2f(float, float):  size of object
      * Vector2f(float, float):  position in the window
-     * 
-     * Wall_Corner:
      * bool:                    if corner is facing right
      * bool:                    if corner is facing up
-     * 
-     * Wall_Strip:
-     * bool:                    if strip is horizontal
      */
-    
-    // straight line (horizontal)
-    w_str1 = new Wall_Strip(&brickwall_big, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(2.0f * scale, 0.0f * scale), true);
 
-    // russian G
-    w_low1 = new Wall_Corner(&brickwall_big, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(0.0f * scale, 0.0f * scale), true, false);
-    w_low2 = new Wall_Corner(&brickwall_big, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(2.0f * scale, 2.0f * scale), true, false);
-
-    // straight line (vertical)
-    w_str2 = new Wall_Strip(&brickwall_big, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(0.0f * scale, 2.0f * scale), false);
+    rd = new Maze_Corner(&brickwall_big, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(-3.0f * scale, -3.0f * scale), true, false);
+    ru = new Maze_Corner(&brickwall_big, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(-3.0f * scale, 3.0f * scale), true, true);
+    ld = new Maze_Corner(&brickwall_big, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(3.0f * scale, -3.0f * scale), false, false);
+    lu = new Maze_Corner(&brickwall_big, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(3.0f * scale, 3.0f * scale), false, true);
     
     std::cout << "[4] Initialized Walls" << std::endl;
 }
@@ -373,7 +362,7 @@ void Game_Engine::pollEvents() {
     }
 }
 
-void Game_Engine::WallContactUpdate(Individual* character, WallBuilder* aWall, float push) {
+void Game_Engine::WallContactUpdate(Individual* character, Maze_Component* aWall, float push) {
     // a value of 1.0f is an immovable object, wheres 0.0f would move quickly
     aWall->ColliderCheck(character->GetCollider(), push);
 }
