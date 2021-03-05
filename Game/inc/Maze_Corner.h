@@ -30,12 +30,15 @@ public:
 
     // returns true if Individual's Collider is many contact with any of the 3 wall segments
     bool ColliderCheck(Collider other, float push);
+
+    bool inMazeComponentBounds(Enemy& indv);
 };
 
 // constructs Wall_Strip by passing 3/4 parameters to Wall_Component (polymorphism)
 Maze_Corner::Maze_Corner(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position, bool faceRight, bool faceUp) :
     Maze_Component(texture, size, position) {
     
+    // all components originally in the same place
     // strip 2 will always needs to be horizontal instead of vertical (I picked arbitrarily)
     comp1 = new Wall_Strip(texture, size, position, false);
     comp2 = new Wall_Strip(texture, size, position, true);
@@ -140,6 +143,17 @@ bool Maze_Corner::ColliderCheck(Collider other, float push) {
     if (comp1_cond || comp2_cond || comp3_cond || comp4_cond)
         return true;
 
+    return false;
+}
+
+bool Maze_Corner::inMazeComponentBounds(Enemy& indv) {
+    if (comp1->inWallComponentBounds(indv) ||
+        comp2->inWallComponentBounds(indv) ||
+        comp3->inWallComponentBounds(indv) ||
+        comp4->inWallComponentBounds(indv)) {
+        indv.setRandPos();
+        return true;
+    }
     return false;
 }
 

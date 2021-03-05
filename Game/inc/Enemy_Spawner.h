@@ -159,7 +159,7 @@ void Enemy_Spawner::UpdateEnemyContact(Player& player) {
 
 void Enemy_Spawner::UpdateWallCollisions(Maze_Component* aWall, float push) {
     for (int i = 0; i < amount; i++) {
-        aWall->ColliderCheck(enemies.at(i)->GetCollider(), push);
+        aWall->ColliderCheck(getEnemy(i)->GetCollider(), push);
     }
 }
 

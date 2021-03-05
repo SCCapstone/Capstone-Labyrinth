@@ -5,6 +5,7 @@
 #define WALL_COMPONENT_H
 
 #include "Wall.h"
+#include "Individual.h"
 
 /* Purpose:
  *  This class instantiates 3 walls, and any child class that inherits from 
@@ -37,6 +38,8 @@ public:
     bool ColliderCheck(Collider other, float push);
 
     void shiftWallComponent(float x_shift, float y_shift);
+
+    bool inWallComponentBounds(Enemy& indv);
 };
 
 // instantiates all wall instance variables
@@ -92,6 +95,13 @@ void Wall_Component::shiftWallComponent(float x_shift, float y_shift) {
 
     wall3->SetPosition(Vector2f(wall3->GetPosition().x + (x_shift * scale),
                                 wall3->GetPosition().y + (y_shift * scale)));
+}
+
+bool Wall_Component::inWallComponentBounds(Enemy& indv) {
+    if (wall1->GetGlobalWallBounds().intersects(indv.GetGlobalIndividualBounds()) ||
+        wall2->GetGlobalWallBounds().intersects(indv.GetGlobalIndividualBounds()) || 
+        wall3->GetGlobalWallBounds().intersects(indv.GetGlobalIndividualBounds()))
+        return true;
 }
 
 #endif  // WALL_COMPONENT_H

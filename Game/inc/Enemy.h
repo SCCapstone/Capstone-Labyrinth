@@ -152,6 +152,7 @@ void Enemy::Update(float deltaTime, int rv) {
    hb->Move(movement);      // move the enemies healthbar
 }
 
+// TODO add window parameters
 void Enemy::setRandPos() {
 
     // finding two random spawn coordinates
@@ -159,6 +160,9 @@ void Enemy::setRandPos() {
     float p2 = rand() % 1000 + 1;
 
     body.setPosition(p1, p2);
+
+    // TODO check here for walls
+
 
     // reset enemy's outline to red
     FoV.setOutlineColor(sf::Color::Red);

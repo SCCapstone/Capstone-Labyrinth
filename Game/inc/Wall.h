@@ -37,6 +37,7 @@ public:
 
     // accessor
     Vector2f GetPosition() { return wall.getPosition();  }
+    sf::FloatRect GetGlobalWallBounds() { return wall.getGlobalBounds(); }
 };
 
 Wall::Wall(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position) {
