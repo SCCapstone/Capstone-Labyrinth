@@ -1,8 +1,8 @@
 /* Copyright 2021 Samuel Dunny */
-/* WallBuilder (in header file) */
+/* Wall_Component  (in header file) */
 
-#ifndef WALLBUILDER_H
-#define WALLBUILDER_H
+#ifndef WALL_COMPONENT_H
+#define WALL_COMPONENT_H
 
 #include "Wall.h"
 
@@ -12,7 +12,10 @@
  *  to create essentially maze building blocks (step up from singular walls)
  */
 
-class WallBuilder {
+// scale for all wall objects
+static const float scale = 250.0f;
+
+class Wall_Component {
 // protected scope so children can modify instance variables
 protected:
     // variables for the walls
@@ -22,20 +25,22 @@ protected:
 
 public:
     // constructor
-    WallBuilder(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position);
+    Wall_Component(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position);
 
     // destructor
-    ~WallBuilder();
+    ~Wall_Component();
 
     // Draw method, draws all walls into referenced window
     void Draw(sf::RenderWindow& window);
 
     // returns true if Individual's Collider is many contact with any of the 3 wall segments
     bool ColliderCheck(Collider other, float push);
+
+    void shiftWallComponent(float x_shift, float y_shift);
 };
 
 // instantiates all wall instance variables
-WallBuilder::WallBuilder(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position) {
+Wall_Component::Wall_Component(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position) {
     // build all 3 walls in the same place (effectively create just one wall)
     wall1 = new Wall(texture, size, position);
     wall2 = new Wall(texture, size, position);
@@ -43,15 +48,15 @@ WallBuilder::WallBuilder(sf::Texture* texture, sf::Vector2f size, sf::Vector2f p
 }
 
 // empty destructor (handled in Game_Engine)
-WallBuilder::~WallBuilder() { /* empty */ }
+Wall_Component::~Wall_Component() { /* empty */ }
 
-void WallBuilder::Draw(sf::RenderWindow& window) {
+void Wall_Component::Draw(sf::RenderWindow& window) {
     wall1->Draw(window);
     wall2->Draw(window);
     wall3->Draw(window);
 }
 
-bool WallBuilder::ColliderCheck(Collider other, float push) {
+bool Wall_Component::ColliderCheck(Collider other, float push) {
     // retrieve contact status (only do this once, otherwise runs into glitch with running diagonally)
     bool wall_cond1 = wall1->ColliderCheck(other, push);
     bool wall_cond2 = wall2->ColliderCheck(other, push);
@@ -78,4 +83,15 @@ bool WallBuilder::ColliderCheck(Collider other, float push) {
     return false;
 }
 
-#endif  // WALLBUILDER_H
+void Wall_Component::shiftWallComponent(float x_shift, float y_shift) {
+    wall1->SetPosition(Vector2f(wall1->GetPosition().x + (x_shift * scale),
+                                wall1->GetPosition().y + (y_shift * scale)));
+
+    wall2->SetPosition(Vector2f(wall2->GetPosition().x + (x_shift * scale),
+                                wall2->GetPosition().y + (y_shift * scale)));
+
+    wall3->SetPosition(Vector2f(wall3->GetPosition().x + (x_shift * scale),
+                                wall3->GetPosition().y + (y_shift * scale)));
+}
+
+#endif  // WALL_COMPONENT_H

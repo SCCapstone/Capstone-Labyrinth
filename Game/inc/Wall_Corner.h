@@ -4,9 +4,9 @@
 #ifndef WALL_CORNER_H
 #define WALL_CORNER_H
 
-#include "WallBuilder.h"
+#include "Wall_Component.h"
 
-/* This class publicly inherits from WallBuilder
+/* This class publicly inherits from Wall_Component
 *   - uses polymorphism for instantiation
 *   - creates 4 different corner orientations of 3 wall segments (listed below)
 *   - placement of segement is always based on segment 2
@@ -29,7 +29,7 @@
     False               False               True                True
  */
 
-class Wall_Corner: public WallBuilder {
+class Wall_Corner: public Wall_Component {
 private:
     // conditions for the corner orientation (not necessary, might use later)
     bool faceRight;
@@ -43,9 +43,9 @@ public:
     ~Wall_Corner();
 };
 
-// constructs Wall_Corner by passing 3/5 parameters to WallBuilder (polymorphism)
+// constructs Wall_Corner by passing 3/5 parameters to Wall_Component (polymorphism)
 Wall_Corner::Wall_Corner(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position, bool fRight, bool fUp):
-    WallBuilder(texture, size, position) {
+    Wall_Component(texture, size, position) {
     // lower corner
     if (fUp) {
         // wall1 will always be directly above wall 2
