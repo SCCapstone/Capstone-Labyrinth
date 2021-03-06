@@ -8,6 +8,7 @@
 #include "Maze_FourWay.h"
 #include "Maze_Hallway.h"
 #include "Maze_DeadEnd.h"
+#include "Maze_TJunction.h"
 
 /* Purpose:
  *  This class instantiates many maze components into one maze (step up from maze components)
@@ -24,6 +25,7 @@ protected:
     Maze_Component* fw;
     Maze_Component* hw;
     Maze_Component* de;
+    Maze_Component* tj;
 
     Texture brickwall_big;
 
@@ -56,6 +58,7 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     this->fw = nullptr;
     this->hw = nullptr;
     this->de = nullptr;
+    this->tj = nullptr;
 
     // scale defined in Wall_Component class
 
@@ -71,7 +74,7 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
      * bool:                    if corner is facing up
      */
 
-    // position is assumed to be centered at 0.0f, 0.0f
+    // position is assumed to be centered at 0.0f, 0.0f, creates starting chamber
     rd = new Maze_Corner(&brickwall_big, size, Vector2f(-3.0f * scale, -3.0f * scale), true, false);
     ru = new Maze_Corner(&brickwall_big, size, Vector2f(-3.0f * scale, 3.0f * scale), true, true);
     ld = new Maze_Corner(&brickwall_big, size, Vector2f(3.0f * scale, -3.0f * scale), false, false);
@@ -80,6 +83,8 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     fw = new Maze_FourWay(&brickwall_big, size, Vector2f(7.0f * scale, 0.0f * scale));
     hw = new Maze_Hallway(&brickwall_big, size, Vector2f(0.0f * scale, -6.0f * scale), false);
     de = new Maze_DeadEnd(&brickwall_big, size, Vector2f(7.0f * scale, 4.0f * scale), false, true);
+
+    tj = new Maze_TJunction(&brickwall_big, size, Vector2f(-7.0f * scale, 0.0f * scale), false, true);
 
     std::cout << "[4] Initialized Walls" << std::endl;
 }
@@ -96,6 +101,8 @@ void Maze_Builder::MazeContactUpdate_Player(Player* character, float push) {
     fw->ColliderCheck(character->GetCollider(), push);
     hw->ColliderCheck(character->GetCollider(), push);
     de->ColliderCheck(character->GetCollider(), push);
+
+    tj->ColliderCheck(character->GetCollider(), push);
 }
 
 void Maze_Builder::MazeContactUpdate_Enemies(Enemy_Spawner* enemies, float push) {
@@ -108,6 +115,8 @@ void Maze_Builder::MazeContactUpdate_Enemies(Enemy_Spawner* enemies, float push)
     enemies->UpdateWallCollisions(fw, 1.0f);
     enemies->UpdateWallCollisions(hw, 1.0f);
     enemies->UpdateWallCollisions(de, 1.0f);
+
+    enemies->UpdateWallCollisions(tj, 1.0f);
 }
 
 void Maze_Builder::Draw(sf::RenderWindow& window) {
@@ -120,6 +129,8 @@ void Maze_Builder::Draw(sf::RenderWindow& window) {
     fw->Draw(window);
     hw->Draw(window);
     de->Draw(window);
+
+    tj->Draw(window);
 }
 
 // don't think we'll need this
@@ -133,6 +144,8 @@ bool Maze_Builder::ColliderCheck(Collider other, float push) {
     bool piece6_cond = hw->ColliderCheck(other, push);
     bool piece7_cond = de->ColliderCheck(other, push);
 
+    bool piece8_cond = tj->ColliderCheck(other, push);
+
     // seems to work just as well
     if (piece1_cond || 
         piece2_cond || 
@@ -140,7 +153,8 @@ bool Maze_Builder::ColliderCheck(Collider other, float push) {
         piece4_cond || 
         piece5_cond ||
         piece6_cond ||
-        piece7_cond)
+        piece7_cond ||
+        piece8_cond)
         return true;
 
     return false;

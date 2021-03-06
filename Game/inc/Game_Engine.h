@@ -24,10 +24,10 @@ using sf::Color;
  */
 
 // how many minotaurs to spawn
-const static int minotaur_amount = 2;
+const static int minotaur_amount = 0;
 
 // factor to see more maze
-const static int zoomOutFactor = 7;
+const static int zoomOutFactor = 10;
 
 class Game_Engine {
 // private attributes
