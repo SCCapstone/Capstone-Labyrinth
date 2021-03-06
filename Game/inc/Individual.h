@@ -86,6 +86,7 @@ public:
    float getSpeed() { return this->speed; }
    float getHealthPercent() { return ((float(this->totalHealth) / float(this->orig_health)) * 100.0f);  }
    Vector2f getIndividualPos() { return body.getPosition(); }
+   sf::FloatRect GetGlobalIndividualBounds() { return body.getGlobalBounds(); }
    Collider GetCollider() { return Collider(body, FoV, hb->getHealthRect()); }
 
    // mutators

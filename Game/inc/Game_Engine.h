@@ -6,9 +6,8 @@
 
 #include "Player.h"
 #include "Enemy_Spawner.h"
-#include "Wall_Corner.h"
-#include "Wall_Strip.h"
-#include "Maze_Corner.h"
+#include "Maze_Builder.h"
+
 #include <ctime>
 
 using sf::View;
@@ -18,17 +17,17 @@ using sf::Clock;
 using sf::Color;
 
 /* Class that acts as game engine
- * Creates window
- * Creates player
- * Creates enemy spawner
- * Creates various wall instances (TODO make MazeBuilder)
+ * Creates window (from SFML)
+ * Creates player (Player)
+ * Creates enemies (Enemy_Spawner)
+ * Creates a maze (Maze_Builder)
  */
 
 // how many minotaurs to spawn
-const static int minotaur_amount = 2;
+const static int minotaur_amount = 0;
 
 // factor to see more maze
-const static int zoomOutFactor = 1;
+const static int zoomOutFactor = 10;
 
 class Game_Engine {
 // private attributes
@@ -49,12 +48,8 @@ private:
     Enemy_Spawner* minotaurs;
     Texture min_texture;
 
-    // wall variables
-    Maze_Component* rd;
-    Maze_Component* ru;
-    Maze_Component* ld;
-    Maze_Component* lu;
-    Texture brickwall_big;
+    // maze variable
+    Maze_Builder* maze;
 
     // using these so animation runs at same rate irrespective of machine
     float deltaTime;
@@ -72,9 +67,6 @@ private:
 
     // function responsible for catching and dealing with all Events
     void pollEvents();
-
-    // function to update contact between walls and player (syntactic sugar)
-    void WallContactUpdate(Individual* character, Maze_Component* aWall, float push);
 
     // function to test if Individuals exist (player, enemy, etc.)
     bool exists(Individual* other) {
@@ -118,13 +110,10 @@ Game_Engine::~Game_Engine() {
     // Player destructor
     delete this->player;
 
-    // dont need destructor for enemies
+    // Wall_Builder destructor
+    delete this->maze;
 
-    // WallBuilder children destructors
-    delete this->rd;
-    delete this->ru;
-    delete this->ld;
-    delete this->lu;
+    // dont need destructor for enemies
 }
 
 void Game_Engine::Update() {
@@ -142,11 +131,8 @@ void Game_Engine::Update() {
         // must call this after player.Update(), otherwise cammera stutters
         player_view.setCenter(this->player->getIndividualPos());
 
-        // makes wall the immovable object to player
-        WallContactUpdate(player, rd, 1.0f);
-        WallContactUpdate(player, ru, 1.0f);
-        WallContactUpdate(player, ld, 1.0f);
-        WallContactUpdate(player, lu, 1.0f);
+        // makes maze the immovable object to player
+        maze->MazeContactUpdate_Player(player, 1.0f);
     }
 
     // update enemy information if any exist
@@ -154,11 +140,8 @@ void Game_Engine::Update() {
         // updates the minotaur's information
         minotaurs->Update(deltaTime);
 
-        // makes wall the immovable object to minotaur
-        minotaurs->UpdateWallCollisions(rd, 1.0f);
-        minotaurs->UpdateWallCollisions(ru, 1.0f);
-        minotaurs->UpdateWallCollisions(ld, 1.0f);
-        minotaurs->UpdateWallCollisions(lu, 1.0f);
+        // makes maze the immovable object to minotaur
+        maze->MazeContactUpdate_Enemies(minotaurs, 1.0f);
     }
 
     // make sure player and minotaur exists before you utilize them
@@ -187,11 +170,8 @@ void Game_Engine::Render() {
     // centers window view on player
     window->setView(player_view);
     
-    // draws all walls
-    rd->Draw(*window);
-    ru->Draw(*window);
-    ld->Draw(*window);
-    lu->Draw(*window);
+    // draws maze
+    maze->Draw(*window);
 
     // draws player (if it exists)
     if (exists(player))
@@ -266,37 +246,18 @@ void Game_Engine::initEnemies() {
      * &min_texture:    reference to texture
      * Vector2u(10, 5): sprite sheet is 10x5 images
      * 0.35f:           how fast the animations switch between images
-     * 37.0f:          player speed in the relation to objects in the window
+     * 37.0f:           player speed in the relation to objects in the window
      * 300              enemy health
      */
     minotaurs = new Enemy_Spawner(minotaur_amount, 20, Vector2f(125.0f,175.0f), &min_texture, Vector2u(10, 5), 0.35f, 37.0f, 150);
 }
 
 void Game_Engine::initWalls() {
-    // ensure all instance variables are empty
-    this->rd = nullptr;
-    this->ru = nullptr;
-    this->ld = nullptr;
-    this->lu = nullptr;
+    // ensure maze isn't already initialized
+    this->maze = nullptr;
 
-    // scales values to window
-    //float scale = 250.0f;
-
-    // load wall texture from img/ directory
-    brickwall_big.loadFromFile("imgs/wall_texture.png");
-
-    /* Initializing walls
-     * &brickwall:              reference to texture
-     * Vector2f(float, float):  size of object
-     * Vector2f(float, float):  position in the window
-     * bool:                    if corner is facing right
-     * bool:                    if corner is facing up
-     */
-
-    rd = new Maze_Corner(&brickwall_big, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(-3.0f * scale, -3.0f * scale), true, false);
-    ru = new Maze_Corner(&brickwall_big, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(-3.0f * scale, 3.0f * scale), true, true);
-    ld = new Maze_Corner(&brickwall_big, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(3.0f * scale, -3.0f * scale), false, false);
-    lu = new Maze_Corner(&brickwall_big, Vector2f(1.0f * scale, 1.0f * scale), Vector2f(3.0f * scale, 3.0f * scale), false, true);
+    // instantiate a maze object
+    maze = new Maze_Builder(Vector2f(1.0f * scale, 1.0f * scale));
     
     std::cout << "[4] Initialized Walls" << std::endl;
 }
@@ -360,11 +321,6 @@ void Game_Engine::pollEvents() {
                 break;
         }
     }
-}
-
-void Game_Engine::WallContactUpdate(Individual* character, Maze_Component* aWall, float push) {
-    // a value of 1.0f is an immovable object, wheres 0.0f would move quickly
-    aWall->ColliderCheck(character->GetCollider(), push);
 }
 
 #endif  // GAME_ENGINE_H
