@@ -30,4 +30,4 @@ public:
     // TODO add move function to move whole maze components
 };
 
-#endif  // WALL_COMPONENT_H
+#endif  // MAZE_COMPONENT_H

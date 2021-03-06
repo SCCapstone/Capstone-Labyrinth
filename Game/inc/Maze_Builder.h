@@ -5,6 +5,9 @@
 #define MAZE_BUILDER_H
 
 #include "Maze_Corner.h"
+#include "Maze_FourWay.h"
+#include "Maze_Hallway.h"
+#include "Maze_DeadEnd.h"
 
 /* Purpose:
  *  This class instantiates many maze components into one maze (step up from maze components)
@@ -17,6 +20,11 @@ protected:
     Maze_Component* ru;
     Maze_Component* ld;
     Maze_Component* lu;
+
+    Maze_Component* fw;
+    Maze_Component* hw;
+    Maze_Component* de;
+
     Texture brickwall_big;
 
 public:
@@ -45,6 +53,9 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     this->ru = nullptr;
     this->ld = nullptr;
     this->lu = nullptr;
+    this->fw = nullptr;
+    this->hw = nullptr;
+    this->de = nullptr;
 
     // scale defined in Wall_Component class
 
@@ -66,6 +77,10 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     ld = new Maze_Corner(&brickwall_big, size, Vector2f(3.0f * scale, -3.0f * scale), false, false);
     lu = new Maze_Corner(&brickwall_big, size, Vector2f(3.0f * scale, 3.0f * scale), false, true);
 
+    fw = new Maze_FourWay(&brickwall_big, size, Vector2f(7.0f * scale, 0.0f * scale));
+    hw = new Maze_Hallway(&brickwall_big, size, Vector2f(0.0f * scale, -6.0f * scale), false);
+    de = new Maze_DeadEnd(&brickwall_big, size, Vector2f(7.0f * scale, 4.0f * scale), false, true);
+
     std::cout << "[4] Initialized Walls" << std::endl;
 }
 
@@ -77,6 +92,10 @@ void Maze_Builder::MazeContactUpdate_Player(Player* character, float push) {
     ru->ColliderCheck(character->GetCollider(), push);
     ld->ColliderCheck(character->GetCollider(), push);
     lu->ColliderCheck(character->GetCollider(), push);
+
+    fw->ColliderCheck(character->GetCollider(), push);
+    hw->ColliderCheck(character->GetCollider(), push);
+    de->ColliderCheck(character->GetCollider(), push);
 }
 
 void Maze_Builder::MazeContactUpdate_Enemies(Enemy_Spawner* enemies, float push) {
@@ -85,6 +104,10 @@ void Maze_Builder::MazeContactUpdate_Enemies(Enemy_Spawner* enemies, float push)
     enemies->UpdateWallCollisions(ru, 1.0f);
     enemies->UpdateWallCollisions(ld, 1.0f);
     enemies->UpdateWallCollisions(lu, 1.0f);
+
+    enemies->UpdateWallCollisions(fw, 1.0f);
+    enemies->UpdateWallCollisions(hw, 1.0f);
+    enemies->UpdateWallCollisions(de, 1.0f);
 }
 
 void Maze_Builder::Draw(sf::RenderWindow& window) {
@@ -93,6 +116,10 @@ void Maze_Builder::Draw(sf::RenderWindow& window) {
     ru->Draw(window);
     ld->Draw(window);
     lu->Draw(window);
+
+    fw->Draw(window);
+    hw->Draw(window);
+    de->Draw(window);
 }
 
 // don't think we'll need this
@@ -102,11 +129,21 @@ bool Maze_Builder::ColliderCheck(Collider other, float push) {
     bool piece3_cond = ld->ColliderCheck(other, push);
     bool piece4_cond = lu->ColliderCheck(other, push);
 
+    bool piece5_cond = fw->ColliderCheck(other, push);
+    bool piece6_cond = hw->ColliderCheck(other, push);
+    bool piece7_cond = de->ColliderCheck(other, push);
+
     // seems to work just as well
-    if (piece1_cond || piece2_cond || piece3_cond || piece4_cond)
+    if (piece1_cond || 
+        piece2_cond || 
+        piece3_cond || 
+        piece4_cond || 
+        piece5_cond ||
+        piece6_cond ||
+        piece7_cond)
         return true;
 
     return false;
     
 }
-#endif  // WALL_COMPONENT_H
+#endif  // MAZE_BUILDER

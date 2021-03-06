@@ -157,4 +157,4 @@ bool Maze_Corner::inMazeComponentBounds(Enemy& indv) {
     return false;
 }
 
-#endif  // WALL_STRIP_H
+#endif  // MAZE_CORNER_H

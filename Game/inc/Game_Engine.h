@@ -27,7 +27,7 @@ using sf::Color;
 const static int minotaur_amount = 2;
 
 // factor to see more maze
-const static int zoomOutFactor = 3;
+const static int zoomOutFactor = 7;
 
 class Game_Engine {
 // private attributes
