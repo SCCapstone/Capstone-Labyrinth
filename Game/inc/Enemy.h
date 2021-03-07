@@ -156,8 +156,8 @@ void Enemy::Update(float deltaTime, int rv) {
 void Enemy::setRandPos() {
 
     // finding two random spawn coordinates
-    float p1 = rand() % 1000 + 1;
-    float p2 = rand() % 1000 + 1;
+    float p1 = float(rand() % 1000 + 1);
+    float p2 = float(rand() % 1000 + 1);
 
     body.setPosition(p1, p2);
 
@@ -294,7 +294,7 @@ const bool Enemy::getAttackTimer() {
 void Enemy::commitAttack(Individual& other) {
    //std::cout << "Attacking" << std::endl;
    //std::cout << "  Pre Attack: " << other.getTotalHealth() << std::endl;
-   float damage = other.getTotalHealth() - getAttackValue();
+   int damage = other.getTotalHealth() - getAttackValue();
    other.setTotalHealth(damage);
    std::cout << "  Post Attack Player Health: " << other.getTotalHealth() << std::endl;
    std::cout << "       Original Player Health: " << other.getOrignalHealth() << std::endl;

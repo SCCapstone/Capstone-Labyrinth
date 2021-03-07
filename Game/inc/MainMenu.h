@@ -68,11 +68,11 @@ void MainMenu::initMainMenu(float width, float height, int numMenuItems, sf::Ren
 {
     if (win != NULL) {
         this->window = win;
-        width = window->getSize().x;
-        height = window->getSize().y;
+        width = (float)window->getSize().x;
+        height = (float)window->getSize().y;
     }
     else {
-        this->window = new sf::RenderWindow(sf::VideoMode(width, height), "Main Menu");
+        this->window = new sf::RenderWindow(sf::VideoMode((unsigned int)width, (unsigned int)height), "Main Menu");
     }
       this->menu = new Menu(width, height, numMenuItems);
 

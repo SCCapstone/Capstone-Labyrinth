@@ -152,7 +152,7 @@ void Player::Attack(Individual& other) {
 void Player::commitAttack(Individual& other) {
    //std::cout << "Attacking" << std::endl;
    //std::cout << "  Pre Attack: " << other.getTotalHealth() << std::endl;
-   float damage = other.getTotalHealth() - getAttackValue();
+   int damage = other.getTotalHealth() - getAttackValue();
    other.setTotalHealth(damage);
    std::cout << "  Post Attack Enemy Health: " << other.getTotalHealth() << std::endl;
 }

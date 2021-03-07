@@ -61,10 +61,10 @@ Animation::Animation(Texture* texture, Vector2u imageCount, float switchTime) {
     currentImage.x = 0;
 
     // setting animation width to texture width
-    uvRect.width = texture->getSize().x / float(imageCount.x);
+    uvRect.width = (int) texture->getSize().x / (int) imageCount.x;
 
     // setting animation height to texture height
-    uvRect.height = texture->getSize().y / float(imageCount.y);
+    uvRect.height = (int) texture->getSize().y / (int) imageCount.y;
 }
 
 Animation::~Animation() { /* empty */}
