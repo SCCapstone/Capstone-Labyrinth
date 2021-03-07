@@ -22,7 +22,7 @@ private:
     Animation health_anim;
 
     // 'speed' of health bar (has to travel at same speed as enemy and player)
-    int speed;
+    float speed;
 
     // what row of the sprite sheet we are using
     unsigned int row;

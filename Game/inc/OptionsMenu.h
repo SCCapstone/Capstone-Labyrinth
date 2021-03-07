@@ -50,7 +50,7 @@ OptionsMenu::~OptionsMenu()
 
 void OptionsMenu::initOptionsMenu(float width, float height)
 {
-      this->window = new sf::RenderWindow(sf::VideoMode(width,height), "Options Menu");
+      this->window = new sf::RenderWindow(sf::VideoMode((unsigned int)width, (unsigned int)height), "Options Menu");
       this->menu = new Menu(width, height, 5);
 
       //Sets default perams for main menu Text

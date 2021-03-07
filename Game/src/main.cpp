@@ -4,6 +4,7 @@
 #include "../inc/Game_Engine.h"
 #include "../inc/MainMenu.h"
 
+// responsible for creating game and running it
 bool runGame_Engine()
 {
 	Game_Engine game;
@@ -14,6 +15,7 @@ bool runGame_Engine()
 	return true; //Default code placeholder to exit to Main Menu
 }
 
+// responsible for running main menu (and subsequently Game)
 bool runMainMenu()
 {
 	MainMenu mainMenu;
@@ -26,9 +28,10 @@ bool runMainMenu()
 	switch (mainMenuExitCode) //Will return what to run
 	{
 	case 0: //0 will be to run Game engine
-		if (runGame_Engine()); {
+		if (runGame_Engine()) {
 			return true;
 		}
+		return false;
 		break;
 
 	case 1: //1 will be to exit and stop game
@@ -40,7 +43,6 @@ bool runMainMenu()
 	}
 	return false;
 }
-
 
 //Begin Main
 int main() {

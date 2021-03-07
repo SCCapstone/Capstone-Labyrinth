@@ -27,7 +27,7 @@ using sf::Color;
 const static int minotaur_amount = 0;
 
 // factor to see more maze
-const static int zoomOutFactor = 10;
+const static int zoomOutFactor = 1;
 
 class Game_Engine {
 // private attributes
@@ -264,8 +264,8 @@ void Game_Engine::initWalls() {
 
 void Game_Engine::initWindow() {
     // setting dimensions of the window
-    videoMode.height = 1000.0f;
-    videoMode.width = 1000.0f;
+    videoMode.height = (unsigned int)1000;
+    videoMode.width = (unsigned int)1000;
 
     // initializing window (dynamic allocation)
     this->window = new RenderWindow(videoMode, "Game Window", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
@@ -273,7 +273,10 @@ void Game_Engine::initWindow() {
 
     // sets player view and centers player in window
     player_view.setCenter(Vector2f(0.0f,0.0f));
-    player_view.setSize(Vector2f(videoMode.width * zoomOutFactor, videoMode.height * zoomOutFactor));
+
+    float factor_x = float(videoMode.width * zoomOutFactor);
+    float factor_y = float(videoMode.height * zoomOutFactor);
+    player_view.setSize(Vector2f(factor_x, factor_y));
 
     std::cout << "[5] Initialized Window" << std::endl;
 }
@@ -288,7 +291,10 @@ void Game_Engine::initWindow() {
 void Game_Engine::ResizeView(const RenderWindow& window, View& view) {
     // calculating aspect ratio
     float aspectRatio = float(window.getSize().x) / float(window.getSize().y);
-    view.setSize(videoMode.width * aspectRatio * zoomOutFactor, videoMode.height * zoomOutFactor);
+
+    float newRatio_x = float(videoMode.width * zoomOutFactor * aspectRatio);
+    float newRatio_y = float(videoMode.height * zoomOutFactor);
+    view.setSize(newRatio_x, newRatio_y);
 }
 
 void Game_Engine::pollEvents() {

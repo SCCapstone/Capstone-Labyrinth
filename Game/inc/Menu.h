@@ -101,7 +101,7 @@ Menu::Menu(float width, float height, int size)
           std::cout << "Blank Button did not load" << std::endl;
       }
       buttons.resize(menuItems);
-      for (auto i = 0; i < buttons.size(); i++)
+      for (unsigned i = 0; i < buttons.size(); i++)
       {
           buttons[i].setTexture(bButtonTex);
           buttons[i].setPosition(sf::Vector2f(textMenu[i].getGlobalBounds().left, textMenu[i].getGlobalBounds().top));
@@ -155,10 +155,10 @@ void Menu::MoveDown()
 void Menu::setText(int selection, std::string words)
 {
       textMenu[selection].setString(words);
-      for (auto i = 0; i < buttons.size(); i++) {
+      for (unsigned i = 0; i < buttons.size(); i++) {
           buttons[i].setOrigin(sf::Vector2f(
-              0 + (buttons[i].getGlobalBounds().width / 2) - (textMenu[i].getGlobalBounds().width / 2),   //Should Dynamically adjust
-              (buttons[i].getGlobalBounds().height / 2) - (textMenu[i].getGlobalBounds().height - 5.0))); //the buttons to center the text
+              0.0f + (buttons[i].getGlobalBounds().width / 2.0f) - (textMenu[i].getGlobalBounds().width / 2.0f),    //Should Dynamically adjust
+              (buttons[i].getGlobalBounds().height / 2.0f) - (textMenu[i].getGlobalBounds().height - 5.0f)));       //the buttons to center the text
          /* std::cout << i << " " << 
               (buttons[i].getGlobalBounds().width / 2) - (textMenu[i].getGlobalBounds().width / 2) << " " <<
               buttons[i].getGlobalBounds().height / 2 - textMenu[i].getGlobalBounds().height / 2 << std::endl;
