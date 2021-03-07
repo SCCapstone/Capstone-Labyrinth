@@ -23,11 +23,17 @@ using sf::Color;
  * Creates a maze (Maze_Builder)
  */
 
-// how many minotaurs to spawn
-const static int minotaur_amount = 0;
+// Constant Values
+const static int minotaur_amount = 0;       // how many minotaurs to spawn
+const static int minotaur_speed = 27.0f;    // how fast minotaurs are
+const static int minotaur_health = 150;     // how much health the minotaurs originally start with
+const static int minotaur_attVal = 20;      // how much damage minotaurs can do
 
-// factor to see more maze
-const static int zoomOutFactor = 1;
+const static bool genRandomEnemies = true;  // set to true to generate random number of enemies (test code)
+
+const static int zoomOutFactor = 7;         // factor to see more maze
+const static float player_speed = 300.0f;   // factor for player speed
+const static int player_health = 200;       // how much health the player originally starts with
 
 class Game_Engine {
 // private attributes
@@ -75,6 +81,8 @@ private:
       return false;
     }
     
+    void randomEnemyGen();
+
 // public attributes 
 public:
     
@@ -165,6 +173,7 @@ void Game_Engine::Update() {
 
 void Game_Engine::Render() {
     // clears window
+    // TODO add texture background (sand, dirt, etc)
     window->clear(Color(150, 150, 150));
 
     // centers window view on player
@@ -222,7 +231,7 @@ void Game_Engine::initPlayer() {
      * 300.0f:              player speed in the relation to objects in the window
      * 200:                 player total health (initial)
      */
-    player = new Player(&base_movement, Vector2u(12, 4), 0.05f, 300.0f, 200);
+    player = new Player(&base_movement, Vector2u(12, 4), 0.05f, player_speed, player_health);
 
     std::cout << "[2] Initialized Player" << std::endl;
 
@@ -249,7 +258,10 @@ void Game_Engine::initEnemies() {
      * 37.0f:           player speed in the relation to objects in the window
      * 300              enemy health
      */
-    minotaurs = new Enemy_Spawner(minotaur_amount, 20, Vector2f(125.0f,175.0f), &min_texture, Vector2u(10, 5), 0.35f, 37.0f, 150);
+    if (genRandomEnemies)
+        randomEnemyGen();
+    else
+        minotaurs = new Enemy_Spawner(minotaur_amount, minotaur_attVal, Vector2f(125.0f,175.0f), &min_texture, Vector2u(10, 5), 0.35f, minotaur_speed, minotaur_health);
 }
 
 void Game_Engine::initWalls() {
@@ -268,7 +280,7 @@ void Game_Engine::initWindow() {
     videoMode.width = (unsigned int)1000;
 
     // initializing window (dynamic allocation)
-    this->window = new RenderWindow(videoMode, "Game Window", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
+    this->window = new RenderWindow(videoMode, "Capstone Labyrinth", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
     window->setKeyRepeatEnabled(false);
 
     // sets player view and centers player in window
@@ -329,4 +341,10 @@ void Game_Engine::pollEvents() {
     }
 }
 
+void Game_Engine::randomEnemyGen() {
+    srand((unsigned)time(0));
+    // picks a number between 1 - 100
+    int rv = rand() % 100 + 1;
+    minotaurs = new Enemy_Spawner(rv, minotaur_attVal, Vector2f(125.0f, 175.0f), &min_texture, Vector2u(10, 5), 0.35f, minotaur_speed, minotaur_health);
+}
 #endif  // GAME_ENGINE_H
