@@ -25,11 +25,11 @@ using sf::Color;
 
 // Constant Values
 const static int minotaur_amount = 0;       // how many minotaurs to spawn
-const static int minotaur_speed = 27.0f;    // how fast minotaurs are
+const static float minotaur_speed = 27.0f;    // how fast minotaurs are
 const static int minotaur_health = 150;     // how much health the minotaurs originally start with
 const static int minotaur_attVal = 20;      // how much damage minotaurs can do
 
-const static bool genRandomEnemies = false;  // set to true to generate random number of enemies (test code)
+const static bool genRandomEnemies = true;  // set to true to generate random number of enemies (test code)
 
 const static int zoomOutFactor = 10;         // factor to see more maze
 const static float player_speed = 300.0f;    // factor for player speed

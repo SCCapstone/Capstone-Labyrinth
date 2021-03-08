@@ -4,8 +4,16 @@
 #ifndef WALL_H
 #define WALL_H
 
-#include <SFML/Graphics.hpp>
 #include "Collider.h"
+
+// scale for all wall objects
+static const float scale = 250.0f;
+
+// ranges for background display
+const static float X_NEG_RANGE = -25.0f;
+const static float X_POS_RANGE = 25.0f;
+const static float Y_NEG_RANGE = -25.0f;
+const static float Y_POS_RANGE = 25.0f;
 
 class Wall {
 // private attributes

@@ -5,7 +5,6 @@
 #define ENEMY_SPAWNER_H
 
 #include "Enemy.h"
-#include "Player.h"
 #include "Maze_Component.h"
 #include <ctime>
 
@@ -98,6 +97,7 @@ void Enemy_Spawner::Populate(Texture* texture, Vector2u imageCount, float switch
         Enemy* nE = new Enemy(texture, imageCount, switchTime, speed, health);
         nE->setAttackValue(attVal);
         nE->setEnemySize(size);
+        
         nE->setRandPos();
         enemies.push_back(nE);
     }

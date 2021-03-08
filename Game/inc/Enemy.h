@@ -5,6 +5,7 @@
 #define ENEMY_H
 
 #include "Individual.h"
+#include "Wall.h"
 
 // #include <unistd.h>	// doesn't port to windows
 #include <io.h>
@@ -156,8 +157,13 @@ void Enemy::Update(float deltaTime, int rv) {
 void Enemy::setRandPos() {
 
     // finding two random spawn coordinates
-    float p1 = float(rand() % 1000 + 1);
-    float p2 = float(rand() % 1000 + 1);
+    //float p1 = float(rand() % 5000 + 1);
+    //float p2 = -1.0f * float(rand() % 5000 + 1);
+    
+    //Vector2f xrange = 
+
+    float p1 = float(rand() % (int)X_POS_RANGE*scale + 1);
+    float p2 = -1.0f * float(rand() % (int)Y_NEG_RANGE*scale + 1);
 
     body.setPosition(p1, p2);
 

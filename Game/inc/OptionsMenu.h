@@ -4,7 +4,6 @@
 #ifndef OPTIONSMENU_H
 #define OPTIONSMENU_H
 
-#include "SFML/Graphics.hpp"
 #include "Menu.h"
 
 class OptionsMenu

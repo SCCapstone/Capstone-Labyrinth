@@ -13,9 +13,6 @@
  *  to create essentially maze building blocks (step up from singular walls)
  */
 
-// scale for all wall objects
-static const float scale = 250.0f;
-
 class Wall_Component {
 // protected scope so children can modify instance variables
 protected:

@@ -93,6 +93,9 @@ public:
 
     // returns true if Individual's Collider is many contact with any of part of the maze
     bool ColliderCheck(Collider other, float push);
+
+    Vector2f getBackGroundBounds_X() { return Vector2f(X_NEG_RANGE, X_POS_RANGE); }
+    Vector2f getBackGroundBounds_Y() { return Vector2f(Y_NEG_RANGE, Y_POS_RANGE); }
 };
 
 Maze_Builder::Maze_Builder(sf::Vector2f size) {
@@ -201,7 +204,7 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     SAMS_boss_room = new Maze_BossRoom(&brickwall_big, size, Vector2f(20.0f * scale, -19.0f * scale), true, false);
 
     // smallest co-ordinate to largest co-ordinate for both x and y
-    bg = new Background_Map(&background, size, -25.0f, 25.0f, -25.0f, 25.0f);
+    bg = new Background_Map(&background, size, X_NEG_RANGE, X_POS_RANGE, Y_NEG_RANGE, Y_POS_RANGE);
 
     std::cout << "[4] Initialized Walls" << std::endl;
 }
