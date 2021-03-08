@@ -10,6 +10,7 @@
 #include "Maze_DeadEnd.h"
 #include "Maze_TJunction.h"
 #include "Maze_BossRoom.h"
+#include "Background_Map.h"
 
 /* Purpose:
  *  This class instantiates many maze components into one maze (step up from maze components)
@@ -67,7 +68,12 @@ protected:
 
     Maze_Component* SAMS_boss_room;
 
+    // create tile map for background scene
+    Background_Map* bg;
+
+    // textures used for wall and background
     Texture brickwall_big;
+    Texture background;
 
 public:
     // constructor
@@ -133,11 +139,15 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
 
     this->SAMS_boss_room = nullptr;
 
+    this->bg = nullptr;
+
     // scale defined in Wall_Component class
 
     // load wall texture from img/ directory
     // not in parameter so we have the freedom to have multiple textures for walls
     brickwall_big.loadFromFile("imgs/wall_texture.png");
+
+    background.loadFromFile("imgs/sand.png");
 
     /* Initializing walls
      * &brickwall:              reference to texture
@@ -189,6 +199,9 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     SAMS_tj7 = new Maze_TJunction(&brickwall_big, size, Vector2f(8.0f * scale, -19.0f * scale), true, false);
 
     SAMS_boss_room = new Maze_BossRoom(&brickwall_big, size, Vector2f(20.0f * scale, -19.0f * scale), true, false);
+
+    // smallest co-ordinate to largest co-ordinate for both x and y
+    bg = new Background_Map(&background, size, -25.0f, 25.0f, -25.0f, 25.0f);
 
     std::cout << "[4] Initialized Walls" << std::endl;
 }
@@ -286,6 +299,9 @@ void Maze_Builder::MazeContactUpdate_Enemies(Enemy_Spawner* enemies, float push)
 }
 
 void Maze_Builder::Draw(sf::RenderWindow& window) {
+    // draw background first, so it gets drawn over
+    bg->Draw(window);
+
     // draws all walls
     SAMS_chamber_rd->Draw(window);
     SAMS_chamber_ru->Draw(window);
@@ -330,7 +346,6 @@ void Maze_Builder::Draw(sf::RenderWindow& window) {
     SAMS_boss_room->Draw(window);
 }
 
-// don't think we'll need this
 bool Maze_Builder::ColliderCheck(Collider other, float push) {
     bool piece1_cond = SAMS_chamber_rd->ColliderCheck(other, push);
     bool piece2_cond = SAMS_chamber_ru->ColliderCheck(other, push);
