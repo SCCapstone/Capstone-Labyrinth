@@ -1,12 +1,12 @@
 /* Copyright 2021 Samuel Dunny */
-/* Maze_Hallway (in header file) */
+/* Maze_FiveBlockFiller (in header file) */
 
-#ifndef MAZE_HALLWAY_H
-#define MAZE_HALLWAY_H
+#ifndef MAZE_FIVEBLOCKFILLER_H
+#define MAZE_FIVEBLOCKFILLER_H
 
 #include "Maze_Component.h"
 
-class Maze_Hallway : public Maze_Component {
+class Maze_FiveBlockFiller : public Maze_Component {
 private:
     // conditions for the orientation (not necessary, might use later)
     bool horizontal;
@@ -17,10 +17,10 @@ private:
 
 public:
     // constructor
-    Maze_Hallway(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position, bool horizontal);
+    Maze_FiveBlockFiller(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position, bool horiz);
 
     // destructor
-    ~Maze_Hallway();
+    ~Maze_FiveBlockFiller();
 
     // Draw method, draws all walls into referenced window
     void Draw(sf::RenderWindow& window);
@@ -32,39 +32,32 @@ public:
 };
 
 // constructs Wall_Strip by passing 3/4 parameters to Wall_Component (polymorphism)
-Maze_Hallway::Maze_Hallway(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position, bool hor) :
+Maze_FiveBlockFiller::Maze_FiveBlockFiller(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position, bool hor) :
     Maze_Component(texture, size, position) {
 
     // all components originally in the same place
     comp1 = new Wall_Strip(texture, size, position, hor);
     comp2 = new Wall_Strip(texture, size, position, hor);
 
-    this->horizontal = hor;
-
-    /* comp1 = vertical wall_strip
-     * comp2 = vertical wall_strip
-     * ^ all of these currently in same location
-     */
-
     if (hor) {
-        comp1->shiftWallComponent(0.0f, -1.0f);
-        comp2->shiftWallComponent(0.0f, 1.0f);
+        comp1->shiftWallComponent(1.0f, 0.0f);
+        comp2->shiftWallComponent(-1.0f, 0.0f);
     }
     else {
-        comp1->shiftWallComponent(-1.0f, 0.0f);
-        comp2->shiftWallComponent(1.0f, 0.0f);
+        comp1->shiftWallComponent(0.0f, 1.0f);
+        comp2->shiftWallComponent(0.0f, -1.0f);
     }
 }
 
 // empty destructor (handled in Game_Engine)
-Maze_Hallway::~Maze_Hallway() { /* empty */ }
+Maze_FiveBlockFiller::~Maze_FiveBlockFiller() { /* empty */ }
 
-void Maze_Hallway::Draw(sf::RenderWindow& window) {
+void Maze_FiveBlockFiller::Draw(sf::RenderWindow& window) {
     comp1->Draw(window);
     comp2->Draw(window);
 }
 
-bool Maze_Hallway::ColliderCheck(Collider other, float push) {
+bool Maze_FiveBlockFiller::ColliderCheck(Collider other, float push) {
     bool comp1_cond = comp1->ColliderCheck(other, push);
     bool comp2_cond = comp2->ColliderCheck(other, push);
 
@@ -75,7 +68,7 @@ bool Maze_Hallway::ColliderCheck(Collider other, float push) {
     return false;
 }
 
-bool Maze_Hallway::inMazeComponentBounds(Enemy& indv) {
+bool Maze_FiveBlockFiller::inMazeComponentBounds(Enemy& indv) {
     if (comp1->inWallComponentBounds(indv) ||
         comp2->inWallComponentBounds(indv)) {
         //indv.setRandPos();
@@ -84,4 +77,4 @@ bool Maze_Hallway::inMazeComponentBounds(Enemy& indv) {
     return false;
 }
 
-#endif  // MAZE_HALLWAY_H
+#endif  // MAZE_FIVEBLOCKFILLER_H

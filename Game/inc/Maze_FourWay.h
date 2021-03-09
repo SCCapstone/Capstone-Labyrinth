@@ -79,7 +79,7 @@ bool Maze_FourWay::inMazeComponentBounds(Enemy& indv) {
         comp2->inWallComponentBounds(indv) ||
         comp3->inWallComponentBounds(indv) ||
         comp4->inWallComponentBounds(indv)) {
-        indv.setRandPos();
+        //indv.setRandPos();
         return true;
     }
     return false;

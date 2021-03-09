@@ -132,7 +132,7 @@ bool Maze_BossRoom::inMazeComponentBounds(Enemy& indv) {
         comp5->inWallComponentBounds(indv) ||
         comp6->inWallComponentBounds(indv) ||
         comp7->inWallComponentBounds(indv)) {
-        indv.setRandPos();
+        //indv.setRandPos();
         return true;
     }
     return false;

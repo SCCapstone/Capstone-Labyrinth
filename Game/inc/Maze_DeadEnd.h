@@ -2,7 +2,7 @@
 /* Maze_DeadEnd (in header file) */
 
 #ifndef MAZE_DEADEND_H
-#define MAZE_HALLWAY_H
+#define MAZE_DEADEND_H
 
 #include "Maze_Component.h"
 
@@ -95,7 +95,7 @@ bool Maze_DeadEnd::inMazeComponentBounds(Enemy& indv) {
     if (comp1->inWallComponentBounds(indv) ||
         comp2->inWallComponentBounds(indv) ||
         comp3->inWallComponentBounds(indv)) {
-        indv.setRandPos();
+        //indv.setRandPos();
         return true;
     }
     return false;

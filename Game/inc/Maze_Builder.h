@@ -10,6 +10,7 @@
 #include "Maze_DeadEnd.h"
 #include "Maze_TJunction.h"
 #include "Maze_BossRoom.h"
+#include "Maze_FiveBlockFiller.h"
 #include "Background_Map.h"
 
 /* Purpose:
@@ -31,7 +32,6 @@ protected:
     Maze_Component* SAMS_c4;
     Maze_Component* SAMS_c5;
     Maze_Component* SAMS_c6;
-    
 
     // four-ways
     Maze_Component* SAMS_fw1;
@@ -65,6 +65,18 @@ protected:
     Maze_Component* SAMS_tj5;
     Maze_Component* SAMS_tj6;
     Maze_Component* SAMS_tj7;
+
+    // filler strips
+    Maze_Component* SAMS_fs1;
+    Maze_Component* SAMS_fs2;
+    Maze_Component* SAMS_fs3;
+    Maze_Component* SAMS_fs4;
+    Maze_Component* SAMS_fs5;
+    Maze_Component* SAMS_fs6;
+    Maze_Component* SAMS_fs7;
+    Maze_Component* SAMS_fs8;
+    Maze_Component* SAMS_fs9;
+    Maze_Component* SAMS_fs10;
 
     Maze_Component* SAMS_boss_room;
 
@@ -140,6 +152,17 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     this->SAMS_tj6 = nullptr;
     this->SAMS_tj7 = nullptr;
 
+    this->SAMS_fs1 = nullptr;
+    this->SAMS_fs2 = nullptr;
+    this->SAMS_fs3 = nullptr;
+    this->SAMS_fs4 = nullptr;
+    this->SAMS_fs5 = nullptr;
+    this->SAMS_fs6 = nullptr;
+    this->SAMS_fs7 = nullptr;
+    this->SAMS_fs8 = nullptr;
+    this->SAMS_fs9 = nullptr;
+    this->SAMS_fs10 = nullptr;
+
     this->SAMS_boss_room = nullptr;
 
     this->bg = nullptr;
@@ -201,6 +224,17 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     SAMS_tj6 = new Maze_TJunction(&brickwall_big, size, Vector2f(3.0f * scale, -15.0f * scale), true, false);
     SAMS_tj7 = new Maze_TJunction(&brickwall_big, size, Vector2f(8.0f * scale, -19.0f * scale), true, false);
 
+    SAMS_fs1 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(13.0f * scale, -20.0f * scale), false);
+    SAMS_fs2 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(4.0f * scale, -17.0f * scale), true);
+    SAMS_fs3 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(2.0f * scale, -18.0f * scale), false);
+    SAMS_fs4 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(14.0f * scale, -2.0f * scale), true);
+    SAMS_fs5 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(14.0f * scale, -14.0f * scale), true);
+    SAMS_fs6 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(14.0f * scale, -13.0f * scale), true);
+    SAMS_fs7 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(16.0f * scale, 1.0f * scale), false);
+    SAMS_fs8 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(14.0f * scale, 2.0f * scale), true);
+    SAMS_fs9 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(14.0f * scale, 3.0f * scale), true);
+    SAMS_fs10 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(14.0f * scale, 4.0f * scale), true);
+
     SAMS_boss_room = new Maze_BossRoom(&brickwall_big, size, Vector2f(20.0f * scale, -19.0f * scale), true, false);
 
     // smallest co-ordinate to largest co-ordinate for both x and y
@@ -253,6 +287,17 @@ void Maze_Builder::MazeContactUpdate_Player(Player* character, float push) {
     SAMS_tj6->ColliderCheck(character->GetCollider(), push);
     SAMS_tj7->ColliderCheck(character->GetCollider(), push);
 
+    SAMS_fs1->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs2->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs3->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs4->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs5->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs6->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs7->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs8->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs9->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs10->ColliderCheck(character->GetCollider(), push);
+
     SAMS_boss_room->ColliderCheck(character->GetCollider(), push);
 }
 
@@ -297,6 +342,17 @@ void Maze_Builder::MazeContactUpdate_Enemies(Enemy_Spawner* enemies, float push)
     enemies->UpdateWallCollisions(SAMS_tj5, 1.0f);
     enemies->UpdateWallCollisions(SAMS_tj6, 1.0f);
     enemies->UpdateWallCollisions(SAMS_tj7, 1.0f);
+
+    enemies->UpdateWallCollisions(SAMS_fs1, 1.0f);
+    enemies->UpdateWallCollisions(SAMS_fs2, 1.0f);
+    enemies->UpdateWallCollisions(SAMS_fs3, 1.0f);
+    enemies->UpdateWallCollisions(SAMS_fs4, 1.0f);
+    enemies->UpdateWallCollisions(SAMS_fs5, 1.0f);
+    enemies->UpdateWallCollisions(SAMS_fs6, 1.0f);
+    enemies->UpdateWallCollisions(SAMS_fs7, 1.0f);
+    enemies->UpdateWallCollisions(SAMS_fs8, 1.0f);
+    enemies->UpdateWallCollisions(SAMS_fs9, 1.0f);
+    enemies->UpdateWallCollisions(SAMS_fs10, 1.0f);
 
     enemies->UpdateWallCollisions(SAMS_boss_room, 1.0f);
 }
@@ -346,6 +402,17 @@ void Maze_Builder::Draw(sf::RenderWindow& window) {
     SAMS_tj6->Draw(window);
     SAMS_tj7->Draw(window);
 
+    SAMS_fs1->Draw(window);
+    SAMS_fs2->Draw(window);
+    SAMS_fs3->Draw(window);
+    SAMS_fs4->Draw(window);
+    SAMS_fs5->Draw(window);
+    SAMS_fs6->Draw(window);
+    SAMS_fs7->Draw(window);
+    SAMS_fs8->Draw(window);
+    SAMS_fs9->Draw(window);
+    SAMS_fs10->Draw(window);
+
     SAMS_boss_room->Draw(window);
 }
 
@@ -390,6 +457,17 @@ bool Maze_Builder::ColliderCheck(Collider other, float push) {
     bool piece21_cond = SAMS_tj6->ColliderCheck(other, push);
     bool piece23_cond = SAMS_tj7->ColliderCheck(other, push);
 
+    bool piece37_cond = SAMS_fs1->ColliderCheck(other, push);
+    bool piece38_cond = SAMS_fs2->ColliderCheck(other, push);
+    bool piece39_cond = SAMS_fs3->ColliderCheck(other, push);
+    bool piece40_cond = SAMS_fs4->ColliderCheck(other, push);
+    bool piece41_cond = SAMS_fs5->ColliderCheck(other, push);
+    bool piece42_cond = SAMS_fs6->ColliderCheck(other, push);
+    bool piece43_cond = SAMS_fs7->ColliderCheck(other, push);
+    bool piece44_cond = SAMS_fs8->ColliderCheck(other, push);
+    bool piece45_cond = SAMS_fs9->ColliderCheck(other, push);
+    bool piece46_cond = SAMS_fs10->ColliderCheck(other, push);
+
     bool piece36_cond = SAMS_boss_room->ColliderCheck(other, push);
 
     // seems to work just as well
@@ -428,7 +506,17 @@ bool Maze_Builder::ColliderCheck(Collider other, float push) {
         piece33_cond ||
         piece34_cond ||
         piece35_cond ||
-        piece36_cond)
+        piece36_cond ||
+        piece37_cond ||
+        piece38_cond ||
+        piece39_cond ||
+        piece40_cond ||
+        piece41_cond ||
+        piece42_cond ||
+        piece43_cond ||
+        piece44_cond ||
+        piece45_cond ||
+        piece46_cond)
         return true;
 
     return false;
