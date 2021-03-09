@@ -5,6 +5,7 @@
 #define ENEMY_H
 
 #include "Individual.h"
+#include "Wall.h"
 
 // #include <unistd.h>	// doesn't port to windows
 #include <io.h>
@@ -24,7 +25,7 @@ public:
 
     void Update(float deltaTime, int rv);
 
-    void setRandPos();
+    void setRandPos(Vector2f initialCoords, Vector2f finalCoords);
 
     void Chase(Player& player, float deltaTime);
 
@@ -153,13 +154,56 @@ void Enemy::Update(float deltaTime, int rv) {
 }
 
 // TODO add window parameters
-void Enemy::setRandPos() {
+void Enemy::setRandPos(Vector2f initialC, Vector2f finalC) {
 
-    // finding two random spawn coordinates
-    float p1 = float(rand() % 1000 + 1);
-    float p2 = float(rand() % 1000 + 1);
+    // find range between given coordinates
+    float x_max = abs(initialC.x) + abs(finalC.x);
+    float y_max = abs(initialC.y) + abs(finalC.y);
 
-    body.setPosition(p1, p2);
+    //std::cout << "MAX COORDS: " << x_max << ", " <<y_max << std::endl;
+
+    
+    float x_rand = 0.0f;
+    float y_rand = 0.0f;
+
+    while (x_rand == 0.0f ||  y_rand == 0.0f) {
+        //srand((unsigned)time(0));
+        x_rand = float(rand() % (int)x_max + 1);
+        y_rand = float(rand() % (int)y_max + 1);
+    }
+
+    //float x_rand = float(rand() % (int)x_max + 1);
+    //float y_rand = float(rand() % (int)y_max + 1);
+
+    //std::cout << "\tRAND COORDS: " << x_rand << ", " << y_rand << std::endl;
+
+    float x_coord = 0.0f;
+    float y_coord = 0.0f;
+
+    // upper right quadrant
+    if (initialC.x < finalC.x && initialC.y > finalC.y) {
+        x_coord = scale * (x_rand - abs(initialC.x));
+        y_coord = -1.0f * scale * (y_rand - abs(initialC.y));
+    }
+    // lower right quadrant
+    else if (initialC.x < finalC.x && initialC.y < finalC.y) {
+        x_coord = scale * (x_rand - abs(initialC.x));
+        y_coord = scale * (y_rand - abs(initialC.y));
+    }
+    // lower left quadrant
+    else if (initialC.x > finalC.x && initialC.y < finalC.y) {
+        x_coord = -1.0f * scale * (x_rand - abs(initialC.x));
+        y_coord = scale * (y_rand - abs(initialC.y));
+    }
+    // upper left quadrant
+    else {
+        x_coord = -1.0f * scale * (x_rand - abs(initialC.x));
+        y_coord = -1.0f * scale * (y_rand - abs(initialC.y));
+    }
+
+    //std::cout << "\tFINAL COORDS: " << x_coord << ", " << y_coord << std::endl;
+
+    body.setPosition(x_coord, y_coord);
 
     // TODO check here for walls
 

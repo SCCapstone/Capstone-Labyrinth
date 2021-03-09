@@ -4,8 +4,6 @@
 #ifndef MAINMENU_H
 #define MAINMENU_H
 
-#include "SFML/Graphics.hpp"
-#include "Menu.h"
 #include "OptionsMenu.h"
 #include <iostream>
 #include <vector>

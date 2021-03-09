@@ -5,9 +5,11 @@
 #define ENEMY_SPAWNER_H
 
 #include "Enemy.h"
-#include "Player.h"
 #include "Maze_Component.h"
+//#include "Maze_Builder.h"
 #include <ctime>
+
+const static int maxEnemyAmt = 250;
 
 class Enemy_Spawner {
 // private attributes
@@ -15,6 +17,8 @@ private:
     int amount;
     int attackValue;
     Vector2f size;
+    Vector2f x_bounds;
+    Vector2f y_bounds;
 
     // true if player needs to be killed
     bool killPlayer;
@@ -26,13 +30,13 @@ private:
 
 // public attributes
 public:
-    Enemy_Spawner(int us_amount, int attVal, Vector2f size, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health);
+    Enemy_Spawner(int us_amount, int attVal, Vector2f size, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health, Vector2f x_bounds, Vector2f y_bounds);
 
     ~Enemy_Spawner();
 
     void Update(float deltaTime);
 
-    void Populate(Texture* texture, Vector2u imageCount, float switchTime, float speed, int attVal, int health);
+    void Populate(Texture* texture, Vector2u imageCount, float switchTime, float speed, int attVal, int health, Vector2f x_bounds, Vector2f y_bounds);
 
     void Spawn(RenderWindow& window);
 
@@ -69,13 +73,18 @@ public:
  * UpdateWallCollsion:  ensures all enemies maintain proper collision with walls
  * deleteEnemy:          erases enemy at given index
  */
-Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Vector2f size, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health) {
+Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Vector2f size, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health, Vector2f x_bounds, Vector2f y_bounds) {
+    
     this->amount = us_amount;
+
     this->attackValue = attVal;
     this->size = size;
     this->killPlayer = false;
 
-    Populate(texture, imageCount, switchTime, speed, attVal, health); 
+    this->x_bounds = x_bounds;
+    this->y_bounds = y_bounds;
+
+    Populate(texture, imageCount, switchTime, speed, attVal, health, x_bounds, y_bounds); 
 }
 
 Enemy_Spawner::~Enemy_Spawner() {
@@ -92,17 +101,17 @@ void Enemy_Spawner::Update(float deltaTime) {
     }
 }
 
-void Enemy_Spawner::Populate(Texture* texture, Vector2u imageCount, float switchTime, float speed, int attVal, int health) {
-    //srand((unsigned) time(0));
+void Enemy_Spawner::Populate(Texture* texture, Vector2u imageCount, float switchTime, float speed, int attVal, int health, Vector2f x_bounds, Vector2f y_bounds) {
+    enemies.clear();
     for (int i = 0; i < amount; i++) {
         Enemy* nE = new Enemy(texture, imageCount, switchTime, speed, health);
         nE->setAttackValue(attVal);
         nE->setEnemySize(size);
-        nE->setRandPos();
+        nE->setRandPos(x_bounds, y_bounds);
         enemies.push_back(nE);
     }
     std::cout << "[3] Initialized Enemy Spawner" << std::endl;
-    for (int i = 0; i < (int) enemies.size(); i++) {
+    for (int i = 0; i < amount; i++) {
         std::cout << "\t**Enemy " << i << "**" << std::endl;
         std::cout << "\t\tHealth: " << getEnemy(i)->getTotalHealth() << "\n\t\tAttack Value: " << getEnemy(i)->getAttackValue() << std::endl;
     }

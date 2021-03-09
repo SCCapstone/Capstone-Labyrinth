@@ -4,7 +4,6 @@
 #ifndef INDIVIDUAL_H
 #define INDIVIDUAL_H
 
-#include "Animation.h"
 #include "Collider.h"
 #include "HealthBar.h"
 

@@ -4,8 +4,16 @@
 #ifndef WALL_H
 #define WALL_H
 
-#include <SFML/Graphics.hpp>
 #include "Collider.h"
+
+// scale for all wall objects
+static const float scale = 250.0f;
+
+// ranges for background display
+const static float X_NEG_RANGE = -25.0f;
+const static float X_POS_RANGE = 25.0f;
+const static float Y_NEG_RANGE = -25.0f;
+const static float Y_POS_RANGE = 25.0f;
 
 class Wall {
 // private attributes
@@ -37,7 +45,11 @@ public:
 
     // accessor
     Vector2f GetPosition() { return wall.getPosition();  }
-    sf::FloatRect GetGlobalWallBounds() { return wall.getGlobalBounds(); }
+
+    bool inWall(Vector2f pos) {
+        sf::FloatRect bounds = wall.getGlobalBounds();
+        return bounds.contains(pos);
+    }
 };
 
 Wall::Wall(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position) {
@@ -56,6 +68,8 @@ void Wall::Draw(sf::RenderWindow& window) {
 // wall_one->GetCollider().CheckCollision(player->GetCollider(), 0.0f);
 bool Wall::ColliderCheck(Collider other, float push) {
     return GetCollider().CheckCollision(other, push);
+    sf::FloatRect bounds = wall.getGlobalBounds();
+    bool cond = bounds.contains(Vector2f(0.0f, 0.0f));
 }
 
 #endif  // WALL_H

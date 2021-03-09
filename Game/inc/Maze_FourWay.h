@@ -27,7 +27,8 @@ public:
     // returns true if Individual's Collider is many contact with any of the 3 wall segments
     bool ColliderCheck(Collider other, float push);
 
-    bool inMazeComponentBounds(Enemy& indv);
+    bool inWallStructure(Vector2f pos);
+
 };
 
 // constructs Wall_Strip by passing 3/4 parameters to Wall_Component (polymorphism)
@@ -74,15 +75,11 @@ bool Maze_FourWay::ColliderCheck(Collider other, float push) {
     return false;
 }
 
-bool Maze_FourWay::inMazeComponentBounds(Enemy& indv) {
-    if (comp1->inWallComponentBounds(indv) ||
-        comp2->inWallComponentBounds(indv) ||
-        comp3->inWallComponentBounds(indv) ||
-        comp4->inWallComponentBounds(indv)) {
-        indv.setRandPos();
-        return true;
-    }
-    return false;
+bool Maze_FourWay::inWallStructure(Vector2f pos) {
+    return comp1->inWallComponent(pos) ||
+            comp2->inWallComponent(pos) ||
+            comp3->inWallComponent(pos) ||
+            comp4->inWallComponent(pos);
 }
 
 #endif  // MAZE_FOURWAY_H

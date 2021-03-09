@@ -5,7 +5,6 @@
 #define BACKGROUND_TILE_H
 
 #include <SFML/Graphics.hpp>
-#include "Maze_Builder.h"
 
 // from sf library
 using sf::RenderWindow;
