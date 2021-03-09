@@ -24,16 +24,23 @@ using sf::Color;
  */
 
 // Constant Values
-const static int minotaur_amount = 10;       // how many minotaurs to spawn
-const static float minotaur_speed = 27.0f;    // how fast minotaurs are
+
+// these need to be non-const when passed
+static int minotaur_amount = 25;            // how many minotaurs to spawn
+static int MAX_ENEMY_AMT = 1000;
+const static bool genMAXEnemies = true;    // set to true to generate MAX number of enemies (test code)
+
+const static float minotaur_speed = 27.0f;  // how fast minotaurs are
 const static int minotaur_health = 150;     // how much health the minotaurs originally start with
 const static int minotaur_attVal = 20;      // how much damage minotaurs can do
 
-const static bool genRandomEnemies = false;  // set to true to generate random number of enemies (test code)
+const static int zoomOutFactor = 10;        // factor to see more maze
+const static float player_speed = 300.0f;   // factor for player speed
+const static int player_health = 200;       // how much health the player originally starts with
 
-const static int zoomOutFactor = 10;         // factor to see more maze
-const static float player_speed = 300.0f;    // factor for player speed
-const static int player_health = 200;        // how much health the player originally starts with
+// we will always start spwan reference at center of maze (0.0f, 0.0f)
+const static Vector2f enemySpawnOrigin = Vector2f(0.0f, 0.0f);
+const static Vector2f SAM_SpawnLimit = Vector2f(15.0f, -19.0f);
 
 class Game_Engine {
 // private attributes
@@ -82,6 +89,8 @@ private:
     }
     
     void randomEnemyGen();
+
+    void noEnemySpawnInWall(Enemy_Spawner* enms, Maze_Builder* mz);
 
 // public attributes 
 public:
@@ -212,10 +221,12 @@ void Game_Engine::initVariables() {
 
     std::cout << "[1] Initialized Variables" << std::endl;
 
+    srand((unsigned)time(0));
+
     // calls all initializers
     initPlayer();
-    initEnemies();
     initWalls();
+    initEnemies();
 }
 
 void Game_Engine::initPlayer() {
@@ -244,7 +255,8 @@ void Game_Engine::initEnemies() {
     this->minotaurs = nullptr;
 
     // for random positions
-    srand((unsigned) time(0));
+    //srand((unsigned) time(0));
+    //std::cout << rv << std::endl;
 
     // loading sprite sheet
     min_texture.loadFromFile("imgs/minotaur.png");
@@ -258,14 +270,11 @@ void Game_Engine::initEnemies() {
      * 37.0f:           player speed in the relation to objects in the window
      * 300              enemy health
      */
+    if (genMAXEnemies)
+        minotaur_amount = MAX_ENEMY_AMT;
 
-    // we will always start spwan reference at center of maze (0.0f, 0.0f)
-    Vector2f enemySpawnOrigin = Vector2f(0.0f, 0.0f);
-
-    if (genRandomEnemies)
-        randomEnemyGen();
-    else
-        minotaurs = new Enemy_Spawner(minotaur_amount, minotaur_attVal, Vector2f(125.0f,175.0f), &min_texture, Vector2u(10, 5), 0.35f, minotaur_speed, minotaur_health, enemySpawnOrigin, Vector2f(15.0f, -19.0f));
+    minotaurs = new Enemy_Spawner(minotaur_amount, minotaur_attVal, Vector2f(125.0f, 175.0f), &min_texture, Vector2u(10, 5), 0.35f, minotaur_speed, minotaur_health, enemySpawnOrigin, SAM_SpawnLimit);
+    noEnemySpawnInWall(minotaurs, maze);
 }
 
 void Game_Engine::initWalls() {
@@ -346,9 +355,15 @@ void Game_Engine::pollEvents() {
 }
 
 void Game_Engine::randomEnemyGen() {
-    srand((unsigned)time(0));
-    // picks a number between 1 - 100
-    int rv = rand() % 100 + 1;
-    minotaurs = new Enemy_Spawner(rv, minotaur_attVal, Vector2f(125.0f, 175.0f), &min_texture, Vector2u(10, 5), 0.35f, minotaur_speed, minotaur_health, Vector2f(0.0f, 15.0f), Vector2f(0.0f, -19.0f));
+    
 }
+
+void Game_Engine::noEnemySpawnInWall(Enemy_Spawner* ens, Maze_Builder* mz) {
+    for (int i = 0; i < minotaur_amount; i++) {
+        while (mz->inMazeWalls(ens->getEnemy(i)->getIndividualPos())) {
+            ens->getEnemy(i)->setRandPos(enemySpawnOrigin, SAM_SpawnLimit);
+        }
+    }
+}
+
 #endif  // GAME_ENGINE_H

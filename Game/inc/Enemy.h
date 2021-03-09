@@ -162,6 +162,7 @@ void Enemy::setRandPos(Vector2f initialC, Vector2f finalC) {
 
     //std::cout << "MAX COORDS: " << x_max << ", " <<y_max << std::endl;
 
+    
     float x_rand = 0.0f;
     float y_rand = 0.0f;
 
@@ -170,6 +171,9 @@ void Enemy::setRandPos(Vector2f initialC, Vector2f finalC) {
         x_rand = float(rand() % (int)x_max + 1);
         y_rand = float(rand() % (int)y_max + 1);
     }
+
+    //float x_rand = float(rand() % (int)x_max + 1);
+    //float y_rand = float(rand() % (int)y_max + 1);
 
     //std::cout << "\tRAND COORDS: " << x_rand << ", " << y_rand << std::endl;
 

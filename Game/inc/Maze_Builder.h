@@ -106,8 +106,7 @@ public:
     // returns true if Individual's Collider is many contact with any of part of the maze
     bool ColliderCheck(Collider other, float push);
 
-    Vector2f getBackGroundBounds_X() { return Vector2f(X_NEG_RANGE, X_POS_RANGE); }
-    Vector2f getBackGroundBounds_Y() { return Vector2f(Y_NEG_RANGE, Y_POS_RANGE); }
+    bool inMazeWalls(Vector2f coords);
 };
 
 Maze_Builder::Maze_Builder(sf::Vector2f size) {
@@ -522,4 +521,54 @@ bool Maze_Builder::ColliderCheck(Collider other, float push) {
     return false;
     
 }
+
+bool Maze_Builder::inMazeWalls(Vector2f coords) {
+    return SAMS_chamber_rd->inWallStructure(coords) ||
+        SAMS_chamber_ru->inWallStructure(coords) ||
+        SAMS_chamber_ld->inWallStructure(coords) ||
+        SAMS_chamber_lu->inWallStructure(coords) ||
+        SAMS_c1->inWallStructure(coords) ||
+        SAMS_c2->inWallStructure(coords) ||
+        SAMS_c3->inWallStructure(coords) ||
+        SAMS_c4->inWallStructure(coords) ||
+        SAMS_c5->inWallStructure(coords) ||
+        SAMS_c6->inWallStructure(coords) ||
+        SAMS_fw1->inWallStructure(coords) ||
+        SAMS_fw2->inWallStructure(coords) ||
+        SAMS_fw3->inWallStructure(coords) ||
+        SAMS_fw4->inWallStructure(coords) ||
+        SAMS_hw1->inWallStructure(coords) ||
+        SAMS_hw2->inWallStructure(coords) ||
+        SAMS_hw3->inWallStructure(coords) ||
+        SAMS_hw4->inWallStructure(coords) ||
+        SAMS_hw5->inWallStructure(coords) ||
+        SAMS_hw6->inWallStructure(coords) ||
+        SAMS_hw7->inWallStructure(coords) ||
+        SAMS_de1->inWallStructure(coords) ||
+        SAMS_de2->inWallStructure(coords) ||
+        SAMS_de3->inWallStructure(coords) ||
+        SAMS_de4->inWallStructure(coords) ||
+        SAMS_de5->inWallStructure(coords) ||
+        SAMS_de6->inWallStructure(coords) ||
+        SAMS_de7->inWallStructure(coords) ||
+        SAMS_tj1->inWallStructure(coords) ||
+        SAMS_tj2->inWallStructure(coords) ||
+        SAMS_tj3->inWallStructure(coords) ||
+        SAMS_tj4->inWallStructure(coords) ||
+        SAMS_tj5->inWallStructure(coords) ||
+        SAMS_tj6->inWallStructure(coords) ||
+        SAMS_tj7->inWallStructure(coords) ||
+        SAMS_fs1->inWallStructure(coords) ||
+        SAMS_fs2->inWallStructure(coords) ||
+        SAMS_fs3->inWallStructure(coords) ||
+        SAMS_fs4->inWallStructure(coords) ||
+        SAMS_fs5->inWallStructure(coords) ||
+        SAMS_fs6->inWallStructure(coords) ||
+        SAMS_fs7->inWallStructure(coords) ||
+        SAMS_fs8->inWallStructure(coords) ||
+        SAMS_fs9->inWallStructure(coords) ||
+        SAMS_fs10->inWallStructure(coords) ||
+        SAMS_boss_room->inWallStructure(coords);
+}
+
 #endif  // MAZE_BUILDER

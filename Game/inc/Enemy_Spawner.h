@@ -6,8 +6,10 @@
 
 #include "Enemy.h"
 #include "Maze_Component.h"
+//#include "Maze_Builder.h"
 #include <ctime>
 
+const static int maxEnemyAmt = 250;
 
 class Enemy_Spawner {
 // private attributes
@@ -72,7 +74,9 @@ public:
  * deleteEnemy:          erases enemy at given index
  */
 Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Vector2f size, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health, Vector2f x_bounds, Vector2f y_bounds) {
+    
     this->amount = us_amount;
+
     this->attackValue = attVal;
     this->size = size;
     this->killPlayer = false;
@@ -98,16 +102,16 @@ void Enemy_Spawner::Update(float deltaTime) {
 }
 
 void Enemy_Spawner::Populate(Texture* texture, Vector2u imageCount, float switchTime, float speed, int attVal, int health, Vector2f x_bounds, Vector2f y_bounds) {
+    enemies.clear();
     for (int i = 0; i < amount; i++) {
         Enemy* nE = new Enemy(texture, imageCount, switchTime, speed, health);
         nE->setAttackValue(attVal);
         nE->setEnemySize(size);
-        //srand((unsigned)time(0));
         nE->setRandPos(x_bounds, y_bounds);
         enemies.push_back(nE);
     }
     std::cout << "[3] Initialized Enemy Spawner" << std::endl;
-    for (int i = 0; i < (int) enemies.size(); i++) {
+    for (int i = 0; i < amount; i++) {
         std::cout << "\t**Enemy " << i << "**" << std::endl;
         std::cout << "\t\tHealth: " << getEnemy(i)->getTotalHealth() << "\n\t\tAttack Value: " << getEnemy(i)->getAttackValue() << std::endl;
     }

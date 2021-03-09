@@ -36,7 +36,7 @@ public:
 
     void shiftWallComponent(float x_shift, float y_shift);
 
-    bool inWallComponentBounds(Enemy& indv);
+    bool inWallComponent(Vector2f pos);
 };
 
 // instantiates all wall instance variables
@@ -94,11 +94,10 @@ void Wall_Component::shiftWallComponent(float x_shift, float y_shift) {
                                 wall3->GetPosition().y + (y_shift * scale)));
 }
 
-bool Wall_Component::inWallComponentBounds(Enemy& indv) {
-    if (wall1->GetGlobalWallBounds().intersects(indv.GetGlobalIndividualBounds()) ||
-        wall2->GetGlobalWallBounds().intersects(indv.GetGlobalIndividualBounds()) || 
-        wall3->GetGlobalWallBounds().intersects(indv.GetGlobalIndividualBounds()))
-        return true;
+bool Wall_Component::inWallComponent(Vector2f pos) {
+    return wall1->inWall(pos) ||
+        wall2->inWall(pos) ||
+        wall3->inWall(pos);
 }
 
 #endif  // WALL_COMPONENT_H
