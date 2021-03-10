@@ -44,6 +44,8 @@ Maze_TJunction::Maze_TJunction(sf::Texture* texture, sf::Vector2f size, sf::Vect
     comp3 = new Wall_Strip(texture, size, position, horiz);
     comp4 = new Wall_Strip(texture, size, position, horiz);
 
+    this->horizontal = horiz;
+    this->facePositive = fPA;
     
     if (horiz == true && fPA == true) {
         comp1 = new Wall_Corner(texture, size, position, false, true);

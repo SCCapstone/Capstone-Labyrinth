@@ -46,6 +46,7 @@ public:
     // accessor
     Vector2f GetPosition() { return wall.getPosition();  }
 
+    // used to tell if enemy's coords are in wall, helps respawn somewhere else
     bool inWall(Vector2f pos) {
         sf::FloatRect bounds = wall.getGlobalBounds();
         return bounds.contains(pos);

@@ -37,6 +37,9 @@ public:
 // constructs Wall_Strip by passing 3/4 parameters to Wall_Component (polymorphism)
 Maze_DeadEnd::Maze_DeadEnd(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position, bool sW, bool fPA) :
     Maze_Component(texture, size, position) {
+
+    this->sideways = sW;
+    this->facePositive = fPA;
    
     // all components originally in the same place
     if (sW) {

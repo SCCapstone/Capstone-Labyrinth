@@ -6,10 +6,7 @@
 
 #include "Enemy.h"
 #include "Maze_Component.h"
-//#include "Maze_Builder.h"
 #include <ctime>
-
-const static int maxEnemyAmt = 250;
 
 class Enemy_Spawner {
 // private attributes
@@ -63,15 +60,16 @@ public:
 };
 
 /* Public Functions in order:
- * Enemy_Spawner:       default constructor, initializes class variables and calls Populate()
- * ~Enemy_spawner:      destructor, clears vector and deltes reference
- * Update:              updates all enemies in the vector (movement and animation), enables random movement
- * Populate:            dynamically allocates memory for all enemies, sets attack value and position of all enemies in vector
- * Spawn:               responsible for drawing enemies in window
- * UpdateEnemyChase:    if player-enemy vision ranges collide, chase is implemented
- * UpdateEnemyContact:  if player-enemy collide, attack is implemented on both sides
- * UpdateWallCollsion:  ensures all enemies maintain proper collision with walls
- * deleteEnemy:          erases enemy at given index
+ * Enemy_Spawner:           default constructor, initializes class variables and calls Populate()
+ * ~Enemy_spawner:          destructor, clears vector and deltes reference
+ * Update:                  updates all enemies in the vector (movement and animation), enables random movement
+ * Populate:                dynamically allocates memory for all enemies, sets attack value and position of all enemies in vector
+ * Spawn:                   responsible for drawing enemies in window
+ * UpdateHealthBarContact   stops the health bar from moving when making contact with solid objects
+ * UpdateEnemyChase:        if player-enemy vision ranges collide, chase is implemented
+ * UpdateEnemyContact:      if player-enemy collide, attack is implemented on both sides
+ * UpdateWallCollsion:      ensures all enemies maintain proper collision with walls
+ * deleteEnemy:             erases enemy at given index
  */
 Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Vector2f size, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health, Vector2f x_bounds, Vector2f y_bounds) {
     

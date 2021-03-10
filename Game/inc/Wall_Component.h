@@ -37,6 +37,9 @@ public:
     void shiftWallComponent(float x_shift, float y_shift);
 
     bool inWallComponent(Vector2f pos);
+
+    // when making strips and corners, wall 2 is always center, hence only returning wall 2's position
+    Vector2f getCenterWallCoords() { return wall2->GetPosition(); }
 };
 
 // instantiates all wall instance variables

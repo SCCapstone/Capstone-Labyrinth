@@ -86,4 +86,5 @@ void HealthBar::setTextureRectangle() {
 void HealthBar::setPos(Vector2f position) {
     healthbar.setPosition(position);
 }
+
 #endif  // HEALTHBAR_H
