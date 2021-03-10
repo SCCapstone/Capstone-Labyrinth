@@ -42,6 +42,9 @@ public:
 Maze_BossRoom::Maze_BossRoom(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position, bool horiz, bool facePos) :
     Maze_Component(texture, size, position) {
 
+    this->horizontal = horiz;
+    this->facePos = facePos;
+
     // all components originally in the same place
     // faceRight and faceUp don't matter, four-way is symmetric on both axis
     comp1 = new Wall_Corner(texture, size, position, true, true);
@@ -56,7 +59,6 @@ Maze_BossRoom::Maze_BossRoom(sf::Texture* texture, sf::Vector2f size, sf::Vector
     /* comp1 = comp2 = comp3 = comp4 = wall_corner (already oriented correctly)
      * ^ all of these currently in same location
      */
-
     comp1->shiftWallComponent(-2.0f, 2.0f);
     comp2->shiftWallComponent(-2.0f, -2.0f);
     comp3->shiftWallComponent(2.0f, -2.0f);
@@ -136,4 +138,4 @@ bool Maze_BossRoom::inWallStructure(Vector2f pos) {
 }
 
 
-#endif  // MAZE_FOURWAY_H
+#endif  // MAZE_BOSSROOM_H

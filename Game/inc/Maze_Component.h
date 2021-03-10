@@ -27,6 +27,7 @@ public:
     // returns true if Individual's Collider is many contact with any of the 3 wall segments (virtual so it gets overriden)
     virtual bool ColliderCheck(Collider other, float push) { return false; }
 
+    // gets overriden in every child class (due to varying number of wall_components)
     virtual bool inWallStructure(Vector2f coords) { return false; }
 };
 

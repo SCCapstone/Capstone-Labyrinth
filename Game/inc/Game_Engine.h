@@ -26,9 +26,9 @@ using sf::Color;
 // Constant Values
 
 // these need to be non-const when passed
-static int minotaur_amount = 25;            // how many minotaurs to spawn
+static int minotaur_amount = 20;            // how many minotaurs to spawn
 static int MAX_ENEMY_AMT = 1000;
-const static bool genMAXEnemies = true;    // set to true to generate MAX number of enemies (test code)
+const static bool genMAXEnemies = false;    // set to true to generate MAX number of enemies (test code)
 
 const static float minotaur_speed = 27.0f;  // how fast minotaurs are
 const static int minotaur_health = 150;     // how much health the minotaurs originally start with
@@ -38,8 +38,7 @@ const static int zoomOutFactor = 10;        // factor to see more maze
 const static float player_speed = 300.0f;   // factor for player speed
 const static int player_health = 200;       // how much health the player originally starts with
 
-// we will always start spwan reference at center of maze (0.0f, 0.0f)
-const static Vector2f enemySpawnOrigin = Vector2f(0.0f, 0.0f);
+const static Vector2f SAM_enemySpawnOrigin = Vector2f(-1.0f, 1.0f);
 const static Vector2f SAM_SpawnLimit = Vector2f(15.0f, -19.0f);
 
 class Game_Engine {
@@ -273,7 +272,8 @@ void Game_Engine::initEnemies() {
     if (genMAXEnemies)
         minotaur_amount = MAX_ENEMY_AMT;
 
-    minotaurs = new Enemy_Spawner(minotaur_amount, minotaur_attVal, Vector2f(125.0f, 175.0f), &min_texture, Vector2u(10, 5), 0.35f, minotaur_speed, minotaur_health, enemySpawnOrigin, SAM_SpawnLimit);
+    // spawn bounds must be exclusive (any free, non-wall space in bounds is viable spawn location)
+    minotaurs = new Enemy_Spawner(minotaur_amount, minotaur_attVal, Vector2f(125.0f, 175.0f), &min_texture, Vector2u(10, 5), 0.35f, minotaur_speed, minotaur_health, SAM_enemySpawnOrigin, SAM_SpawnLimit);
     noEnemySpawnInWall(minotaurs, maze);
 }
 
@@ -309,9 +309,9 @@ void Game_Engine::initWindow() {
 
 
 /* Game Driver functions in order:
- * pollEvents():                        gets called in Update(), constantly checks for events (pressing keys, lifting keys, exiting window)
- * WallContactUpdate():                 gets called in Update(), updates the contact settings between Individuals and the walls
- * ResizeView(RenderWindow&, View&):    used to keep proportions in event of window resizing
+ * ResizeView(RenderWindow&, View&):                used to keep proportions in event of window resizing
+ * pollEvents():                                    gets called in Update(), constantly checks for events (pressing keys, lifting keys, exiting window)
+ * noEnemySpawnInWall(Enemy_Spawn*, Maze_Builder*)  ensures enemies don't spawn in walls, randomly spawns them somewhere else until they arent in a wall
  */
 void Game_Engine::ResizeView(const RenderWindow& window, View& view) {
     // calculating aspect ratio
@@ -354,14 +354,10 @@ void Game_Engine::pollEvents() {
     }
 }
 
-void Game_Engine::randomEnemyGen() {
-    
-}
-
 void Game_Engine::noEnemySpawnInWall(Enemy_Spawner* ens, Maze_Builder* mz) {
     for (int i = 0; i < minotaur_amount; i++) {
         while (mz->inMazeWalls(ens->getEnemy(i)->getIndividualPos())) {
-            ens->getEnemy(i)->setRandPos(enemySpawnOrigin, SAM_SpawnLimit);
+            ens->getEnemy(i)->setRandPos(SAM_enemySpawnOrigin, SAM_SpawnLimit);
         }
     }
 }

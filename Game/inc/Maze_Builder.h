@@ -11,6 +11,7 @@
 #include "Maze_TJunction.h"
 #include "Maze_BossRoom.h"
 #include "Maze_FiveBlockFiller.h"
+#include "Maze_SpawnChamber.h"
 #include "Background_Map.h"
 
 /* Purpose:
@@ -20,12 +21,11 @@
 class Maze_Builder {
 protected:
     // wall variables
+    
+    // spawn chamber
+    Maze_Component* spawnChamber;
 
     // corners
-    Maze_Component* SAMS_chamber_rd;
-    Maze_Component* SAMS_chamber_ru;
-    Maze_Component* SAMS_chamber_ld;
-    Maze_Component* SAMS_chamber_lu;
     Maze_Component* SAMS_c1;
     Maze_Component* SAMS_c2;
     Maze_Component* SAMS_c3;
@@ -106,15 +106,13 @@ public:
     // returns true if Individual's Collider is many contact with any of part of the maze
     bool ColliderCheck(Collider other, float push);
 
+    // function that returns true if given coordinates are in a wall component
     bool inMazeWalls(Vector2f coords);
 };
 
 Maze_Builder::Maze_Builder(sf::Vector2f size) {
     // ensure all instance variables are empty
-    this->SAMS_chamber_rd = nullptr;
-    this->SAMS_chamber_ru = nullptr;
-    this->SAMS_chamber_ld = nullptr;
-    this->SAMS_chamber_lu = nullptr;
+    this->spawnChamber = nullptr;
     this->SAMS_c1 = nullptr;
     this->SAMS_c2 = nullptr;
     this->SAMS_c3 = nullptr;
@@ -174,19 +172,14 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
 
     background.loadFromFile("imgs/sand.png");
 
-    /* Initializing walls
-     * &brickwall:              reference to texture
-     * Vector2f(float, float):  size of object
-     * Vector2f(float, float):  position in the window
-     * bool:                    if corner is facing right
-     * bool:                    if corner is facing up
-     */
+    // smallest co-ordinate to largest co-ordinate for both x and y
+    // all range parameters defined in Wall.h
+    bg = new Background_Map(&background, size, X_NEG_RANGE, X_POS_RANGE, Y_NEG_RANGE, Y_POS_RANGE);
 
     // position is assumed to be centered at 0.0f, 0.0f, creates starting chamber
-    SAMS_chamber_rd = new Maze_Corner(&brickwall_big, size, Vector2f(-3.0f * scale, -3.0f * scale), true, false);
-    SAMS_chamber_ru = new Maze_Corner(&brickwall_big, size, Vector2f(-3.0f * scale, 3.0f * scale), true, true);
-    SAMS_chamber_ld = new Maze_Corner(&brickwall_big, size, Vector2f(3.0f * scale, -3.0f * scale), false, false);
-    SAMS_chamber_lu = new Maze_Corner(&brickwall_big, size, Vector2f(3.0f * scale, 3.0f * scale), false, true);
+    spawnChamber = new Maze_SpawnChamber(&brickwall_big, size, Vector2f(0.0f * scale, 0.0f * scale));
+
+    // corners
     SAMS_c1 = new Maze_Corner(&brickwall_big, size, Vector2f(0.0f * scale, -11.0f * scale), true, false);
     SAMS_c2 = new Maze_Corner(&brickwall_big, size, Vector2f(0.0f * scale, -15.0f * scale), true, true);
     SAMS_c3 = new Maze_Corner(&brickwall_big, size, Vector2f(15.0f * scale, -16.0f * scale), false, true);
@@ -194,11 +187,13 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     SAMS_c5 = new Maze_Corner(&brickwall_big, size, Vector2f(15.0f * scale, -11.0f * scale), false, false);
     SAMS_c6 = new Maze_Corner(&brickwall_big, size, Vector2f(15.0f * scale, -19.0f * scale), true, false);
 
+    // four-way intersections
     SAMS_fw1 = new Maze_FourWay(&brickwall_big, size, Vector2f(7.0f * scale, 0.0f * scale));
     SAMS_fw2 = new Maze_FourWay(&brickwall_big, size, Vector2f(0.0f * scale, -7.0f * scale));
     SAMS_fw3 = new Maze_FourWay(&brickwall_big, size, Vector2f(11.0f * scale, 0.0f * scale));
     SAMS_fw4 = new Maze_FourWay(&brickwall_big, size, Vector2f(11.0f * scale, -11.0f * scale));
 
+    // 3-wall length hallways
     SAMS_hw1 = new Maze_Hallway(&brickwall_big, size, Vector2f(5.0f * scale, -7.0f * scale), true);
     SAMS_hw2 = new Maze_Hallway(&brickwall_big, size, Vector2f(7.0f * scale, -2.0f * scale), false);
     SAMS_hw3 = new Maze_Hallway(&brickwall_big, size, Vector2f(7.0f * scale, -11.0f * scale), false);
@@ -207,6 +202,7 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     SAMS_hw6 = new Maze_Hallway(&brickwall_big, size, Vector2f(15.0f * scale, -9.0f * scale), false);
     SAMS_hw7 = new Maze_Hallway(&brickwall_big, size, Vector2f(13.0f * scale, -16.0f * scale), true);
 
+    // deadend
     SAMS_de1 = new Maze_DeadEnd(&brickwall_big, size, Vector2f(7.0f * scale, 3.0f * scale), false, true);
     SAMS_de2 = new Maze_DeadEnd(&brickwall_big, size, Vector2f(14.0f * scale, 0.0f * scale), true, false);
     SAMS_de3 = new Maze_DeadEnd(&brickwall_big, size, Vector2f(11.0f * scale, -13.0f * scale), false, true);
@@ -215,6 +211,7 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     SAMS_de6 = new Maze_DeadEnd(&brickwall_big, size, Vector2f(17.0f * scale, -7.0f * scale), true, false);
     SAMS_de7 = new Maze_DeadEnd(&brickwall_big, size, Vector2f(11.0f * scale, -21.0f * scale), false, false);
 
+    // T-junction intersections
     SAMS_tj1 = new Maze_TJunction(&brickwall_big, size, Vector2f(8.0f * scale, -15.0f * scale), true, true);
     SAMS_tj2 = new Maze_TJunction(&brickwall_big, size, Vector2f(7.0f * scale, -7.0f * scale), true, false);
     SAMS_tj3 = new Maze_TJunction(&brickwall_big, size, Vector2f(11.0f * scale, -7.0f * scale), false, false);
@@ -223,6 +220,7 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     SAMS_tj6 = new Maze_TJunction(&brickwall_big, size, Vector2f(3.0f * scale, -15.0f * scale), true, false);
     SAMS_tj7 = new Maze_TJunction(&brickwall_big, size, Vector2f(8.0f * scale, -19.0f * scale), true, false);
 
+    // filler segments (used her to fill extra maze space within enemy spawn bounds that we dont want enemies to spawn in)
     SAMS_fs1 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(13.0f * scale, -20.0f * scale), false);
     SAMS_fs2 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(4.0f * scale, -17.0f * scale), true);
     SAMS_fs3 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(2.0f * scale, -18.0f * scale), false);
@@ -234,10 +232,8 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     SAMS_fs9 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(14.0f * scale, 3.0f * scale), true);
     SAMS_fs10 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(14.0f * scale, 4.0f * scale), true);
 
+    // creates room for maze section boss
     SAMS_boss_room = new Maze_BossRoom(&brickwall_big, size, Vector2f(20.0f * scale, -19.0f * scale), true, false);
-
-    // smallest co-ordinate to largest co-ordinate for both x and y
-    bg = new Background_Map(&background, size, X_NEG_RANGE, X_POS_RANGE, Y_NEG_RANGE, Y_POS_RANGE);
 
     std::cout << "[4] Initialized Walls" << std::endl;
 }
@@ -246,10 +242,7 @@ Maze_Builder::~Maze_Builder() { /* empty */ }
 
 void Maze_Builder::MazeContactUpdate_Player(Player* character, float push) {
     // a value of 1.0f is an immovable object, wheres 0.0f would move quickly
-    SAMS_chamber_rd->ColliderCheck(character->GetCollider(), push);
-    SAMS_chamber_ru->ColliderCheck(character->GetCollider(), push);
-    SAMS_chamber_ld->ColliderCheck(character->GetCollider(), push);
-    SAMS_chamber_lu->ColliderCheck(character->GetCollider(), push);
+    spawnChamber->ColliderCheck(character->GetCollider(), push);
     SAMS_c1->ColliderCheck(character->GetCollider(), push);
     SAMS_c2->ColliderCheck(character->GetCollider(), push);
     SAMS_c3->ColliderCheck(character->GetCollider(), push);
@@ -302,10 +295,7 @@ void Maze_Builder::MazeContactUpdate_Player(Player* character, float push) {
 
 void Maze_Builder::MazeContactUpdate_Enemies(Enemy_Spawner* enemies, float push) {
     // makes wall the immovable object to minotaur
-    enemies->UpdateWallCollisions(SAMS_chamber_rd, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_chamber_ru, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_chamber_ld, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_chamber_lu, 1.0f);
+    enemies->UpdateWallCollisions(spawnChamber, 1.0f);
     enemies->UpdateWallCollisions(SAMS_c1, 1.0f);
     enemies->UpdateWallCollisions(SAMS_c2, 1.0f);
     enemies->UpdateWallCollisions(SAMS_c3, 1.0f);
@@ -361,10 +351,7 @@ void Maze_Builder::Draw(sf::RenderWindow& window) {
     bg->Draw(window);
 
     // draws all walls
-    SAMS_chamber_rd->Draw(window);
-    SAMS_chamber_ru->Draw(window);
-    SAMS_chamber_ld->Draw(window);
-    SAMS_chamber_lu->Draw(window);
+    spawnChamber->Draw(window);
     SAMS_c1->Draw(window);
     SAMS_c2->Draw(window);
     SAMS_c3->Draw(window);
@@ -416,10 +403,8 @@ void Maze_Builder::Draw(sf::RenderWindow& window) {
 }
 
 bool Maze_Builder::ColliderCheck(Collider other, float push) {
-    bool piece1_cond = SAMS_chamber_rd->ColliderCheck(other, push);
-    bool piece2_cond = SAMS_chamber_ru->ColliderCheck(other, push);
-    bool piece3_cond = SAMS_chamber_ld->ColliderCheck(other, push);
-    bool piece4_cond = SAMS_chamber_lu->ColliderCheck(other, push);
+    
+    bool piece1_cond = spawnChamber->ColliderCheck(other, push);
     bool piece15_cond = SAMS_c1->ColliderCheck(other, push);
     bool piece20_cond = SAMS_c2->ColliderCheck(other, push);
     bool piece28_cond = SAMS_c3->ColliderCheck(other, push);
@@ -471,9 +456,6 @@ bool Maze_Builder::ColliderCheck(Collider other, float push) {
 
     // seems to work just as well
     if (piece1_cond || 
-        piece2_cond || 
-        piece3_cond || 
-        piece4_cond || 
         piece5_cond ||
         piece6_cond ||
         piece7_cond ||
@@ -523,52 +505,49 @@ bool Maze_Builder::ColliderCheck(Collider other, float push) {
 }
 
 bool Maze_Builder::inMazeWalls(Vector2f coords) {
-    return SAMS_chamber_rd->inWallStructure(coords) ||
-        SAMS_chamber_ru->inWallStructure(coords) ||
-        SAMS_chamber_ld->inWallStructure(coords) ||
-        SAMS_chamber_lu->inWallStructure(coords) ||
-        SAMS_c1->inWallStructure(coords) ||
-        SAMS_c2->inWallStructure(coords) ||
-        SAMS_c3->inWallStructure(coords) ||
-        SAMS_c4->inWallStructure(coords) ||
-        SAMS_c5->inWallStructure(coords) ||
-        SAMS_c6->inWallStructure(coords) ||
-        SAMS_fw1->inWallStructure(coords) ||
-        SAMS_fw2->inWallStructure(coords) ||
-        SAMS_fw3->inWallStructure(coords) ||
-        SAMS_fw4->inWallStructure(coords) ||
-        SAMS_hw1->inWallStructure(coords) ||
-        SAMS_hw2->inWallStructure(coords) ||
-        SAMS_hw3->inWallStructure(coords) ||
-        SAMS_hw4->inWallStructure(coords) ||
-        SAMS_hw5->inWallStructure(coords) ||
-        SAMS_hw6->inWallStructure(coords) ||
-        SAMS_hw7->inWallStructure(coords) ||
-        SAMS_de1->inWallStructure(coords) ||
-        SAMS_de2->inWallStructure(coords) ||
-        SAMS_de3->inWallStructure(coords) ||
-        SAMS_de4->inWallStructure(coords) ||
-        SAMS_de5->inWallStructure(coords) ||
-        SAMS_de6->inWallStructure(coords) ||
-        SAMS_de7->inWallStructure(coords) ||
-        SAMS_tj1->inWallStructure(coords) ||
-        SAMS_tj2->inWallStructure(coords) ||
-        SAMS_tj3->inWallStructure(coords) ||
-        SAMS_tj4->inWallStructure(coords) ||
-        SAMS_tj5->inWallStructure(coords) ||
-        SAMS_tj6->inWallStructure(coords) ||
-        SAMS_tj7->inWallStructure(coords) ||
-        SAMS_fs1->inWallStructure(coords) ||
-        SAMS_fs2->inWallStructure(coords) ||
-        SAMS_fs3->inWallStructure(coords) ||
-        SAMS_fs4->inWallStructure(coords) ||
-        SAMS_fs5->inWallStructure(coords) ||
-        SAMS_fs6->inWallStructure(coords) ||
-        SAMS_fs7->inWallStructure(coords) ||
-        SAMS_fs8->inWallStructure(coords) ||
-        SAMS_fs9->inWallStructure(coords) ||
-        SAMS_fs10->inWallStructure(coords) ||
-        SAMS_boss_room->inWallStructure(coords);
+    return spawnChamber->inWallStructure(coords) ||
+            SAMS_c1->inWallStructure(coords) ||
+            SAMS_c2->inWallStructure(coords) ||
+            SAMS_c3->inWallStructure(coords) ||
+            SAMS_c4->inWallStructure(coords) ||
+            SAMS_c5->inWallStructure(coords) ||
+            SAMS_c6->inWallStructure(coords) ||
+            SAMS_fw1->inWallStructure(coords) ||
+            SAMS_fw2->inWallStructure(coords) ||
+            SAMS_fw3->inWallStructure(coords) ||
+            SAMS_fw4->inWallStructure(coords) ||
+            SAMS_hw1->inWallStructure(coords) ||
+            SAMS_hw2->inWallStructure(coords) ||
+            SAMS_hw3->inWallStructure(coords) ||
+            SAMS_hw4->inWallStructure(coords) ||
+            SAMS_hw5->inWallStructure(coords) ||
+            SAMS_hw6->inWallStructure(coords) ||
+            SAMS_hw7->inWallStructure(coords) ||
+            SAMS_de1->inWallStructure(coords) ||
+            SAMS_de2->inWallStructure(coords) ||
+            SAMS_de3->inWallStructure(coords) ||
+            SAMS_de4->inWallStructure(coords) ||
+            SAMS_de5->inWallStructure(coords) ||
+            SAMS_de6->inWallStructure(coords) ||
+            SAMS_de7->inWallStructure(coords) ||
+            SAMS_tj1->inWallStructure(coords) ||
+            SAMS_tj2->inWallStructure(coords) ||
+            SAMS_tj3->inWallStructure(coords) ||
+            SAMS_tj4->inWallStructure(coords) ||
+            SAMS_tj5->inWallStructure(coords) ||
+            SAMS_tj6->inWallStructure(coords) ||
+            SAMS_tj7->inWallStructure(coords) ||
+            SAMS_fs1->inWallStructure(coords) ||
+            SAMS_fs2->inWallStructure(coords) ||
+            SAMS_fs3->inWallStructure(coords) ||
+            SAMS_fs4->inWallStructure(coords) ||
+            SAMS_fs5->inWallStructure(coords) ||
+            SAMS_fs6->inWallStructure(coords) ||
+            SAMS_fs7->inWallStructure(coords) ||
+            SAMS_fs8->inWallStructure(coords) ||
+            SAMS_fs9->inWallStructure(coords) ||
+            SAMS_fs10->inWallStructure(coords) ||
+            SAMS_boss_room->inWallStructure(coords);
 }
 
-#endif  // MAZE_BUILDER
+#endif  // MAZE_BUILDER_H

@@ -6,9 +6,7 @@
 
 #include "Individual.h"
 #include "Wall.h"
-
-// #include <unistd.h>	// doesn't port to windows
-#include <io.h>
+#include <io.h>     // #include <unistd.h> doesn't port to windows
 
 class Enemy : public Individual {
 // private attributes
@@ -153,7 +151,6 @@ void Enemy::Update(float deltaTime, int rv) {
    hb->Move(movement);      // move the enemies healthbar
 }
 
-// TODO add window parameters
 void Enemy::setRandPos(Vector2f initialC, Vector2f finalC) {
 
     // find range between given coordinates

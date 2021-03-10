@@ -29,6 +29,8 @@ public:
 
     // takes in window reference, draws player
     void Draw(RenderWindow& window);
+
+    int getTileAmount() { return this->tile_amount;  }
 };
 
 Background_Map::Background_Map(Texture* texture, Vector2f size, float x_posSTART, float x_posEND, float y_posSTART, float y_posEND) {

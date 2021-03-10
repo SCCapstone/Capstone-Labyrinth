@@ -40,7 +40,7 @@ Maze_FiveBlockFiller::Maze_FiveBlockFiller(sf::Texture* texture, sf::Vector2f si
     comp1 = new Wall_Strip(texture, size, position, hor);
     comp2 = new Wall_Strip(texture, size, position, hor);
 
-    horizontal = hor;
+    this->horizontal = hor;
 
     if (hor) {
         comp1->shiftWallComponent(1.0f, 0.0f);

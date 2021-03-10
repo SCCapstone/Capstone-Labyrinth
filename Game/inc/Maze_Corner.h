@@ -33,6 +33,8 @@ public:
 
     bool inWallStructure(Vector2f pos);
 
+    Vector2f getOuterCornerCoord();
+
 };
 
 // constructs Wall_Strip by passing 3/4 parameters to Wall_Component (polymorphism)
@@ -152,6 +154,11 @@ bool Maze_Corner::inWallStructure(Vector2f pos) {
         comp2->inWallComponent(pos) ||
         comp3->inWallComponent(pos) ||
         comp4->inWallComponent(pos);
+}
+
+Vector2f Maze_Corner::getOuterCornerCoord() {
+    // comp3 is always the furthest corner coordinate
+    return comp3->getCenterWallCoords();
 }
 
 
