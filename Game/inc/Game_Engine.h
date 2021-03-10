@@ -284,7 +284,7 @@ void Game_Engine::initWalls() {
     // instantiate a maze object
     maze = new Maze_Builder(Vector2f(1.0f * scale, 1.0f * scale));
     
-    std::cout << "[4] Initialized Walls" << std::endl;
+    std::cout << "[4] Initialized Maze" << std::endl;
 }
 
 void Game_Engine::initWindow() {
