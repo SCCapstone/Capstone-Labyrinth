@@ -13,7 +13,7 @@
 #include "Maze_FiveBlockFiller.h"
 
 /* Purpose:
- *  This class instantiates many maze quadrants into one maze(step up from maze components)
+ *  This class instantiates many maze components into one maze quadrant(step up from maze components)
  *  All cordinate placements assume center is at 0,0 in the window
  */
 
@@ -214,8 +214,6 @@ Maze_FirstQuadrant::Maze_FirstQuadrant(sf::Vector2f size) {
 
     // creates room for maze section boss
     SAMS_boss_room = new Maze_BossRoom(&brickwall_big, size, Vector2f(20.0f * scale, -19.0f * scale), true, false);
-
-    std::cout << "[4] Initialized Quadrant 1 Walls" << std::endl;
 }
 
 Maze_FirstQuadrant::~Maze_FirstQuadrant() { /* empty */ }
