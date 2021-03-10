@@ -74,6 +74,7 @@ protected:
     Maze_Component* SAMS_fs9;
     Maze_Component* SAMS_fs10;
 
+    // boss room
     Maze_Component* SAMS_boss_room;
 
     // textures used for wall and background
@@ -272,58 +273,57 @@ void Maze_FirstQuadrant::MazeContactUpdate_Player(Player* character, float push)
 
 void Maze_FirstQuadrant::MazeContactUpdate_Enemies(Enemy_Spawner* enemies, float push) {
     // makes wall the immovable object to minotaur
-    enemies->UpdateWallCollisions(SAMS_c1, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_c2, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_c3, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_c4, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_c5, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_c6, 1.0f);
+    enemies->UpdateWallCollisions(SAMS_c1, push);
+    enemies->UpdateWallCollisions(SAMS_c2, push);
+    enemies->UpdateWallCollisions(SAMS_c3, push);
+    enemies->UpdateWallCollisions(SAMS_c4, push);
+    enemies->UpdateWallCollisions(SAMS_c5, push);
+    enemies->UpdateWallCollisions(SAMS_c6, push);
 
-    enemies->UpdateWallCollisions(SAMS_fw1, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_fw2, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_fw3, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_fw4, 1.0f);
+    enemies->UpdateWallCollisions(SAMS_fw1, push);
+    enemies->UpdateWallCollisions(SAMS_fw2, push);
+    enemies->UpdateWallCollisions(SAMS_fw3, push);
+    enemies->UpdateWallCollisions(SAMS_fw4, push);
 
-    enemies->UpdateWallCollisions(SAMS_hw1, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_hw2, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_hw3, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_hw4, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_hw5, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_hw6, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_hw7, 1.0f);
+    enemies->UpdateWallCollisions(SAMS_hw1, push);
+    enemies->UpdateWallCollisions(SAMS_hw2, push);
+    enemies->UpdateWallCollisions(SAMS_hw3, push);
+    enemies->UpdateWallCollisions(SAMS_hw4, push);
+    enemies->UpdateWallCollisions(SAMS_hw5, push);
+    enemies->UpdateWallCollisions(SAMS_hw6, push);
+    enemies->UpdateWallCollisions(SAMS_hw7, push);
 
-    enemies->UpdateWallCollisions(SAMS_de1, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_de2, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_de3, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_de4, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_de5, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_de6, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_de7, 1.0f);
+    enemies->UpdateWallCollisions(SAMS_de1, push);
+    enemies->UpdateWallCollisions(SAMS_de2, push);
+    enemies->UpdateWallCollisions(SAMS_de3, push);
+    enemies->UpdateWallCollisions(SAMS_de4, push);
+    enemies->UpdateWallCollisions(SAMS_de5, push);
+    enemies->UpdateWallCollisions(SAMS_de6, push);
+    enemies->UpdateWallCollisions(SAMS_de7, push);
 
-    enemies->UpdateWallCollisions(SAMS_tj1, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_tj2, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_tj3, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_tj4, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_tj5, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_tj6, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_tj7, 1.0f);
+    enemies->UpdateWallCollisions(SAMS_tj1, push);
+    enemies->UpdateWallCollisions(SAMS_tj2, push);
+    enemies->UpdateWallCollisions(SAMS_tj3, push);
+    enemies->UpdateWallCollisions(SAMS_tj4, push);
+    enemies->UpdateWallCollisions(SAMS_tj5, push);
+    enemies->UpdateWallCollisions(SAMS_tj6, push);
+    enemies->UpdateWallCollisions(SAMS_tj7, push);
 
-    enemies->UpdateWallCollisions(SAMS_fs1, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_fs2, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_fs3, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_fs4, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_fs5, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_fs6, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_fs7, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_fs8, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_fs9, 1.0f);
-    enemies->UpdateWallCollisions(SAMS_fs10, 1.0f);
+    enemies->UpdateWallCollisions(SAMS_fs1, push);
+    enemies->UpdateWallCollisions(SAMS_fs2, push);
+    enemies->UpdateWallCollisions(SAMS_fs3, push);
+    enemies->UpdateWallCollisions(SAMS_fs4, push);
+    enemies->UpdateWallCollisions(SAMS_fs5, push);
+    enemies->UpdateWallCollisions(SAMS_fs6, push);
+    enemies->UpdateWallCollisions(SAMS_fs7, push);
+    enemies->UpdateWallCollisions(SAMS_fs8, push);
+    enemies->UpdateWallCollisions(SAMS_fs9, push);
+    enemies->UpdateWallCollisions(SAMS_fs10, push);
 
-    enemies->UpdateWallCollisions(SAMS_boss_room, 1.0f);
+    enemies->UpdateWallCollisions(SAMS_boss_room, push);
 }
 
 void Maze_FirstQuadrant::Draw(sf::RenderWindow& window) {
-
     // draws all walls
     SAMS_c1->Draw(window);
     SAMS_c2->Draw(window);
