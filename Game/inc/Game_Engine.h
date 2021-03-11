@@ -6,6 +6,7 @@
 
 #include "Player.h"
 #include "Enemy_Spawner.h"
+#include "Replinish_Spawner.h"
 #include "Maze_Builder.h"
 
 #include <ctime>
@@ -34,9 +35,10 @@ const static float minotaur_speed = 27.0f;  // how fast minotaurs are
 const static int minotaur_health = 150;     // how much health the minotaurs originally start with
 const static int minotaur_attVal = 20;      // how much damage minotaurs can do
 
-const static int zoomOutFactor = 10;        // factor to see more maze
+const static int zoomOutFactor = 4;        // factor to see more maze
 const static float player_speed = 300.0f;   // factor for player speed
 const static int player_health = 200;       // how much health the player originally starts with
+const static int SAM_QuadrantHeartAmt = 8;
 
 const static Vector2f SAM_enemySpawnOrigin = Vector2f(-1.0f, 1.0f);
 const static Vector2f SAM_SpawnLimit = Vector2f(15.0f, -19.0f);
@@ -63,6 +65,9 @@ private:
     // maze variable
     Maze_Builder* maze;
 
+    Replinish_Spawner* replinishers;
+    Texture hr_text;
+
     // using these so animation runs at same rate irrespective of machine
     float deltaTime;
     Clock clock;
@@ -70,6 +75,7 @@ private:
     // initializer functions
     void initVariables();
     void initPlayer();
+    void initReplinishers();
     void initEnemies();
     void initWalls();
     void initWindow();
@@ -86,10 +92,9 @@ private:
          return true;
       return false;
     }
-    
-    void randomEnemyGen();
 
     void noEnemySpawnInWall(Enemy_Spawner* enms, Maze_Builder* mz);
+    void noHeartSpawnInWall(Replinish_Spawner* hrts, Maze_Builder* mz);
 
 // public attributes 
 public:
@@ -130,6 +135,7 @@ Game_Engine::~Game_Engine() {
     delete this->maze;
 
     // dont need destructor for enemies
+    // don't need a destructor for hearts
 }
 
 void Game_Engine::Update() {
@@ -138,6 +144,10 @@ void Game_Engine::Update() {
 
     // poll events
     pollEvents();
+
+    if (!(replinishers->Empty())) {
+        replinishers->Update(deltaTime);
+    }
 
     // update player information if it exists
     if (exists(player)) {
@@ -149,6 +159,10 @@ void Game_Engine::Update() {
 
         // makes maze the immovable object to player
         maze->MazeContactUpdate_Player(player, 1.0f);
+
+        if (!(replinishers->Empty())) {
+            replinishers->UpdatePlayerContact(*player);
+        }
     }
 
     // update enemy information if any exist
@@ -190,6 +204,9 @@ void Game_Engine::Render() {
     // draws maze
     maze->Draw(*window);
 
+    if (!(replinishers->Empty()))
+        replinishers->Spawn(*window);
+
     // draws player (if it exists)
     if (exists(player))
         player->Draw(*window);
@@ -205,11 +222,12 @@ void Game_Engine::Render() {
 
 
 /* Initializer functions in order:
- * initVariables(): initilizes all variables, calls initPlayer(), initEnemies(), and initWalls()
- * initPlayer():    initializes main player, sets it to sprite sheet, reports player base health and attack value
- * initEnemies():   initializes enemy objects, sets their position, reports enemy base health and attack value
- * initWalls():     initializes wall objects (2), loads texture for them
- * initWindow():    initializes game window, sets view to be center with player
+ * initVariables():     initilizes all variables, calls initPlayer(), initEnemies(), and initWalls()
+ * initPlayer():        initializes main player, sets it to sprite sheet, reports player base health and attack value
+ * initReplinishers():  initializes health replinish objects, sets their positions randomly
+ * initEnemies():       initializes enemy objects, sets their position randomly, reports enemy base health and attack value
+ * initWalls():         initializes wall objects (2), loads texture for them
+ * initWindow():        initializes game window, sets view to be center with player
  */
 void Game_Engine::initVariables() {
     // clearing any previous memory, not necessary, but safe
@@ -218,14 +236,15 @@ void Game_Engine::initVariables() {
     // initializing deltaTime 
     deltaTime = 0.0f;
 
-    std::cout << "[1] Initialized Variables" << std::endl;
-
     srand((unsigned)time(0));
 
     // calls all initializers
     initPlayer();
-    initWalls();
+    initWalls();            // walls needs to be initalized before enemies for random placement to work
     initEnemies();
+    initReplinishers();
+
+    std::cout << "[5] Initialized Variables" << std::endl;
 }
 
 void Game_Engine::initPlayer() {
@@ -243,11 +262,20 @@ void Game_Engine::initPlayer() {
      */
     player = new Player(&base_movement, Vector2u(12, 4), 0.05f, player_speed, player_health);
 
-    std::cout << "[2] Initialized Player" << std::endl;
+    std::cout << "[1] Initialized Player" << std::endl;
 
     // reports player statistics
     std::cout << "\t**Player Total Health: " << player->getTotalHealth() << "**" << std::endl;
     std::cout << "\t**Player Attack Value: " << player->getAttackValue() << "**" << std::endl;
+}
+
+void Game_Engine::initReplinishers() {
+    this->replinishers = nullptr;
+
+    hr_text.loadFromFile("imgs/spinning_heart.png");
+
+    replinishers = new Replinish_Spawner(SAM_QuadrantHeartAmt, Vector2f(0.2f * scale, 0.3f * scale), &hr_text, Vector2u(4, 1), 0.5f, SAM_enemySpawnOrigin, SAM_SpawnLimit);
+    noHeartSpawnInWall(replinishers, maze);
 }
 
 void Game_Engine::initEnemies() {
@@ -284,7 +312,7 @@ void Game_Engine::initWalls() {
     // instantiate a maze object
     maze = new Maze_Builder(Vector2f(1.0f * scale, 1.0f * scale));
     
-    std::cout << "[4] Initialized Maze" << std::endl;
+    std::cout << "[2] Initialized Maze" << std::endl;
 }
 
 void Game_Engine::initWindow() {
@@ -303,7 +331,7 @@ void Game_Engine::initWindow() {
     float factor_y = float(videoMode.height * zoomOutFactor);
     player_view.setSize(Vector2f(factor_x, factor_y));
 
-    std::cout << "[5] Initialized Window" << std::endl;
+    std::cout << "[6] Initialized Window" << std::endl;
 }
 
 
@@ -311,7 +339,8 @@ void Game_Engine::initWindow() {
 /* Game Driver functions in order:
  * ResizeView(RenderWindow&, View&):                used to keep proportions in event of window resizing
  * pollEvents():                                    gets called in Update(), constantly checks for events (pressing keys, lifting keys, exiting window)
- * noEnemySpawnInWall(Enemy_Spawn*, Maze_Builder*)  ensures enemies don't spawn in walls, randomly spawns them somewhere else until they arent in a wall
+ * noEnemySpawnInWall(Enemy_Spawn*, Maze_Builder*): ensures enemies don't spawn in walls, randomly spawns them somewhere else until they arent in a wall
+ * noHeartSpawnInWall(Enemy_Spawn*, Maze_Builder*): ensures hearts don't spawn in walls, randomly spawns them somewhere else until they arent in a wall
  */
 void Game_Engine::ResizeView(const RenderWindow& window, View& view) {
     // calculating aspect ratio
@@ -358,6 +387,14 @@ void Game_Engine::noEnemySpawnInWall(Enemy_Spawner* ens, Maze_Builder* mz) {
     for (int i = 0; i < minotaur_amount; i++) {
         while (mz->inMazeWalls(ens->getEnemy(i)->getIndividualPos())) {
             ens->getEnemy(i)->setRandPos(SAM_enemySpawnOrigin, SAM_SpawnLimit);
+        }
+    }
+}
+
+void Game_Engine::noHeartSpawnInWall(Replinish_Spawner* hrts, Maze_Builder* mz) {
+    for (int i = 0; i < SAM_QuadrantHeartAmt; i++) {
+        while (mz->inMazeWalls(hrts->getHeart(i)->GetHeartPosition())) {
+            hrts->getHeart(i)->setRandPos(SAM_enemySpawnOrigin, SAM_SpawnLimit);
         }
     }
 }
