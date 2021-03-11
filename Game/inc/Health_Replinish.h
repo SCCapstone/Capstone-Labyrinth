@@ -33,9 +33,11 @@ public:
     void SetPosition(sf::Vector2f pos) { heart.setPosition(pos); }
 
     // accessor
-    sf::Vector2f GetPosition() { return heart.getPosition(); }
+    sf::Vector2f GetHeartPosition() { return heart.getPosition(); }
 
     bool Replinish(Player* player);
+
+    void setRandPos(Vector2f initialC, Vector2f finalC);
 };
 
 Health_Replinish::Health_Replinish(sf::Texture* texture, sf::Vector2f size, sf::Vector2f position, Vector2u imageCount, float switchTime) :
@@ -69,9 +71,55 @@ bool Health_Replinish::Replinish(Player* player) {
         // reset player health to original health
         player->setTotalHealth(player->getOrignalHealth());
         return true;
-        //std::cout << "\nHealth consumed" << std::endl;
     }
     return false;
+}
+
+void Health_Replinish::setRandPos(Vector2f initialC, Vector2f finalC) {
+
+    // find range between given coordinates
+    float x_max = abs(initialC.x) + abs(finalC.x);
+    float y_max = abs(initialC.y) + abs(finalC.y);
+
+    float x_rand = 0.0f;
+    float y_rand = 0.0f;
+
+    while (x_rand == 0.0f || y_rand == 0.0f) {
+        //srand((unsigned)time(0));
+        x_rand = float(rand() % (int)x_max + 1);
+        y_rand = float(rand() % (int)y_max + 1);
+    }
+
+    //float x_rand = float(rand() % (int)x_max + 1);
+    //float y_rand = float(rand() % (int)y_max + 1);
+
+    //std::cout << "\tRAND COORDS: " << x_rand << ", " << y_rand << std::endl;
+
+    float x_coord = 0.0f;
+    float y_coord = 0.0f;
+
+    // upper right quadrant
+    if (initialC.x < finalC.x && initialC.y > finalC.y) {
+        x_coord = scale * (x_rand - abs(initialC.x));
+        y_coord = -1.0f * scale * (y_rand - abs(initialC.y));
+    }
+    // lower right quadrant
+    else if (initialC.x < finalC.x && initialC.y < finalC.y) {
+        x_coord = scale * (x_rand - abs(initialC.x));
+        y_coord = scale * (y_rand - abs(initialC.y));
+    }
+    // lower left quadrant
+    else if (initialC.x > finalC.x && initialC.y < finalC.y) {
+        x_coord = -1.0f * scale * (x_rand - abs(initialC.x));
+        y_coord = scale * (y_rand - abs(initialC.y));
+    }
+    // upper left quadrant
+    else {
+        x_coord = -1.0f * scale * (x_rand - abs(initialC.x));
+        y_coord = -1.0f * scale * (y_rand - abs(initialC.y));
+    }
+
+    heart.setPosition(x_coord, y_coord);
 }
 
 
