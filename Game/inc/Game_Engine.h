@@ -34,7 +34,7 @@ const static float minotaur_speed = 27.0f;  // how fast minotaurs are
 const static int minotaur_health = 150;     // how much health the minotaurs originally start with
 const static int minotaur_attVal = 20;      // how much damage minotaurs can do
 
-const static int zoomOutFactor = 10;        // factor to see more maze
+const static int zoomOutFactor = 5;        // factor to see more maze
 const static float player_speed = 300.0f;   // factor for player speed
 const static int player_health = 200;       // how much health the player originally starts with
 
@@ -63,6 +63,9 @@ private:
     // maze variable
     Maze_Builder* maze;
 
+    Health_Replinish* hr;
+    Texture hr_text;
+
     // using these so animation runs at same rate irrespective of machine
     float deltaTime;
     Clock clock;
@@ -86,8 +89,12 @@ private:
          return true;
       return false;
     }
-    
-    void randomEnemyGen();
+
+    bool exists(Health_Replinish* hr) {
+        if (hr != nullptr)
+            return true;
+        return false;
+    }
 
     void noEnemySpawnInWall(Enemy_Spawner* enms, Maze_Builder* mz);
 
@@ -138,6 +145,14 @@ void Game_Engine::Update() {
 
     // poll events
     pollEvents();
+
+    if (exists(hr)) {
+        hr->Update(deltaTime);
+        if (hr->Replinish(player)) {
+            hr = nullptr;
+            delete hr;
+        }
+    }
 
     // update player information if it exists
     if (exists(player)) {
@@ -190,6 +205,9 @@ void Game_Engine::Render() {
     // draws maze
     maze->Draw(*window);
 
+    if (exists(hr))
+        hr->Draw(*window);
+
     // draws player (if it exists)
     if (exists(player))
         player->Draw(*window);
@@ -214,6 +232,10 @@ void Game_Engine::Render() {
 void Game_Engine::initVariables() {
     // clearing any previous memory, not necessary, but safe
     this->window = nullptr;
+
+    this->hr = nullptr;
+    hr_text.loadFromFile("imgs/spinning_heart.png");
+    hr = new Health_Replinish(&hr_text, Vector2f(0.2f * scale, 0.3f * scale), Vector2f(-5.0f * scale, 3.0f * scale), Vector2u(4, 1), 0.5f);
 
     // initializing deltaTime 
     deltaTime = 0.0f;

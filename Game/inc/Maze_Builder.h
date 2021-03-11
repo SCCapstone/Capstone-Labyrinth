@@ -12,6 +12,7 @@
 
 #include "Maze_SpawnChamber.h"
 #include "Background_Map.h"
+#include "Health_Replinish.h"
 
 /* Purpose:
  *  This class instantiates 4 maze quadrants into one maze (step up from maze quadrants)
@@ -120,6 +121,9 @@ void Maze_Builder::Draw(sf::RenderWindow& window) {
     scnd_Quad->Draw(window);
     thrd_Quad->Draw(window);
     frth_Quad->Draw(window);
+    // TODO get it display on window
+    
+    
 }
 
 bool Maze_Builder::ColliderCheck(Collider other, float push) {
