@@ -14,8 +14,6 @@ using sf::Vector2f;
 using sf::RectangleShape;
 using sf::Keyboard;
 
-#define body_height 150.0f
-#define body_width 100.0f
 
 class Individual {
 // private attributes
@@ -25,32 +23,26 @@ protected:
    RectangleShape body;
    RectangleShape FoV;
 
-   // declare new health bar object
-   HealthBar* hb;
-   // loading health bar sprite sheet
-   Texture health_text;
-   unsigned int hb_row;
+   
+   HealthBar* hb;           // declare new health bar object
+   Texture health_text;     // loading health bar sprite sheet
+   unsigned int hb_row;     // the row for the health bar animation
 
-   // creating instance of animation (to animate body)
-   Animation animation;
+   Animation animation;     // creating instance of animation (to animate body)
+   unsigned int row;        // what row of the sprite sheet we are using
 
-   // what row of the sprite sheet we are using
-   unsigned int row;
-
-   // player speed
+   // inidividual attributes
    float speed;
+   Vector2f size;
 
-   // whether the player is facing left or right (used so we dont have to create left and right animations)
-   bool faceRight;
+   
+   bool faceRight;          // whether the player is facing left or right (used so we dont have to create left and right animations)
+   bool movingUp;           // whether the player is moving upwards
+   bool movingDown;         // whether the player is moving downwards
 
-   // whether the player is moving upwards or downwards
-   bool movingUp;
-   bool movingDown;
-
-   // default attack, original health, and initial total health
-   int base_attackVal = 10;
-   int totalHealth = 100;
-   int orig_health = 100;
+   int base_attackVal = 10; // default attack
+   int totalHealth = 100;   // original health
+   int orig_health = 100;   // initial total health
 
 // public attributes
 public:
@@ -59,7 +51,7 @@ public:
     * imageCount for number of images in sheet
     * switchTime for frame rate
     */
-   Individual(Texture* texture, Vector2u imageCount, float switchTime, float speed);
+   Individual(Texture* texture, Vector2u imageCount, Vector2f size, float switchTime, float speed);
 
    // destructor
    virtual ~Individual();
@@ -75,27 +67,25 @@ public:
    // checks if vision fields collide
    bool VisionColliderCheck(Collider other, float push);
 
-   // checks if health bar fields collide
+   // checks if health bar fields collider
    bool HealthBarColliderCheck(Collider other, float push);
    
    // accessors
    int getTotalHealth() { return this->totalHealth; }
    int getOrignalHealth() { return this->orig_health; }
    int getAttackValue() { return this->base_attackVal; }
-   float getSpeed() { return this->speed; }
    float getHealthPercent() { return ((float(this->totalHealth) / float(this->orig_health)) * 100.0f);  }
    Vector2f getIndividualPos() { return body.getPosition(); }
+   Vector2f getIndividualSize() { return body.getSize(); }
    sf::FloatRect GetGlobalIndividualBounds() { return body.getGlobalBounds(); }
    Collider GetCollider() { return Collider(body, FoV, hb->getHealthRect()); }
 
    // mutators
    void setTotalHealth(int val) { this->totalHealth = val; }
    void setOriginalHealth(int val) { this->orig_health = val; }
-   void setAttackValue(int val) { this->base_attackVal = val; }
-   void setSpeed(float sp) { this->speed = sp; }
 };
 
-Individual::Individual(Texture* texture, Vector2u imageCount, float switchTime, float speed) :
+Individual::Individual(Texture* texture, Vector2u imageCount, Vector2f size, float switchTime, float speed) :
    animation(texture, imageCount, switchTime) {
 
       this->speed = speed;
@@ -107,14 +97,14 @@ Individual::Individual(Texture* texture, Vector2u imageCount, float switchTime, 
       movingDown = false;
       movingUp = false;
 
-      body.setSize(Vector2f(body_width, body_height));
+      body.setSize(size);
       body.setOrigin(body.getSize() / 2.0f);
       body.setPosition(500, 500);
       body.setTexture(texture);
 
       //body.getSize();
 
-      FoV.setSize(Vector2f(3.0f * body_width, 2.0f * body_height));
+      FoV.setSize(Vector2f(3.0f * size.x, 2.0f * size.y));
       FoV.setOrigin(FoV.getSize() / 2.0f);
       FoV.setFillColor(sf::Color::Transparent);
       FoV.setOutlineThickness(1.0f);

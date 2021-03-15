@@ -17,13 +17,16 @@ private:
     
 // public attributes
 public:
-    Enemy(Texture* texture, Vector2u imageCount, float switchTime, float speed, int health);
+    Enemy(Texture* texture, Vector2u imageCount, Vector2f size, float switchTime, float speed, int health, int attVal);
 
     ~Enemy();
 
     void Update(float deltaTime, int rv);
 
     void setRandPos(Vector2f initialCoords, Vector2f finalCoords);
+
+    // for boss
+    void setPos(Vector2f initialCoords);
 
     void Chase(Player& player, float deltaTime);
 
@@ -33,21 +36,17 @@ public:
 
     void commitAttack(Individual& other);
 
-    void setEnemySize(Vector2f size) { 
-        body.setSize(size);
-        body.setOrigin(body.getSize() / 2.0f);
-        FoV.setSize((3.0f * body.getSize(), 2.0f * body.getSize()));
-        FoV.setOrigin(FoV.getSize() / 2.0f);
-    }
+    
 };
 
-Enemy::Enemy(Texture* texture, Vector2u imageCount, float switchTime, float speed, int health) :
-        Individual(texture, imageCount, switchTime, speed) {
+Enemy::Enemy(Texture* texture, Vector2u imageCount, Vector2f size, float switchTime, float speed, int health, int attVal) :
+        Individual(texture, imageCount, size, switchTime, speed) {
     this->enemy_attackTimer.restart();
+
+    this->base_attackVal = attVal;
 
     // this is in milliseconds (enemy attacks every 3 seconds)
     this->enemy_attackTimerMax = 1000;
-
     setTotalHealth(health);
     setOriginalHealth(health);
 }
@@ -202,11 +201,22 @@ void Enemy::setRandPos(Vector2f initialC, Vector2f finalC) {
 
     body.setPosition(x_coord, y_coord);
 
-    // TODO check here for walls
-
-
     // reset enemy's outline to red
     FoV.setOutlineColor(sf::Color::Red);
+
+    // ensure enemy's outline spawns with enemy
+    FoV.setPosition(body.getPosition());
+
+    // setting health bar's positon to match enemies
+    hb->setPos(sf::Vector2f(body.getPosition().x, body.getPosition().y - (3.0f * body.getSize().y / 4.0f)));
+}
+
+// for boss
+void Enemy::setPos(Vector2f coords) {
+    body.setPosition(coords);
+
+    // reset enemy's outline to red
+    FoV.setOutlineColor(sf::Color::Black);
 
     // ensure enemy's outline spawns with enemy
     FoV.setPosition(body.getPosition());
