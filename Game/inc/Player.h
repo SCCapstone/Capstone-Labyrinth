@@ -15,7 +15,7 @@ private:
   
 // public attributes
 public:
-    Player(Texture* texture, Vector2u imageCount, float switchTime, float speed, int health);
+    Player(Texture* texture, Vector2u imageCount, Vector2f size, float switchTime, float speed, int health, int attVal);
 
     ~Player();
 
@@ -28,13 +28,16 @@ public:
     const bool getAttackTimer();
 };
 
-Player::Player(Texture* texture, Vector2u imageCount, float switchTime, float speed, int health):
-        Individual(texture, imageCount, switchTime, speed) {
+Player::Player(Texture* texture, Vector2u imageCount, Vector2f size, float switchTime, float speed, int health, int attVal):
+        Individual(texture, imageCount, size, switchTime, speed) {
    this->player_attackTimer.restart();
+
+   this->base_attackVal = attVal;
 
    // this is in milliseconds (player attacks every second)
    this->player_attackTimerMax = 150;
 
+   // always starting player at the origin
    body.setPosition(0.0f,0.0f);
    FoV.setPosition(body.getPosition());
    hb->setPos(sf::Vector2f(body.getPosition().x, body.getPosition().y - (3.0f * body.getSize().y / 4.0f)));
@@ -165,4 +168,5 @@ const bool Player::getAttackTimer() {
     }
     return false;
 }
+
 #endif  // PLAYER_H

@@ -26,22 +26,24 @@ using sf::Color;
 
 // Constant Values
 
-// these need to be non-const when passed
-static int minotaur_amount = 20;            // how many minotaurs to spawn
 static int MAX_ENEMY_AMT = 1000;
-const static bool genMAXEnemies = false;    // set to true to generate MAX number of enemies (test code)
+const static bool genMAXEnemies = false;                                // set to true to generate MAX number of enemies (test code)
+const static int totalEnemyAmount = 80;
 
-const static float minotaur_speed = 27.0f;  // how fast minotaurs are
-const static int minotaur_health = 150;     // how much health the minotaurs originally start with
-const static int minotaur_attVal = 20;      // how much damage minotaurs can do
-
-const static int zoomOutFactor = 4;        // factor to see more maze
-const static float player_speed = 300.0f;   // factor for player speed
-const static int player_health = 200;       // how much health the player originally starts with
-const static int SAM_QuadrantHeartAmt = 8;
+const static int zoomOutFactor = 10;                                    // factor to see more maze
+const static float player_speed = 300.0f;                               // factor for player speed
+const static int player_attVal = 10;                                    // factor for player attack value
+const static int player_health = 200;                                   // how much health the player originally starts with
+const static Vector2f player_size = Vector2f(100.0f, 150.0f);
 
 const static Vector2f SAM_enemySpawnOrigin = Vector2f(-1.0f, 1.0f);
 const static Vector2f SAM_SpawnLimit = Vector2f(15.0f, -19.0f);
+const static int SAM_QuadrantHeartAmt = 8;
+const static Vector2f SAM_enemySize = 1.5f * player_size;
+const static float SAM_minotaur_speed = 27.0f;                          // how fast minotaurs are
+const static int SAM_minotaur_health = 150;                             // how much health the minotaurs originally start with
+const static int SAM_minotaur_attVal = 20;                              // how much damage minotaurs can do
+static int SAM_minotaur_amount = (int)totalEnemyAmount/4;               // how many minotaurs to spawn
 
 class Game_Engine {
 // private attributes
@@ -60,6 +62,8 @@ private:
 
     // variables for enemy character
     Enemy_Spawner* minotaurs;
+    // todo start here, continue init for boss
+    Enemy* Minos;
     Texture min_texture;
 
     // maze variable
@@ -131,6 +135,9 @@ Game_Engine::~Game_Engine() {
     // Player destructor
     delete this->player;
 
+    // Boss destructor
+    delete this->Minos;
+
     // Wall_Builder destructor
     delete this->maze;
 
@@ -145,6 +152,7 @@ void Game_Engine::Update() {
     // poll events
     pollEvents();
 
+    // update replinishers
     if (!(replinishers->Empty())) {
         replinishers->Update(deltaTime);
     }
@@ -160,9 +168,19 @@ void Game_Engine::Update() {
         // makes maze the immovable object to player
         maze->MazeContactUpdate_Player(player, 1.0f);
 
+        // replinish player health
         if (!(replinishers->Empty())) {
             replinishers->UpdatePlayerContact(*player);
         }
+    }
+
+    if (exists(Minos)) {
+        srand((unsigned)time(0));
+        int rv = rand() % 5 + 1;
+        Minos->Update(deltaTime, rv);
+
+        // makes maze the immovable object to player
+        maze->MazeContactUpdate_Boss(Minos, 1.0f);
     }
 
     // update enemy information if any exist
@@ -191,19 +209,61 @@ void Game_Engine::Update() {
             std::cout << "\nPlayer deleted" << std::endl;
         }
     }
+
+    // variable to manage boss deletion
+    bool Boss_dead = false;
+
+    if (exists(Minos) && exists(player)) {
+        player->HealthBarColliderCheck(Minos->GetCollider(), 0.0f);
+
+        if (player->VisionColliderCheck(Minos->GetCollider(), 0.0f)) {
+            Minos->Chase(*player, deltaTime);
+        }
+
+        // 0.5f to show that enemies and player have same force on each other
+        if (player->ColliderCheck(Minos->GetCollider(), 0.5f)) {
+
+            // player attacking enemy
+            if (Minos->getTotalHealth() > player->getAttackValue()) {
+                player->Attack(*Minos);
+            }
+            else {
+                Boss_dead = true;
+            }
+
+            // enemy attacking player
+            if (player->getTotalHealth() > Minos->getAttackValue()) {
+                Minos->ConstantAttack(*player);
+            }
+            else {
+                player = nullptr;
+                delete player;
+                std::cout << "\nPlayer deleted" << std::endl;
+            }
+        }
+    }
+
+    // deletes boss
+    if (Boss_dead) {
+        Minos = nullptr;
+        delete Minos;
+        std::cout << "\nBOSS deleted: " << std::endl;
+    }
 }
 
 void Game_Engine::Render() {
     // clears window
-    // TODO add texture background (sand, dirt, etc)
+
+    // default background
     window->clear(Color(150, 150, 150));
 
     // centers window view on player
     window->setView(player_view);
     
-    // draws maze
+    // draws maze and custom background
     maze->Draw(*window);
 
+    // draws health replinishing items (if they exist)
     if (!(replinishers->Empty()))
         replinishers->Spawn(*window);
 
@@ -214,6 +274,10 @@ void Game_Engine::Render() {
     // draws enemies (if they exist)
     if (!(minotaurs->Empty()))
         minotaurs->Spawn(*window);
+
+    // draws boss (if it exists)
+    if (exists(Minos))
+        Minos->Draw(*window);
 
     // display all drawn objects
     window->display();
@@ -235,8 +299,6 @@ void Game_Engine::initVariables() {
 
     // initializing deltaTime 
     deltaTime = 0.0f;
-
-    srand((unsigned)time(0));
 
     // calls all initializers
     initPlayer();
@@ -260,7 +322,7 @@ void Game_Engine::initPlayer() {
      * 300.0f:              player speed in the relation to objects in the window
      * 200:                 player total health (initial)
      */
-    player = new Player(&base_movement, Vector2u(12, 4), 0.05f, player_speed, player_health);
+    player = new Player(&base_movement, Vector2u(12, 4), player_size, 0.05f, player_speed, player_health, player_attVal);
 
     std::cout << "[1] Initialized Player" << std::endl;
 
@@ -280,36 +342,30 @@ void Game_Engine::initReplinishers() {
 
 void Game_Engine::initEnemies() {
     this->minotaurs = nullptr;
-
-    // for random positions
-    //srand((unsigned) time(0));
-    //std::cout << rv << std::endl;
+    this->Minos = nullptr;
 
     // loading sprite sheet
     min_texture.loadFromFile("imgs/minotaur.png");
 
-    /* Initializing enemy
-     * enemy_amount:    how many enemies to spawn
-     * 20:              enemy attack value
-     * &min_texture:    reference to texture
-     * Vector2u(10, 5): sprite sheet is 10x5 images
-     * 0.35f:           how fast the animations switch between images
-     * 37.0f:           player speed in the relation to objects in the window
-     * 300              enemy health
-     */
+    // testing condition
     if (genMAXEnemies)
-        minotaur_amount = MAX_ENEMY_AMT;
+        SAM_minotaur_amount = MAX_ENEMY_AMT;
 
+    // Initializing enemy spawner
     // spawn bounds must be exclusive (any free, non-wall space in bounds is viable spawn location)
-    minotaurs = new Enemy_Spawner(minotaur_amount, minotaur_attVal, Vector2f(125.0f, 175.0f), &min_texture, Vector2u(10, 5), 0.35f, minotaur_speed, minotaur_health, SAM_enemySpawnOrigin, SAM_SpawnLimit);
+    minotaurs = new Enemy_Spawner(SAM_minotaur_amount, SAM_minotaur_attVal, SAM_enemySize, &min_texture, Vector2u(10, 5), 0.35f, SAM_minotaur_speed, SAM_minotaur_health, SAM_enemySpawnOrigin, SAM_SpawnLimit);
     noEnemySpawnInWall(minotaurs, maze);
+
+    // boss enemy for upper right quadrant
+    Minos = new Enemy(&min_texture, Vector2u(10, 5), 1.5f * SAM_enemySize,  0.35f, 0.75f * SAM_minotaur_speed, 2 * SAM_minotaur_health, int(1.5 * SAM_minotaur_attVal));
+    Minos->setPos(maze->getFirstQuadBossCoords());
 }
 
 void Game_Engine::initWalls() {
     // ensure maze isn't already initialized
     this->maze = nullptr;
 
-    // instantiate a maze object
+    // instantiate a maze object with the scale for all walls
     maze = new Maze_Builder(Vector2f(1.0f * scale, 1.0f * scale));
     
     std::cout << "[2] Initialized Maze" << std::endl;
@@ -384,7 +440,7 @@ void Game_Engine::pollEvents() {
 }
 
 void Game_Engine::noEnemySpawnInWall(Enemy_Spawner* ens, Maze_Builder* mz) {
-    for (int i = 0; i < minotaur_amount; i++) {
+    for (int i = 0; i < SAM_minotaur_amount; i++) {
         while (mz->inMazeWalls(ens->getEnemy(i)->getIndividualPos())) {
             ens->getEnemy(i)->setRandPos(SAM_enemySpawnOrigin, SAM_SpawnLimit);
         }

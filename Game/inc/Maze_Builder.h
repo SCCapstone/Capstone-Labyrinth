@@ -48,6 +48,9 @@ public:
     // contact update functions between walls and the player
     void MazeContactUpdate_Player(Player* player, float push);
 
+    // contact update functions between walls and the boss
+    void MazeContactUpdate_Boss(Enemy* boss, float push);
+
     // contact update function between walls and enemies
     void MazeContactUpdate_Enemies(Enemy_Spawner* enemies, float push);
 
@@ -59,6 +62,8 @@ public:
 
     // function that returns true if given coordinates are in a wall component
     bool inMazeWalls(Vector2f coords);
+
+    Vector2f getFirstQuadBossCoords() { return Sams_Quad->getBossRoomCoords(); }
 };
 
 Maze_Builder::Maze_Builder(sf::Vector2f size) {
@@ -100,6 +105,15 @@ void Maze_Builder::MazeContactUpdate_Player(Player* character, float push) {
     scnd_Quad->ColliderCheck(character->GetCollider(), push);
     thrd_Quad->ColliderCheck(character->GetCollider(), push);
     frth_Quad->ColliderCheck(character->GetCollider(), push);
+}
+
+void Maze_Builder::MazeContactUpdate_Boss(Enemy* boss, float push) {
+    // a value of 1.0f is an immovable object, wheres 0.0f would move quickly
+    spawnChamber->ColliderCheck(boss->GetCollider(), push);
+    Sams_Quad->ColliderCheck(boss->GetCollider(), push);
+    scnd_Quad->ColliderCheck(boss->GetCollider(), push);
+    thrd_Quad->ColliderCheck(boss->GetCollider(), push);
+    frth_Quad->ColliderCheck(boss->GetCollider(), push);
 }
 
 void Maze_Builder::MazeContactUpdate_Enemies(Enemy_Spawner* enemies, float push) {

@@ -76,6 +76,7 @@ protected:
 
     // boss room
     Maze_Component* SAMS_boss_room;
+    Vector2f br_coords;
 
     // textures used for wall and background
     Texture brickwall_big;
@@ -101,6 +102,8 @@ public:
 
     // function that returns true if given coordinates are in a wall component
     bool inMazeWalls(Vector2f coords);
+
+    Vector2f getBossRoomCoords() { return br_coords; }
 };
 
 Maze_FirstQuadrant::Maze_FirstQuadrant(sf::Vector2f size) {
@@ -214,7 +217,8 @@ Maze_FirstQuadrant::Maze_FirstQuadrant(sf::Vector2f size) {
     SAMS_fs10 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(14.0f * scale, 4.0f * scale), true);
 
     // creates room for maze section boss
-    SAMS_boss_room = new Maze_BossRoom(&brickwall_big, size, Vector2f(20.0f * scale, -19.0f * scale), true, false);
+    this->br_coords = Vector2f(20.0f * scale, -19.0f * scale);
+    SAMS_boss_room = new Maze_BossRoom(&brickwall_big, size, br_coords, true, false);
 }
 
 Maze_FirstQuadrant::~Maze_FirstQuadrant() { /* empty */ }
@@ -518,6 +522,6 @@ bool Maze_FirstQuadrant::inMazeWalls(Vector2f coords) {
             SAMS_fs9->inWallStructure(coords) ||
             SAMS_fs10->inWallStructure(coords) ||
             SAMS_boss_room->inWallStructure(coords);
-}
+}   
 
 #endif  // MAZE_FIRSTQUADRANT_H

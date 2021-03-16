@@ -33,7 +33,7 @@ public:
 
     void Update(float deltaTime);
 
-    void Populate(Texture* texture, Vector2u imageCount, float switchTime, float speed, int attVal, int health, Vector2f x_bounds, Vector2f y_bounds);
+    void Populate(Texture* texture, Vector2u imageCount, Vector2f size, float switchTime, float speed, int attVal, int health, Vector2f x_bounds, Vector2f y_bounds);
 
     void Spawn(RenderWindow& window);
 
@@ -76,13 +76,12 @@ Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Vector2f size, Texture* 
     this->amount = us_amount;
 
     this->attackValue = attVal;
-    this->size = size;
     this->killPlayer = false;
 
     this->x_bounds = x_bounds;
     this->y_bounds = y_bounds;
 
-    Populate(texture, imageCount, switchTime, speed, attVal, health, x_bounds, y_bounds); 
+    Populate(texture, imageCount, size, switchTime, speed, attVal, health, x_bounds, y_bounds); 
 }
 
 Enemy_Spawner::~Enemy_Spawner() {
@@ -99,12 +98,11 @@ void Enemy_Spawner::Update(float deltaTime) {
     }
 }
 
-void Enemy_Spawner::Populate(Texture* texture, Vector2u imageCount, float switchTime, float speed, int attVal, int health, Vector2f x_bounds, Vector2f y_bounds) {
+void Enemy_Spawner::Populate(Texture* texture, Vector2u imageCount, Vector2f size, float switchTime, float speed, int attVal, int health, Vector2f x_bounds, Vector2f y_bounds) {
     enemies.clear();
     for (int i = 0; i < amount; i++) {
-        Enemy* nE = new Enemy(texture, imageCount, switchTime, speed, health);
-        nE->setAttackValue(attVal);
-        nE->setEnemySize(size);
+        // not a boss type vector
+        Enemy* nE = new Enemy(texture, imageCount, size, switchTime, speed, health, attVal);
         nE->setRandPos(x_bounds, y_bounds);
         enemies.push_back(nE);
     }

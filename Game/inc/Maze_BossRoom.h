@@ -35,7 +35,6 @@ public:
     bool ColliderCheck(Collider other, float push);
 
     bool inWallStructure(Vector2f pos);
-
 };
 
 // constructs Wall_Strip by passing 3/4 parameters to Wall_Component (polymorphism)
