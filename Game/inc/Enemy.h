@@ -211,7 +211,7 @@ void Enemy::setRandPos(Vector2f initialC, Vector2f finalC) {
     hb->setPos(sf::Vector2f(body.getPosition().x, body.getPosition().y - (3.0f * body.getSize().y / 4.0f)));
 }
 
-// for boss
+// for boss types to manually set position (instead of randomly)
 void Enemy::setPos(Vector2f coords) {
     body.setPosition(coords);
 

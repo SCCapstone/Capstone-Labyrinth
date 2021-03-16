@@ -168,4 +168,5 @@ const bool Player::getAttackTimer() {
     }
     return false;
 }
+
 #endif  // PLAYER_H
