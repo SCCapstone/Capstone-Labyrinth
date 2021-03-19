@@ -4,9 +4,6 @@
 #ifndef HEALTH_REPLINISH_H
 #define HEALTH_REPLINISH_H
 
-#include "Collider.h"
-#include "Animation.h"
-#include "Player.h"
 
 class Health_Replinish {
     // private attributes
