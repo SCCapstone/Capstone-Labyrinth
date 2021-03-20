@@ -88,7 +88,7 @@ int OptionsMenu::update() {
     // whule loop that scans for key strokes
     while(window->pollEvent(event)) {
         switch(event.type) {
-        // if a key ahs been released
+        // if a key has been released
         case sf::Event::KeyReleased:
             switch(event.key.code) {
             

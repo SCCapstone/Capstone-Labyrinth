@@ -34,7 +34,7 @@ public:
     Menu(unsigned int width, unsigned int height);
 
     // parameterized constructor 2
-    Menu(unsigned int width, unsigned int height, int size);
+    Menu(unsigned int width, unsigned int height, int numOfButtons);
     
     // destructor
     ~Menu();
@@ -102,14 +102,14 @@ Menu::Menu(unsigned int width, unsigned int height) {
 }
 
 //Handles textMenu with varying textMenu options
-Menu::Menu(unsigned int width, unsigned int height, int size) {
+Menu::Menu(unsigned int width, unsigned int height, int numOfButtons) {
     // load text texture
     if (!font.loadFromFile("txts/NotPapayrus.ttf")) {
         std::cout << "Text did not load" << std::endl;
     }
 
     // button amount
-    menuItems = size;
+    menuItems = numOfButtons;
     
     // creates menuItem-amount of texts
     textMenu.assign(menuItems, sf::Text());

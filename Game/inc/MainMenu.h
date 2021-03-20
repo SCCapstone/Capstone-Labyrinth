@@ -5,6 +5,7 @@
 #define MAINMENU_H
 
 #include "OptionsMenu.h"
+#include "InstructionsMenu.h"
 #include <iostream>
 #include <vector>
 
@@ -244,13 +245,13 @@ void MainMenu::runOptionsMenu() {
 // instantiates OptionsMenu object, runs options menu
 void MainMenu::runInstructions() {
     // creates new optiuons sub-menu
-    OptionsMenu options;
+    InstructionsMenu instructions;
 
     // runs the options menu until exit condition
-    while (options.running())
+    while (instructions.running())
     {
-        options.update();
-        options.render();
+        instructions.update();
+        instructions.render();
     }
 }
 
