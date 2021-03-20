@@ -5,9 +5,9 @@
 #include "../inc/MainMenu.h"
 
 // responsible for creating game and running it
-bool runGame_Engine()
-{
-	Game_Engine game;
+bool runGame_Engine(bool inCheatMode) {
+	if (inCheatMode) std::cout << "-----GAME IN CHEAT MODE-----" << std::endl;
+	Game_Engine game(inCheatMode);
 	while (game.running()) {
 		game.Update();
 		game.Render();
@@ -16,19 +16,17 @@ bool runGame_Engine()
 }
 
 // responsible for running main menu (and subsequently Game)
-bool runMainMenu()
-{
+bool runMainMenu() {
 	MainMenu mainMenu;
 	int mainMenuExitCode = -1;
-	while (mainMenu.running())
-	{
+	while (mainMenu.running()) {
 		mainMenuExitCode = mainMenu.update();
 		mainMenu.render();
 	}
 	switch (mainMenuExitCode) //Will return what to run
 	{
 	case 0: //0 will be to run Game engine
-		if (runGame_Engine()) {
+		if (runGame_Engine(mainMenu.inCheatMode())) {
 			return true;
 		}
 		return false;

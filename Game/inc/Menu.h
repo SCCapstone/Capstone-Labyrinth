@@ -48,6 +48,7 @@ public:
 
     // accessors
     int getSelection() { return selectedItemIndex; }
+    std::string getText(int selection) { return textMenu[selection].getString(); }
 
     // mutators
     void setText(int selection, std::string words);

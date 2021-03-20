@@ -77,7 +77,7 @@ void InstructionsMenu::initInstructions(unsigned int width, unsigned int height)
 
     this->instructs.setFont(font);
     this->instructs.setFillColor(sf::Color::Black);
-    this->instructs.setString("Arrow Keys:\t\tMove around\nSpacebar:\t\t\t Attack\nEscape:\t\t\t\t  Exit game");
+    this->instructs.setString("Arrow Keys:\t\tMove around\nSpacebar:\t\t\t Attack\nEscape:\t\t\t\t  Exit game\nObjective:\t\t\t Kill all 4 bosses to\n\t\t\t\t\t\t\t\t conquer the maze");
     this->instructs.setPosition(Vector2f((float)videoMode.width / 2, (float)3 * (videoMode.height / 8)));
     this->instructs.setOrigin(sf::Vector2f(instructs.getLocalBounds().width / 2,
                                            instructs.getLocalBounds().height / 2));

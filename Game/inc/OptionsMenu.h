@@ -5,6 +5,7 @@
 #define OPTIONSMENU_H
 
 #include "Menu.h"
+#include <stdlib.h>
 
 class OptionsMenu {
 // private attributes
@@ -14,6 +15,9 @@ private:
     Menu* menu;                     // used to display buttons
     sf::Texture backgroundTex;      // variable for the texture of our background
     sf::Sprite background;          // variable for the background
+
+    bool cheating;
+
     
     // initializes options menu
     void initOptionsMenu(unsigned int width, unsigned int height);
@@ -38,7 +42,9 @@ public:
     // returns true if window is still open
     const bool running() const {
       return window->isOpen();
-    } 
+    }
+
+    bool getIsCheating() { return cheating; }
 };
 
 // default constructor (calls initOptionsMenu function with default values)
@@ -67,7 +73,7 @@ void OptionsMenu::initOptionsMenu(unsigned int width, unsigned int height) {
     menu->setText(0, "Effects");
     menu->setText(1, "Music");
     menu->setText(2, "Graphics");
-    menu->setText(3, "Size");
+    menu->setText(3, "Cheat Mode: Disabled");
     menu->setText(4, "Exit");
 
     // load background texture
@@ -85,7 +91,7 @@ int OptionsMenu::update() {
     // create event variable
     sf::Event event;
 
-    // whule loop that scans for key strokes
+    // while loop that scans for key strokes
     while(window->pollEvent(event)) {
         switch(event.type) {
         // if a key has been released
@@ -119,11 +125,25 @@ int OptionsMenu::update() {
                 case 0:
                     //Sssssshhhh options soon
                     break;
+
+                case 3:
+                    if (menu->getText(3)._Equal("Cheat Mode: Enabled")) {
+                        menu->setText(3, "Cheat Mode: Disabled");
+                        cheating = false;
+                    }
+                    else {
+                        menu->setText(3, "Cheat Mode: Enabled");
+                        cheating = true;
+                    }
+                    return 3;
+                    break;
                     
                 case 4:
                     //Exit to Main menu
                     window->close();
-                    return 0;
+                    if (cheating)
+                        return 5;
+                    return 6;
                     break;
                     
                 default:

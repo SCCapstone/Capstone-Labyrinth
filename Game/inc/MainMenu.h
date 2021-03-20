@@ -22,6 +22,8 @@ private:
     sf::Texture backgroundTex;
     sf::Sprite background;
 
+    bool is_cheating = false;
+
     // initializer function for main menu
     void initMainMenu(unsigned int width, unsigned int height, int numMenuItems, sf::RenderWindow* win);
 
@@ -47,7 +49,9 @@ public:
       // returns true if window is still open
       const bool running() const {
         return window->isOpen();
-      }  
+      }
+
+      bool inCheatMode() { return is_cheating; }
 };
 
 // default constructor
@@ -179,7 +183,7 @@ int MainMenu::update() {
                     break;
 
                 case 2:
-                    //Do the options screen
+                    // run the instructions screen
                     runInstructions();
                     break;
                     
@@ -234,12 +238,19 @@ void MainMenu::runOptionsMenu() {
     // creates new optiuons sub-menu
     OptionsMenu options;
 
+    int cheat_mode = 0;
+
     // runs the options menu until exit condition
     while(options.running())
     {
-          options.update();
+          cheat_mode = options.update();
           options.render();
     }
+
+    // 5 means cheating, 6 means not cheating
+    //std::cout << cheat_mode << std::endl;
+    is_cheating = options.getIsCheating();
+    //std::cout << options.getIsCheating() << std::endl;
 }
 
 // instantiates OptionsMenu object, runs options menu
