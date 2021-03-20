@@ -12,7 +12,6 @@
 
 #include "Maze_SpawnChamber.h"
 #include "Background_Map.h"
-#include "Health_Replinish.h"
 
 /* Purpose:
  *  This class instantiates 4 maze quadrants into one maze (step up from maze quadrants)
