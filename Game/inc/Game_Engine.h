@@ -8,6 +8,7 @@
 #include "Enemy_Spawner.h"
 #include "Replinish_Spawner.h"
 #include "Maze_Builder.h"
+#include "Exit_Page.h"
 
 #include <ctime>
 
@@ -81,6 +82,12 @@ private:
     // stores cheat mode setting
     bool inCheatMode;
 
+    // stores player status
+    bool playerDead;
+
+    Exit_Page* exitpage;
+    Vector2f playerCoords_copy; // stores copy of players positiuon when they die for message display purposes
+
     // initializer functions
     void initVariables();
     void initPlayer();
@@ -115,6 +122,7 @@ public:
 
     // accessor, returns true if window is still open
     const bool running() const { return window->isOpen(); }
+    const bool isPlayerDead() const { return playerDead; }
 };
 
 /* Public Functions in order:
@@ -127,6 +135,7 @@ Game_Engine::Game_Engine(bool inCheatMode) {
     std::cout << "-----STARTING INITIALIZATION-----" << std::endl;
 
     this->inCheatMode = inCheatMode;
+    this->playerDead = false;
 
     // determine window scope based on cheat mode condition
     if (this->inCheatMode)
@@ -153,6 +162,9 @@ Game_Engine::~Game_Engine() {
 
     // Wall_Builder destructor
     delete this->maze;
+
+    // Exit page destructor
+    delete this->exitpage;
 
     // dont need destructor for enemies
     // don't need a destructor for hearts
@@ -215,11 +227,15 @@ void Game_Engine::Update() {
         // if the player and an enemy collide, update attack and kill information (in enemy spawner)
         minotaurs->UpdateEnemyContact(*player);
 
+        playerCoords_copy = player->getIndividualPos();
+
         // delete player condition
         if (minotaurs->getKillStatus()) {
             player = nullptr;
             delete player;
             std::cout << "\nPlayer deleted" << std::endl;
+            playerDead = true;
+            exitpage->setLost(playerDead);
         }
     }
 
@@ -249,9 +265,12 @@ void Game_Engine::Update() {
                 Minos->ConstantAttack(*player);
             }
             else {
+                playerCoords_copy = player->getIndividualPos();
                 player = nullptr;
                 delete player;
                 std::cout << "\nPlayer deleted" << std::endl;
+                playerDead = true;
+                exitpage->setLost(playerDead);
             }
         }
     }
@@ -261,6 +280,7 @@ void Game_Engine::Update() {
         Minos = nullptr;
         delete Minos;
         std::cout << "\nBOSS deleted: " << std::endl;
+        exitpage->setLost(!Boss_dead);
     }
 }
 
@@ -291,6 +311,15 @@ void Game_Engine::Render() {
     // draws boss (if it exists)
     if (exists(Minos))
         Minos->Draw(*window);
+
+    // TODO add more bosses when maze is finished to extend win condition
+    if (!exists(Minos)) {
+        exitpage->Render(*window, playerCoords_copy);
+    }
+
+    if (!exists(player)) {
+        exitpage->Render(*window, playerCoords_copy);
+    }
 
     // display all drawn objects
     window->display();
@@ -398,6 +427,8 @@ void Game_Engine::initWindow() {
     videoMode.height = (unsigned int)1000;
     videoMode.width = (unsigned int)1000;
 
+    this->exitpage = nullptr;
+
     // initializing window (dynamic allocation)
     this->window = new RenderWindow(videoMode, "Capstone Labyrinth", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
     window->setKeyRepeatEnabled(false);
@@ -408,6 +439,9 @@ void Game_Engine::initWindow() {
     float factor_x = float(videoMode.width * zoomOutFactor);
     float factor_y = float(videoMode.height * zoomOutFactor);
     player_view.setSize(Vector2f(factor_x, factor_y));
+
+    // default exit page is for a win (arbitrarily pickey x factor for font sizing)
+    exitpage = new Exit_Page(factor_x);
 
     std::cout << "[6] Initialized Window" << std::endl;
 }
