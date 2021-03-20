@@ -30,10 +30,12 @@ static int MAX_ENEMY_AMT = 1000;
 const static bool genMAXEnemies = false;                                // set to true to generate MAX number of enemies (test code)
 const static int totalEnemyAmount = 80;
 
-const static int zoomOutFactor = 10;                                    // factor to see more maze
+// default cheat mode view, gets set to 10 or 1 in init
+static int zoomOutFactor = 5;                                           // factor to see more maze (can be boosted in cheat mode)
+const static int player_attVal = 10;                                    // factor for player attack value (can be boosted in cheat mode)
+const static int player_health = 200;                                   // how much health the player originally starts with (can be boosted in cheat mode)
+
 const static float player_speed = 300.0f;                               // factor for player speed
-const static int player_attVal = 10;                                    // factor for player attack value
-const static int player_health = 200;                                   // how much health the player originally starts with
 const static Vector2f player_size = Vector2f(100.0f, 150.0f);
 
 const static Vector2f SAM_enemySpawnOrigin = Vector2f(-1.0f, 1.0f);
@@ -76,6 +78,9 @@ private:
     float deltaTime;
     Clock clock;
 
+    // stores cheat mode setting
+    bool inCheatMode;
+
     // initializer functions
     void initVariables();
     void initPlayer();
@@ -103,10 +108,10 @@ private:
 // public attributes 
 public:
     
-    Game_Engine();      // constructor
-    ~Game_Engine();     // destructor
-    void Update();      // updates all game objects, states (contact, attack, moving)
-    void Render();      // renders all objects and states in window
+    Game_Engine(bool inCheatMode);      // constructor
+    ~Game_Engine();                     // destructor
+    void Update();                      // updates all game objects, states (contact, attack, moving)
+    void Render();                      // renders all objects and states in window
 
     // accessor, returns true if window is still open
     const bool running() const { return window->isOpen(); }
@@ -118,8 +123,16 @@ public:
  * Update():        updates all game logic (interactions between players, enemies, the environment, and movement in the window)
  * Render():        draws and displays all game objects (player, enemies, walls)
  */
-Game_Engine::Game_Engine() {
+Game_Engine::Game_Engine(bool inCheatMode) {
     std::cout << "-----STARTING INITIALIZATION-----" << std::endl;
+
+    this->inCheatMode = inCheatMode;
+
+    // determine window scope based on cheat mode condition
+    if (this->inCheatMode)
+        zoomOutFactor = 10;
+    else
+        zoomOutFactor = 1;
 
     // initializes
     initVariables();
@@ -322,7 +335,16 @@ void Game_Engine::initPlayer() {
      * 300.0f:              player speed in the relation to objects in the window
      * 200:                 player total health (initial)
      */
-    player = new Player(&base_movement, Vector2u(12, 4), player_size, 0.05f, player_speed, player_health, player_attVal);
+
+    // if in cheat mode, double player health and attack value
+    if (inCheatMode) {
+        int player_health_dub = player_health * 2;
+        int player_attVal_dub = player_attVal * 2;
+        player = new Player(&base_movement, Vector2u(12, 4), player_size, 0.05f, player_speed, player_health_dub, player_attVal_dub);
+    }
+    else {
+        player = new Player(&base_movement, Vector2u(12, 4), player_size, 0.05f, player_speed, player_health, player_attVal);
+    }
 
     std::cout << "[1] Initialized Player" << std::endl;
 
