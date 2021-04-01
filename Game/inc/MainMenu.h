@@ -27,6 +27,9 @@ private:
     // initializer function for main menu
     void initMainMenu(unsigned int width, unsigned int height, int numMenuItems, sf::RenderWindow* win);
 
+    //Function for running commands based on what item is selected
+    int itemSelected();
+
     // function that is responisble for instantiating and running the options menu
     void runOptionsMenu();
 
@@ -141,6 +144,18 @@ int MainMenu::update() {
         // switch on events (keystrokes)
         switch(event.type) {
         
+            //Mouse Events
+        case sf::Event::MouseMoved:
+            menu->mouseUpdate(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
+            break;
+        case sf::Event::MouseButtonReleased:
+            //Switch for different mouse buttons, might be useful later
+            switch(event.mouseButton.button)
+            case sf::Mouse::Left:
+                menu->mouseUpdate(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
+                return itemSelected();
+                break;
+
         // if any key was released
         case sf::Event::KeyReleased:
             // switch on key release codes
@@ -168,34 +183,7 @@ int MainMenu::update() {
 
             // user pressed the enter key
             case sf::Keyboard::Enter:
-                // retrieves selected button's index
-                switch(menu->getSelection()) {
-                
-                case 0:
-                    //Play is just close window rn
-                    window->close();
-                    return 0;
-                    break;
-                          
-                case 1:
-                    //Do the options screen
-                    runOptionsMenu();
-                    break;
-
-                case 2:
-                    // run the instructions screen
-                    runInstructions();
-                    break;
-                    
-                case 3:
-                    //Time to exit, have to make it different from play somehow
-                    window->close();
-                    return 1;
-                    break;
-
-                default:
-                    break;
-                }
+                return itemSelected();
                 break;
             
             default:
@@ -213,6 +201,38 @@ int MainMenu::update() {
         }
     }
     return -1;
+}
+
+//Will execute proper commands after selection code
+int MainMenu::itemSelected() {
+    // retrieves selected button's index
+    switch (menu->getSelection()) {
+
+    case 0:
+        //Play is just close window rn
+        window->close();
+        return 0;
+        break;
+
+    case 1:
+        //Do the options screen
+        runOptionsMenu();
+        break;
+
+    case 2:
+        // run the instructions screen
+        runInstructions();
+        break;
+
+    case 3:
+        //Time to exit, have to make it different from play somehow
+        window->close();
+        return 1;
+        break;
+
+    default:
+        break;
+    }
 }
 
 // renders all menu objects
