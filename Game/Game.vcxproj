@@ -157,6 +157,9 @@
     <Image Include="imgs\trees_chest.png" />
     <Image Include="imgs\wall.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="inc\FileWriter.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
