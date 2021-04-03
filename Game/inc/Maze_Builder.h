@@ -22,10 +22,8 @@ protected:
     // spawn chamber
     Maze_Component* spawnChamber;
 
-    // Sam Dunny's portion of the maze
     Maze_FirstQuadrant* Sams_Quad;
 
-    // TODO add group member's actual names here
     Maze_SecondQuadrant* scnd_Quad;
     Maze_ThirdQuadrant* thrd_Quad;
     Maze_FourthQuadrant* frth_Quad;
@@ -63,6 +61,9 @@ public:
     bool inMazeWalls(Vector2f coords);
 
     Vector2f getFirstQuadBossCoords() { return Sams_Quad->getBossRoomCoords(); }
+    Vector2f getSecondQuadBossCoords() { return scnd_Quad->getBossRoomCoords(); }
+    Vector2f getThirdQuadBossCoords() { return thrd_Quad->getBossRoomCoords(); }
+    Vector2f getFourthQuadBossCoords() { return frth_Quad->getBossRoomCoords(); }
 };
 
 Maze_Builder::Maze_Builder(sf::Vector2f size) {
@@ -83,7 +84,9 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
 
     // smallest co-ordinate to largest co-ordinate for both x and y
     // all range parameters defined in Wall.h
-    bg = new Background_Map(&background, size, X_NEG_RANGE, X_POS_RANGE, Y_NEG_RANGE, Y_POS_RANGE);
+    bg = new Background_Map(&background, size, 0.0f, X_POS_RANGE, Y_NEG_RANGE, 1.0f);
+
+    // Can add custom backgrounds HERE TODO
 
     // position is assumed to be centered at 0.0f, 0.0f, creates starting chamber
     spawnChamber = new Maze_SpawnChamber(&brickwall_big, size, Vector2f(0.0f * scale, 0.0f * scale));
