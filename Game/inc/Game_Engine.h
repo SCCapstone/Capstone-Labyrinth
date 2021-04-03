@@ -32,7 +32,8 @@ const static bool genMAXEnemies = false;                                // set t
 const static int totalEnemyAmount = 80;
 
 // default cheat mode view, gets set to 10 or 1 in init
-static int zoomOutFactor = 5;                                           // factor to see more maze (can be boosted in cheat mode)
+static int zoomOutFactor;                                           // factor to see more maze (can be boosted in cheat mode)
+int zoomValue = 20;
 const static int player_attVal = 10;                                    // factor for player attack value (can be boosted in cheat mode)
 const static int player_health = 200;                                   // how much health the player originally starts with (can be boosted in cheat mode)
 
@@ -139,7 +140,7 @@ Game_Engine::Game_Engine(bool inCheatMode) {
 
     // determine window scope based on cheat mode condition
     if (this->inCheatMode)
-        zoomOutFactor = 10;
+        zoomOutFactor = zoomValue;
     else
         zoomOutFactor = 1;
 

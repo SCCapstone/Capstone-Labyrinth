@@ -51,10 +51,6 @@ Maze_BossRoom::Maze_BossRoom(sf::Texture* texture, sf::Vector2f size, sf::Vector
     comp3 = new Wall_Corner(texture, size, position, false, false);
     comp4 = new Wall_Corner(texture, size, position, false, true);
 
-    // at least 1 wall be vertical and 1 horizontal, regardless of orientation
-    comp5 = new Wall_Strip(texture, size, position, false);
-    comp6 = new Wall_Strip(texture, size, position, true);
-
     /* comp1 = comp2 = comp3 = comp4 = wall_corner (already oriented correctly)
      * ^ all of these currently in same location
      */
@@ -63,37 +59,57 @@ Maze_BossRoom::Maze_BossRoom(sf::Texture* texture, sf::Vector2f size, sf::Vector
     comp3->shiftWallComponent(2.0f, -2.0f);
     comp4->shiftWallComponent(2.0f, 2.0f);
 
-    // entrance on the left side
+    // entrance on the right side (works)
     if (facePos == true && horiz == true) {
-        // need another horizontal strip
+        // need 1 vertical strip
+        comp5 = new Wall_Strip(texture, size, position, false);
+        
+        // need 2 horizontal strips
+        comp6 = new Wall_Strip(texture, size, position, true);
         comp7 = new Wall_Strip(texture, size, position, true);
+
         comp5->shiftWallComponent(-2.0f, 0.0f);
         comp6->shiftWallComponent(0.0f, -2.0f);
         comp7->shiftWallComponent(0.0f, 2.0f);
     }
-    // entrance on the top side
+    // entrance on the top side (works)
     if (facePos == true && horiz == false) {
-        // need another vertical strip
-        comp7 = new Wall_Strip(texture, size, position, false);
-        comp5->shiftWallComponent(2.0f, 0.0f);
-        comp6->shiftWallComponent(0.0f, 2.0f);
-        comp7->shiftWallComponent(-2.0f, 0.0f);
-    }
-    // entrance on the left side
-    if (facePos == false && horiz == true) {
-        // need another horizontal strip
+        // need 2 vertical strips
+        comp5 = new Wall_Strip(texture, size, position, false);
+        comp6 = new Wall_Strip(texture, size, position, false);
+
+        // need 1 horizontal strip
         comp7 = new Wall_Strip(texture, size, position, true);
+        
+        comp5->shiftWallComponent(2.0f, 0.0f);
+        comp6->shiftWallComponent(-2.0f, 0.0f);
+        comp7->shiftWallComponent(0.0f, 2.0f);
+    }
+    // entrance on the left side (works)
+    if (facePos == false && horiz == true) {
+        // need 1 vertical strip
+        comp5 = new Wall_Strip(texture, size, position, false);
+
+        // need 2 horizontal strips
+        comp6 = new Wall_Strip(texture, size, position, true);
+        comp7 = new Wall_Strip(texture, size, position, true);
+
         comp5->shiftWallComponent(2.0f, 0.0f);
         comp6->shiftWallComponent(0.0f, -2.0f);
         comp7->shiftWallComponent(0.0f, 2.0f);
     }
-    // entrance is on the bottom
-    else {
-        // need another vertical strip
-        comp7 = new Wall_Strip(texture, size, position, false);
+    // entrance is on the bottom (works)
+    if (facePos == false && horiz == false) {
+        // need 2 vertical strips
+        comp5 = new Wall_Strip(texture, size, position, false);
+        comp6 = new Wall_Strip(texture, size, position, false);
+
+        // need 1 horizontal strip
+        comp7 = new Wall_Strip(texture, size, position, true);
+        
         comp5->shiftWallComponent(2.0f, 0.0f);
-        comp6->shiftWallComponent(0.0f, -2.0f);
-        comp7->shiftWallComponent(-2.0f, 0.0f);
+        comp6->shiftWallComponent(-2.0f, 0.0f);
+        comp7->shiftWallComponent(0.0f, -2.0f);
     }
 }
 
