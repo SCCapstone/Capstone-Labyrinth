@@ -94,6 +94,8 @@ public:
 
     // function that returns true if given coordinates are in a wall component
     bool inMazeWalls(Vector2f coords);
+
+    Vector2f getBossRoomCoords() { return br_coords; }
 };
 
 Maze_SecondQuadrant::Maze_SecondQuadrant(sf::Vector2f size) {

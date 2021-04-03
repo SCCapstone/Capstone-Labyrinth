@@ -34,20 +34,36 @@ const static int totalEnemyAmount = 80;
 // default cheat mode view, gets set to 10 or 1 in init
 static int zoomOutFactor;                                           // factor to see more maze (can be boosted in cheat mode)
 int zoomValue = 20;
+
 const static int player_attVal = 10;                                    // factor for player attack value (can be boosted in cheat mode)
 const static int player_health = 200;                                   // how much health the player originally starts with (can be boosted in cheat mode)
-
 const static float player_speed = 300.0f;                               // factor for player speed
 const static Vector2f player_size = Vector2f(100.0f, 150.0f);
 
-const static Vector2f SAM_enemySpawnOrigin = Vector2f(-1.0f, 1.0f);
+// quadrant spawn limits (x, y)
 const static Vector2f SAM_SpawnLimit = Vector2f(15.0f, -19.0f);
-const static int SAM_QuadrantHeartAmt = 8;
+const static Vector2f Q2_SpawnLimit = Vector2f(-28.0f, -17.0f);
+const static Vector2f Q3_SpawnLimit = Vector2f(-28.0f, 26.0f);
+const static Vector2f Q4_SpawnLimit = Vector2f(15.0f, 26.0f);
+
+const static Vector2f SAM_enemySpawnOrigin = Vector2f(0.0f, 0.0f);
+/*
+const static Vector2f q2_enemySpawnOrigin = Vector2f(-1.0f, 1.0f);
+const static Vector2f q3_enemySpawnOrigin = Vector2f(-1.0f, 1.0f);
+const static Vector2f q4_enemySpawnOrigin = Vector2f(-1.0f, 1.0f);
+*/
+
+// will use these as values for other enemy types, TODO add different attrributes for other enemies
+const static int SAM_QuadrantHeartAmt = 9;
 const static Vector2f SAM_enemySize = 1.5f * player_size;
 const static float SAM_minotaur_speed = 27.0f;                          // how fast minotaurs are
 const static int SAM_minotaur_health = 150;                             // how much health the minotaurs originally start with
 const static int SAM_minotaur_attVal = 20;                              // how much damage minotaurs can do
+
 static int SAM_minotaur_amount = (int)totalEnemyAmount/4;               // how many minotaurs to spawn
+static int q2_enemy_amount = (int)totalEnemyAmount / 4;                 // how many minotaurs to spawn
+static int q3_enemy_amount = (int)totalEnemyAmount / 4;                 // how many minotaurs to spawn
+static int q4_enemy_amount = (int)totalEnemyAmount / 4;                 // how many minotaurs to spawn
 
 class Game_Engine {
 // private attributes
@@ -64,16 +80,33 @@ private:
     View player_view;
     Texture base_movement;
 
-    // variables for enemy character
+    // variables for enemy characters
     Enemy_Spawner* minotaurs;
-    // todo start here, continue init for boss
+    Enemy_Spawner* enemies_q2;
+    Enemy_Spawner* enemies_q3;
+    Enemy_Spawner* enemies_q4;
+
+    // boss enemies
     Enemy* Minos;
+    Enemy* boss_q2;
+    Enemy* boss_q3;
+    Enemy* boss_q4;
+
+    // variables to manage boss deletion
+    bool SAM_Boss_dead = false;
+    bool q2_Boss_dead = false;
+    bool q3_Boss_dead = false;
+    bool q4_Boss_dead = false;
+
     Texture min_texture;
 
     // maze variable
     Maze_Builder* maze;
 
     Replinish_Spawner* replinishers;
+    Replinish_Spawner* replinishers_q2;
+    Replinish_Spawner* replinishers_q3;
+    Replinish_Spawner* replinishers_q4;
     Texture hr_text;
 
     // using these so animation runs at same rate irrespective of machine
@@ -87,7 +120,7 @@ private:
     bool playerDead;
 
     Exit_Page* exitpage;
-    Vector2f playerCoords_copy; // stores copy of players positiuon when they die for message display purposes
+    Vector2f playerCoords_copy; // stores copy of players position when they die for message display purposes
 
     // initializer functions
     void initVariables();
@@ -110,8 +143,8 @@ private:
       return false;
     }
 
-    void noEnemySpawnInWall(Enemy_Spawner* enms, Maze_Builder* mz);
-    void noHeartSpawnInWall(Replinish_Spawner* hrts, Maze_Builder* mz);
+    void noEnemySpawnInWall(Enemy_Spawner* enms, Maze_Builder* mz, Vector2f origin, Vector2f limit, int amount);
+    void noHeartSpawnInWall(Replinish_Spawner* hrts, Maze_Builder* mz, Vector2f origin, Vector2f limit, int amount);
 
 // public attributes 
 public:
@@ -160,6 +193,9 @@ Game_Engine::~Game_Engine() {
 
     // Boss destructor
     delete this->Minos;
+    delete this->boss_q2;
+    delete this->boss_q3;
+    delete this->boss_q4;
 
     // Wall_Builder destructor
     delete this->maze;
@@ -182,6 +218,15 @@ void Game_Engine::Update() {
     if (!(replinishers->Empty())) {
         replinishers->Update(deltaTime);
     }
+    if (!(replinishers_q2->Empty())) {
+        replinishers_q2->Update(deltaTime);
+    }
+    if (!(replinishers_q3->Empty())) {
+        replinishers_q3->Update(deltaTime);
+    }
+    if (!(replinishers_q4->Empty())) {
+        replinishers_q4->Update(deltaTime);
+    }
 
     // update player information if it exists
     if (exists(player)) {
@@ -198,6 +243,15 @@ void Game_Engine::Update() {
         if (!(replinishers->Empty())) {
             replinishers->UpdatePlayerContact(*player);
         }
+        if (!(replinishers_q2->Empty())) {
+            replinishers_q2->UpdatePlayerContact(*player);
+        }
+        if (!(replinishers_q3->Empty())) {
+            replinishers_q3->UpdatePlayerContact(*player);
+        }
+        if (!(replinishers_q4->Empty())) {
+            replinishers_q4->UpdatePlayerContact(*player);
+        }
     }
 
     if (exists(Minos)) {
@@ -208,6 +262,30 @@ void Game_Engine::Update() {
         // makes maze the immovable object to player
         maze->MazeContactUpdate_Boss(Minos, 1.0f);
     }
+    if (exists(boss_q2)) {
+        srand((unsigned)time(0));
+        int rv = rand() % 5 + 1;
+        boss_q2->Update(deltaTime, rv);
+
+        // makes maze the immovable object to player
+        maze->MazeContactUpdate_Boss(boss_q2, 1.0f);
+    }
+    if (exists(boss_q3)) {
+        srand((unsigned)time(0));
+        int rv = rand() % 5 + 1;
+        boss_q3->Update(deltaTime, rv);
+
+        // makes maze the immovable object to player
+        maze->MazeContactUpdate_Boss(boss_q3, 1.0f);
+    }
+    if (exists(boss_q4)) {
+        srand((unsigned)time(0));
+        int rv = rand() % 5 + 1;
+        boss_q4->Update(deltaTime, rv);
+
+        // makes maze the immovable object to player
+        maze->MazeContactUpdate_Boss(boss_q4, 1.0f);
+    }
 
     // update enemy information if any exist
     if (!(minotaurs->Empty())) {
@@ -216,6 +294,27 @@ void Game_Engine::Update() {
 
         // makes maze the immovable object to minotaur
         maze->MazeContactUpdate_Enemies(minotaurs, 1.0f);
+    }
+    if (!(enemies_q2->Empty())) {
+        // updates the minotaur's information
+        enemies_q2->Update(deltaTime);
+
+        // makes maze the immovable object to minotaur
+        maze->MazeContactUpdate_Enemies(enemies_q2, 1.0f);
+    }
+    if (!(enemies_q3->Empty())) {
+        // updates the minotaur's information
+        enemies_q3->Update(deltaTime);
+
+        // makes maze the immovable object to minotaur
+        maze->MazeContactUpdate_Enemies(enemies_q3, 1.0f);
+    }
+    if (!(enemies_q4->Empty())) {
+        // updates the minotaur's information
+        enemies_q4->Update(deltaTime);
+
+        // makes maze the immovable object to minotaur
+        maze->MazeContactUpdate_Enemies(enemies_q4, 1.0f);
     }
 
     // make sure player and minotaur exists before you utilize them
@@ -239,9 +338,66 @@ void Game_Engine::Update() {
             exitpage->setLost(playerDead);
         }
     }
+    if (!(enemies_q2->Empty()) && exists(player)) {
+        enemies_q2->UpdateHealthBarContact(*player);
 
-    // variable to manage boss deletion
-    bool Boss_dead = false;
+        // if the player and the enemy's field of vision collide, enemy chases player
+        enemies_q2->UpdateEnemyChase(*player, deltaTime);
+
+        // if the player and an enemy collide, update attack and kill information (in enemy spawner)
+        enemies_q2->UpdateEnemyContact(*player);
+
+        playerCoords_copy = player->getIndividualPos();
+
+        // delete player condition
+        if (enemies_q2->getKillStatus()) {
+            player = nullptr;
+            delete player;
+            std::cout << "\nPlayer deleted" << std::endl;
+            playerDead = true;
+            exitpage->setLost(playerDead);
+        }
+    }
+    if (!(enemies_q3->Empty()) && exists(player)) {
+        enemies_q3->UpdateHealthBarContact(*player);
+
+        // if the player and the enemy's field of vision collide, enemy chases player
+        enemies_q3->UpdateEnemyChase(*player, deltaTime);
+
+        // if the player and an enemy collide, update attack and kill information (in enemy spawner)
+        enemies_q3->UpdateEnemyContact(*player);
+
+        playerCoords_copy = player->getIndividualPos();
+
+        // delete player condition
+        if (enemies_q3->getKillStatus()) {
+            player = nullptr;
+            delete player;
+            std::cout << "\nPlayer deleted" << std::endl;
+            playerDead = true;
+            exitpage->setLost(playerDead);
+        }
+    }
+    if (!(enemies_q4->Empty()) && exists(player)) {
+        enemies_q4->UpdateHealthBarContact(*player);
+
+        // if the player and the enemy's field of vision collide, enemy chases player
+        enemies_q4->UpdateEnemyChase(*player, deltaTime);
+
+        // if the player and an enemy collide, update attack and kill information (in enemy spawner)
+        enemies_q4->UpdateEnemyContact(*player);
+
+        playerCoords_copy = player->getIndividualPos();
+
+        // delete player condition
+        if (enemies_q4->getKillStatus()) {
+            player = nullptr;
+            delete player;
+            std::cout << "\nPlayer deleted" << std::endl;
+            playerDead = true;
+            exitpage->setLost(playerDead);
+        }
+    }
 
     if (exists(Minos) && exists(player)) {
         player->HealthBarColliderCheck(Minos->GetCollider(), 0.0f);
@@ -258,7 +414,8 @@ void Game_Engine::Update() {
                 player->Attack(*Minos);
             }
             else {
-                Boss_dead = true;
+                SAM_Boss_dead = true;
+                std::cout << "\nBOSS deleted: " << std::endl;
             }
 
             // enemy attacking player
@@ -275,13 +432,128 @@ void Game_Engine::Update() {
             }
         }
     }
+    if (exists(boss_q2) && exists(player)) {
+        player->HealthBarColliderCheck(boss_q2->GetCollider(), 0.0f);
+
+        if (player->VisionColliderCheck(boss_q2->GetCollider(), 0.0f)) {
+            boss_q2->Chase(*player, deltaTime);
+        }
+
+        // 0.5f to show that enemies and player have same force on each other
+        if (player->ColliderCheck(boss_q2->GetCollider(), 0.5f)) {
+
+            // player attacking enemy
+            if (boss_q2->getTotalHealth() > player->getAttackValue()) {
+                player->Attack(*boss_q2);
+            }
+            else {
+                q2_Boss_dead = true;
+                std::cout << "\nBOSS deleted: " << std::endl;
+            }
+
+            // enemy attacking player
+            if (player->getTotalHealth() > boss_q2->getAttackValue()) {
+                boss_q2->ConstantAttack(*player);
+            }
+            else {
+                playerCoords_copy = player->getIndividualPos();
+                player = nullptr;
+                delete player;
+                std::cout << "\nPlayer deleted" << std::endl;
+                playerDead = true;
+                exitpage->setLost(playerDead);
+            }
+        }
+    }
+    if (exists(boss_q3) && exists(player)) {
+        player->HealthBarColliderCheck(boss_q3->GetCollider(), 0.0f);
+
+        if (player->VisionColliderCheck(boss_q3->GetCollider(), 0.0f)) {
+            boss_q3->Chase(*player, deltaTime);
+        }
+
+        // 0.5f to show that enemies and player have same force on each other
+        if (player->ColliderCheck(boss_q3->GetCollider(), 0.5f)) {
+
+            // player attacking enemy
+            if (boss_q3->getTotalHealth() > player->getAttackValue()) {
+                player->Attack(*boss_q3);
+            }
+            else {
+                q3_Boss_dead = true;
+                std::cout << "\nBOSS deleted: " << std::endl;
+            }
+
+            // enemy attacking player
+            if (player->getTotalHealth() > boss_q3->getAttackValue()) {
+                boss_q3->ConstantAttack(*player);
+            }
+            else {
+                playerCoords_copy = player->getIndividualPos();
+                player = nullptr;
+                delete player;
+                std::cout << "\nPlayer deleted" << std::endl;
+                playerDead = true;
+                exitpage->setLost(playerDead);
+            }
+        }
+    }
+    if (exists(boss_q4) && exists(player)) {
+        player->HealthBarColliderCheck(boss_q4->GetCollider(), 0.0f);
+
+        if (player->VisionColliderCheck(boss_q4->GetCollider(), 0.0f)) {
+            boss_q4->Chase(*player, deltaTime);
+        }
+
+        // 0.5f to show that enemies and player have same force on each other
+        if (player->ColliderCheck(boss_q4->GetCollider(), 0.5f)) {
+
+            // player attacking enemy
+            if (boss_q4->getTotalHealth() > player->getAttackValue()) {
+                player->Attack(*boss_q4);
+            }
+            else {
+                q4_Boss_dead = true;
+                std::cout << "\nBOSS deleted: " << std::endl;
+            }
+
+            // enemy attacking player
+            if (player->getTotalHealth() > boss_q4->getAttackValue()) {
+                boss_q4->ConstantAttack(*player);
+            }
+            else {
+                playerCoords_copy = player->getIndividualPos();
+                player = nullptr;
+                delete player;
+                std::cout << "\nPlayer deleted" << std::endl;
+                playerDead = true;
+                exitpage->setLost(playerDead);
+            }
+        }
+    }
 
     // deletes boss
-    if (Boss_dead) {
+    if (SAM_Boss_dead) {
         Minos = nullptr;
         delete Minos;
-        std::cout << "\nBOSS deleted: " << std::endl;
-        exitpage->setLost(!Boss_dead);
+    }
+    if (q2_Boss_dead) {
+        boss_q2 = nullptr;
+        delete boss_q2;
+    }
+    if (q3_Boss_dead) {
+        boss_q3 = nullptr;
+        delete boss_q3;
+    }
+    if (q4_Boss_dead) {
+        boss_q4 = nullptr;
+        delete boss_q4;
+    }
+
+    // game has been won
+    if (SAM_Boss_dead && q2_Boss_dead && q3_Boss_dead && q4_Boss_dead) {
+        //std::cout << "\nALL BOSSES DEFEATED: " << std::endl;
+        exitpage->setLost(false);
     }
 }
 
@@ -300,6 +572,12 @@ void Game_Engine::Render() {
     // draws health replinishing items (if they exist)
     if (!(replinishers->Empty()))
         replinishers->Spawn(*window);
+    if (!(replinishers_q2->Empty()))
+        replinishers_q2->Spawn(*window);
+    if (!(replinishers_q3->Empty()))
+        replinishers_q3->Spawn(*window);
+    if (!(replinishers_q4->Empty()))
+        replinishers_q4->Spawn(*window);
 
     // draws player (if it exists)
     if (exists(player))
@@ -308,13 +586,25 @@ void Game_Engine::Render() {
     // draws enemies (if they exist)
     if (!(minotaurs->Empty()))
         minotaurs->Spawn(*window);
+    if (!(enemies_q2->Empty()))
+        enemies_q2->Spawn(*window);
+    if (!(enemies_q3->Empty()))
+        enemies_q3->Spawn(*window);
+    if (!(enemies_q4->Empty()))
+        enemies_q4->Spawn(*window);
 
-    // draws boss (if it exists)
+    // draws bosses (if they exists)
     if (exists(Minos))
         Minos->Draw(*window);
+    if (exists(boss_q2))
+        boss_q2->Draw(*window);
+    if (exists(boss_q3))
+        boss_q3->Draw(*window);
+    if (exists(boss_q4))
+        boss_q4->Draw(*window);
 
-    // TODO add more bosses when maze is finished to extend win condition
-    if (!exists(Minos)) {
+    // draws win message
+    if (!exists(Minos) && !exists(boss_q2) && !exists(boss_q3) && !exists(boss_q4)) {
         exitpage->Render(*window, playerCoords_copy);
     }
 
@@ -385,32 +675,76 @@ void Game_Engine::initPlayer() {
 
 void Game_Engine::initReplinishers() {
     this->replinishers = nullptr;
+    this->replinishers_q2 = nullptr;
+    this->replinishers_q3 = nullptr;
+    this->replinishers_q4 = nullptr;
 
     hr_text.loadFromFile("imgs/spinning_heart.png");
 
     replinishers = new Replinish_Spawner(SAM_QuadrantHeartAmt, Vector2f(0.2f * scale, 0.3f * scale), &hr_text, Vector2u(4, 1), 0.5f, SAM_enemySpawnOrigin, SAM_SpawnLimit);
-    noHeartSpawnInWall(replinishers, maze);
+    noHeartSpawnInWall(replinishers, maze, SAM_enemySpawnOrigin, SAM_SpawnLimit, SAM_QuadrantHeartAmt);
+
+    replinishers_q2 = new Replinish_Spawner(SAM_QuadrantHeartAmt, Vector2f(0.2f * scale, 0.3f * scale), &hr_text, Vector2u(4, 1), 0.5f, SAM_enemySpawnOrigin, Q2_SpawnLimit);
+    noHeartSpawnInWall(replinishers_q2, maze, SAM_enemySpawnOrigin, Q2_SpawnLimit, SAM_QuadrantHeartAmt);
+
+    replinishers_q3 = new Replinish_Spawner(SAM_QuadrantHeartAmt, Vector2f(0.2f * scale, 0.3f * scale), &hr_text, Vector2u(4, 1), 0.5f, SAM_enemySpawnOrigin, Q3_SpawnLimit);
+    noHeartSpawnInWall(replinishers_q3, maze, SAM_enemySpawnOrigin, Q3_SpawnLimit, SAM_QuadrantHeartAmt);
+
+    replinishers_q4 = new Replinish_Spawner(SAM_QuadrantHeartAmt, Vector2f(0.2f * scale, 0.3f * scale), &hr_text, Vector2u(4, 1), 0.5f, SAM_enemySpawnOrigin, Q4_SpawnLimit);
+    noHeartSpawnInWall(replinishers_q4, maze, SAM_enemySpawnOrigin, Q4_SpawnLimit, SAM_QuadrantHeartAmt);
 }
 
 void Game_Engine::initEnemies() {
     this->minotaurs = nullptr;
+    this->enemies_q2 = nullptr;
+    this->enemies_q3 = nullptr;
+    this->enemies_q4 = nullptr;
+
     this->Minos = nullptr;
+    this->boss_q2 = nullptr;
+    this->boss_q3 = nullptr;
+    this->boss_q4 = nullptr;
 
     // loading sprite sheet
     min_texture.loadFromFile("imgs/minotaur.png");
 
     // testing condition
-    if (genMAXEnemies)
-        SAM_minotaur_amount = MAX_ENEMY_AMT;
+    if (genMAXEnemies) {
+        SAM_minotaur_amount = MAX_ENEMY_AMT / 4;
+        q2_enemy_amount = MAX_ENEMY_AMT / 4;
+        q3_enemy_amount = MAX_ENEMY_AMT / 4;
+        q4_enemy_amount = MAX_ENEMY_AMT / 4;
+    }
 
-    // Initializing enemy spawner
+    // Initializing enemy spawners
     // spawn bounds must be exclusive (any free, non-wall space in bounds is viable spawn location)
     minotaurs = new Enemy_Spawner(SAM_minotaur_amount, SAM_minotaur_attVal, SAM_enemySize, &min_texture, Vector2u(10, 5), 0.35f, SAM_minotaur_speed, SAM_minotaur_health, SAM_enemySpawnOrigin, SAM_SpawnLimit);
-    noEnemySpawnInWall(minotaurs, maze);
+    noEnemySpawnInWall(minotaurs, maze, SAM_enemySpawnOrigin, SAM_SpawnLimit, SAM_minotaur_amount);
+
+    enemies_q2 = new Enemy_Spawner(q2_enemy_amount, SAM_minotaur_attVal, SAM_enemySize, &min_texture, Vector2u(10, 5), 0.35f, SAM_minotaur_speed, SAM_minotaur_health, SAM_enemySpawnOrigin, Q2_SpawnLimit);
+    noEnemySpawnInWall(enemies_q2, maze, SAM_enemySpawnOrigin, Q2_SpawnLimit, q2_enemy_amount);
+    
+    enemies_q3 = new Enemy_Spawner(q3_enemy_amount, SAM_minotaur_attVal, SAM_enemySize, &min_texture, Vector2u(10, 5), 0.35f, SAM_minotaur_speed, SAM_minotaur_health, SAM_enemySpawnOrigin, Q3_SpawnLimit);
+    noEnemySpawnInWall(enemies_q3, maze, SAM_enemySpawnOrigin, Q3_SpawnLimit, q3_enemy_amount);
+
+    enemies_q4 = new Enemy_Spawner(q4_enemy_amount, SAM_minotaur_attVal, SAM_enemySize, &min_texture, Vector2u(10, 5), 0.35f, SAM_minotaur_speed, SAM_minotaur_health, SAM_enemySpawnOrigin, Q4_SpawnLimit);
+    noEnemySpawnInWall(enemies_q4, maze, SAM_enemySpawnOrigin, Q4_SpawnLimit, q4_enemy_amount);
 
     // boss enemy for upper right quadrant
     Minos = new Enemy(&min_texture, Vector2u(10, 5), 1.5f * SAM_enemySize,  0.35f, 0.75f * SAM_minotaur_speed, 2 * SAM_minotaur_health, int(1.5 * SAM_minotaur_attVal));
     Minos->setPos(maze->getFirstQuadBossCoords());
+
+    // boss enemy for lower right quadrant
+    boss_q2 = new Enemy(&min_texture, Vector2u(10, 5), 1.5f * SAM_enemySize, 0.35f, 0.75f * SAM_minotaur_speed, 2 * SAM_minotaur_health, int(1.5 * SAM_minotaur_attVal));
+    boss_q2->setPos(maze->getSecondQuadBossCoords());
+
+    // boss enemy for lower left quadrant
+    boss_q3 = new Enemy(&min_texture, Vector2u(10, 5), 1.5f * SAM_enemySize, 0.35f, 0.75f * SAM_minotaur_speed, 2 * SAM_minotaur_health, int(1.5 * SAM_minotaur_attVal));
+    boss_q3->setPos(maze->getThirdQuadBossCoords());
+
+    // boss enemy for lower right quadrant
+    boss_q4 = new Enemy(&min_texture, Vector2u(10, 5), 1.5f * SAM_enemySize, 0.35f, 0.75f * SAM_minotaur_speed, 2 * SAM_minotaur_health, int(1.5 * SAM_minotaur_attVal));
+    boss_q4->setPos(maze->getFourthQuadBossCoords());
 }
 
 void Game_Engine::initWalls() {
@@ -496,18 +830,18 @@ void Game_Engine::pollEvents() {
     }
 }
 
-void Game_Engine::noEnemySpawnInWall(Enemy_Spawner* ens, Maze_Builder* mz) {
-    for (int i = 0; i < SAM_minotaur_amount; i++) {
+void Game_Engine::noEnemySpawnInWall(Enemy_Spawner* ens, Maze_Builder* mz, Vector2f origin, Vector2f limit, int amount) {
+    for (int i = 0; i < amount; i++) {
         while (mz->inMazeWalls(ens->getEnemy(i)->getIndividualPos())) {
-            ens->getEnemy(i)->setRandPos(SAM_enemySpawnOrigin, SAM_SpawnLimit);
+            ens->getEnemy(i)->setRandPos(origin, limit);
         }
     }
 }
 
-void Game_Engine::noHeartSpawnInWall(Replinish_Spawner* hrts, Maze_Builder* mz) {
-    for (int i = 0; i < SAM_QuadrantHeartAmt; i++) {
+void Game_Engine::noHeartSpawnInWall(Replinish_Spawner* hrts, Maze_Builder* mz, Vector2f origin, Vector2f limit, int amount) {
+    for (int i = 0; i < amount; i++) {
         while (mz->inMazeWalls(hrts->getHeart(i)->GetHeartPosition())) {
-            hrts->getHeart(i)->setRandPos(SAM_enemySpawnOrigin, SAM_SpawnLimit);
+            hrts->getHeart(i)->setRandPos(origin, limit);
         }
     }
 }
