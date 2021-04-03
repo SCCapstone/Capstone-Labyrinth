@@ -79,7 +79,7 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     // load wall and background texture from img/ directory
     // not in parameter so we have the freedom to have multiple textures for walls
     brickwall_big.loadFromFile("imgs/wall_texture.png");
-    background.loadFromFile("imgs/sand.png");
+    background.loadFromFile("imgs/floorV2.png");
 
     // smallest co-ordinate to largest co-ordinate for both x and y
     // all range parameters defined in Wall.h
