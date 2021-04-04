@@ -47,8 +47,8 @@ Exit_Page::Exit_Page(float factor) {
     this->instructs.setOutlineColor(sf::Color::Black);
     this->instructs.setOutlineThickness(10);
 
-    this->instructs.setCharacterSize(factor / 13);
-    this->instructs.setOutlineThickness(factor / 52);
+    this->instructs.setCharacterSize((unsigned int)(factor / 13.0f));
+    this->instructs.setOutlineThickness(factor / 52.0f);
 }
 
 // destructor

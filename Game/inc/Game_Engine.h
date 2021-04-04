@@ -42,9 +42,9 @@ const static Vector2f player_size = Vector2f(100.0f, 150.0f);
 
 // quadrant spawn limits (x, y)
 const static Vector2f SAM_SpawnLimit = Vector2f(15.0f, -19.0f);
-const static Vector2f Q2_SpawnLimit = Vector2f(-28.0f, -17.0f);
+const static Vector2f Q4_SpawnLimit = Vector2f(-28.0f, -17.0f);
 const static Vector2f Q3_SpawnLimit = Vector2f(-28.0f, 26.0f);
-const static Vector2f Q4_SpawnLimit = Vector2f(15.0f, 26.0f);
+const static Vector2f Q2_SpawnLimit = Vector2f(15.0f, 26.0f);
 
 const static Vector2f SAM_enemySpawnOrigin = Vector2f(0.0f, 0.0f);
 /*
