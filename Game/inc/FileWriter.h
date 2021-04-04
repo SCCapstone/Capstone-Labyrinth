@@ -7,11 +7,12 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <algorithm>
 
 
 class FileWriter {
 private:
-	const std::string optionsFilePath = "../options/options.txt";
+	const std::string optionsFilePath = "../options/options.dat";
 	std::vector<option> optionList; //Will store all the options in a list
 
 
@@ -38,11 +39,16 @@ FileWriter::FileWriter() {
 //Will init the Option file and read in all data
 void FileWriter::initOption() {
 	std::fstream optionFile;
-	optionFile.open(optionsFilePath);
+	optionFile.open(optionsFilePath, std::ios::in);
 	if (!optionFile.is_open()) {
 		std::cout << "Options File failed to open!";
 		return;
 	}
+	std::string line;
+	while (!optionFile.eofbit) {
+		line = optionFile.;
+	}
+
 
 }
 
