@@ -86,7 +86,7 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     brickwall_big.loadFromFile("imgs/wall_texture.png");
     docks_wall.loadFromFile("imgs/docks_wallV1.png");
     butcher_wall.loadFromFile("imgs/butchery_wallsV1.png");
-    background.loadFromFile("imgs/floorV2.png");
+    background.loadFromFile("imgs/base_floorV2.png");
     docks_background.loadFromFile("imgs/docks_floorV2.png");
     butcher_background.loadFromFile("imgs/butchery_floorV1.png");
 
