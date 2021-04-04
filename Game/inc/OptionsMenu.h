@@ -162,6 +162,7 @@ int OptionsMenu::itemSelected() {
 
     case 0:
         //Sssssshhhh options soon
+        return 0;
         break;
 
     case 3:
@@ -185,6 +186,7 @@ int OptionsMenu::itemSelected() {
         break;
 
     default:
+        return -1;
         break;
     }
 }

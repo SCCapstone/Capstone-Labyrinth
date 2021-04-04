@@ -62,6 +62,20 @@ protected:
     Maze_Component* CAILAS3_tj4;
 
     // filler strips
+    Maze_Component* SAMS_fs1;
+    Maze_Component* SAMS_fs2;
+    Maze_Component* SAMS_fs3;
+    Maze_Component* SAMS_fs4;
+    Maze_Component* SAMS_fs5;
+    Maze_Component* SAMS_fs6;
+    Maze_Component* SAMS_fs7;
+    Maze_Component* SAMS_fs8;
+    Maze_Component* SAMS_fs9;
+    Maze_Component* SAMS_fs10;
+    Maze_Component* SAMS_fs11;
+    Maze_Component* SAMS_fs12;
+    Maze_Component* SAMS_fs13;
+    Maze_Component* SAMS_fs14;
 
     // boss room
     Maze_Component* CAILAS3_boss_room;
@@ -132,6 +146,21 @@ Maze_FourthQuadrant::Maze_FourthQuadrant(sf::Vector2f size) {
     this->CAILAS3_tj3 = nullptr;
     this->CAILAS3_tj4 = nullptr;
 
+    this->SAMS_fs1 = nullptr;
+    this->SAMS_fs2 = nullptr;
+    this->SAMS_fs3 = nullptr;
+    this->SAMS_fs4 = nullptr;
+    this->SAMS_fs5 = nullptr;
+    this->SAMS_fs6 = nullptr;
+    this->SAMS_fs7 = nullptr;
+    this->SAMS_fs8 = nullptr;
+    this->SAMS_fs9 = nullptr;
+    this->SAMS_fs10 = nullptr;
+    this->SAMS_fs11 = nullptr;
+    this->SAMS_fs12 = nullptr;
+    this->SAMS_fs13 = nullptr;
+    this->SAMS_fs14 = nullptr;
+
     this->CAILAS3_boss_room = nullptr;
 
     // load wall texture from img/ directory
@@ -179,6 +208,20 @@ Maze_FourthQuadrant::Maze_FourthQuadrant(sf::Vector2f size) {
     CAILAS3_tj4 = new Maze_TJunction(&brickwall_big, size, Vector2f(-27.0f * scale, -4.0f * scale), false, true);
 
     // filler segments (used her to fill extra maze space within enemy spawn bounds that we dont want enemies to spawn in)
+    SAMS_fs1 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-28.0f * scale, 10.0f * scale), false);
+    SAMS_fs2 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-24.0f * scale, -17.0f * scale), true);
+    SAMS_fs3 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-28.0f * scale, 15.0f * scale), false);
+    SAMS_fs4 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-27.0f * scale, -17.0f * scale), true);
+    SAMS_fs5 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-27.0f * scale, -16.0f * scale), true);
+    SAMS_fs6 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-27.0f * scale, -12.0f * scale), true);
+    SAMS_fs7 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-24.0f * scale, -16.0f * scale), true);
+    SAMS_fs8 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-27.0f * scale, -13.0f * scale), true);
+    SAMS_fs9 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-27.0f * scale, -14.0f * scale), true);
+    SAMS_fs10 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-27.0f * scale, -15.0f * scale), true);
+    SAMS_fs11 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-28.0f * scale, 20.0f * scale), false);
+    SAMS_fs12 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-29.0f * scale, 10.0f * scale), false);
+    SAMS_fs13 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-29.0f * scale, 15.0f * scale), false);
+    SAMS_fs14 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-29.0f * scale, 20.0f * scale), false);
 
     // creates room for maze section boss
     this->br_coords = Vector2f(-27.0f * scale, -9.0f * scale);
@@ -225,6 +268,21 @@ void Maze_FourthQuadrant::MazeContactUpdate_Player(Player* character, float push
     CAILAS3_tj3->ColliderCheck(character->GetCollider(), push);
     CAILAS3_tj4->ColliderCheck(character->GetCollider(), push);
 
+    SAMS_fs1->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs2->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs3->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs4->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs5->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs6->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs7->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs8->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs9->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs10->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs11->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs12->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs13->ColliderCheck(character->GetCollider(), push);
+    SAMS_fs14->ColliderCheck(character->GetCollider(), push);
+
     CAILAS3_boss_room->ColliderCheck(character->GetCollider(), push);
 
 }
@@ -261,11 +319,25 @@ void Maze_FourthQuadrant::MazeContactUpdate_Enemies(Enemy_Spawner* enemies, floa
     enemies->UpdateWallCollisions(CAILAS3_de10, push);
     enemies->UpdateWallCollisions(CAILAS3_de11, push);
 
-
     enemies->UpdateWallCollisions(CAILAS3_tj1, push);
     enemies->UpdateWallCollisions(CAILAS3_tj2, push);
     enemies->UpdateWallCollisions(CAILAS3_tj3, push);
     enemies->UpdateWallCollisions(CAILAS3_tj4, push);
+
+    enemies->UpdateWallCollisions(SAMS_fs1, push);
+    enemies->UpdateWallCollisions(SAMS_fs2, push);
+    enemies->UpdateWallCollisions(SAMS_fs3, push);
+    enemies->UpdateWallCollisions(SAMS_fs4, push);
+    enemies->UpdateWallCollisions(SAMS_fs5, push);
+    enemies->UpdateWallCollisions(SAMS_fs6, push);
+    enemies->UpdateWallCollisions(SAMS_fs7, push);
+    enemies->UpdateWallCollisions(SAMS_fs8, push);
+    enemies->UpdateWallCollisions(SAMS_fs9, push);
+    enemies->UpdateWallCollisions(SAMS_fs10, push);
+    enemies->UpdateWallCollisions(SAMS_fs11, push);
+    enemies->UpdateWallCollisions(SAMS_fs12, push);
+    enemies->UpdateWallCollisions(SAMS_fs13, push);
+    enemies->UpdateWallCollisions(SAMS_fs14, push);
 
     enemies->UpdateWallCollisions(CAILAS3_boss_room, push);
 }
@@ -307,6 +379,21 @@ void Maze_FourthQuadrant::Draw(sf::RenderWindow& window) {
     CAILAS3_tj3->Draw(window);
     CAILAS3_tj4->Draw(window);
 
+    SAMS_fs1->Draw(window);
+    SAMS_fs2->Draw(window);
+    SAMS_fs3->Draw(window);
+    SAMS_fs4->Draw(window);
+    SAMS_fs5->Draw(window);
+    SAMS_fs6->Draw(window);
+    SAMS_fs7->Draw(window);
+    SAMS_fs8->Draw(window);
+    SAMS_fs9->Draw(window);
+    SAMS_fs10->Draw(window);
+    SAMS_fs11->Draw(window);
+    SAMS_fs12->Draw(window);
+    SAMS_fs13->Draw(window);
+    SAMS_fs14->Draw(window);
+
     CAILAS3_boss_room->Draw(window);
 }
 
@@ -347,6 +434,21 @@ bool Maze_FourthQuadrant::ColliderCheck(Collider other, float push) {
     bool piece29_cond = CAILAS3_tj3->ColliderCheck(other, push);
     bool piece30_cond = CAILAS3_tj4->ColliderCheck(other, push);
 
+    bool piece32_cond = SAMS_fs1->ColliderCheck(other, push);
+    bool piece33_cond = SAMS_fs2->ColliderCheck(other, push);
+    bool piece34_cond = SAMS_fs3->ColliderCheck(other, push);
+    bool piece35_cond = SAMS_fs4->ColliderCheck(other, push);
+    bool piece36_cond = SAMS_fs5->ColliderCheck(other, push);
+    bool piece37_cond = SAMS_fs6->ColliderCheck(other, push);
+    bool piece38_cond = SAMS_fs7->ColliderCheck(other, push);
+    bool piece39_cond = SAMS_fs8->ColliderCheck(other, push);
+    bool piece40_cond = SAMS_fs9->ColliderCheck(other, push);
+    bool piece41_cond = SAMS_fs10->ColliderCheck(other, push);
+    bool piece42_cond = SAMS_fs11->ColliderCheck(other, push);
+    bool piece43_cond = SAMS_fs12->ColliderCheck(other, push);
+    bool piece44_cond = SAMS_fs13->ColliderCheck(other, push);
+    bool piece45_cond = SAMS_fs14->ColliderCheck(other, push);
+
     bool piece31_cond = CAILAS3_boss_room->ColliderCheck(other, push);
 
     if (piece1_cond ||
@@ -379,7 +481,21 @@ bool Maze_FourthQuadrant::ColliderCheck(Collider other, float push) {
         piece28_cond ||
         piece29_cond ||
         piece30_cond ||
-        piece31_cond)
+        piece31_cond ||
+        piece32_cond ||
+        piece33_cond ||
+        piece34_cond ||
+        piece35_cond ||
+        piece36_cond ||
+        piece37_cond ||
+        piece38_cond ||
+        piece39_cond ||
+        piece40_cond ||
+        piece41_cond ||
+        piece42_cond ||
+        piece43_cond ||
+        piece44_cond ||
+        piece45_cond)
         return true;
 
     return false;
@@ -418,6 +534,19 @@ bool Maze_FourthQuadrant::inMazeWalls(Vector2f coords) {
         CAILAS3_tj2->inWallStructure(coords) ||
         CAILAS3_tj3->inWallStructure(coords) ||
         CAILAS3_tj4->inWallStructure(coords) ||
+        SAMS_fs2->inWallStructure(coords) ||
+        SAMS_fs3->inWallStructure(coords) ||
+        SAMS_fs4->inWallStructure(coords) ||
+        SAMS_fs5->inWallStructure(coords) ||
+        SAMS_fs6->inWallStructure(coords) ||
+        SAMS_fs7->inWallStructure(coords) ||
+        SAMS_fs8->inWallStructure(coords) ||
+        SAMS_fs9->inWallStructure(coords) ||
+        SAMS_fs10->inWallStructure(coords) ||
+        SAMS_fs11->inWallStructure(coords) ||
+        SAMS_fs12->inWallStructure(coords) ||
+        SAMS_fs13->inWallStructure(coords) ||
+        SAMS_fs14->inWallStructure(coords) ||
         CAILAS3_boss_room->inWallStructure(coords);
 }
 

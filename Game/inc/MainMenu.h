@@ -217,11 +217,13 @@ int MainMenu::itemSelected() {
     case 1:
         //Do the options screen
         runOptionsMenu();
+        return 3;
         break;
 
     case 2:
         // run the instructions screen
         runInstructions();
+        return 2;
         break;
 
     case 3:
@@ -231,6 +233,7 @@ int MainMenu::itemSelected() {
         break;
 
     default:
+        return -1;
         break;
     }
 }

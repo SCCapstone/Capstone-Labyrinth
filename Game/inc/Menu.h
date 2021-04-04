@@ -180,7 +180,7 @@ void Menu::MoveDown() {
 //Updates selection after mouse moves
 void Menu::mouseUpdate(sf::Vector2i mousePos) {
     sf::Vector2f floatMousePos = sf::Vector2f(mousePos);
-    for (int i = 0; i < buttons.size(); i++) {
+    for (unsigned int i = 0; i < buttons.size(); i++) {
         if (buttons[i].getGlobalBounds().contains(floatMousePos)) {
             textMenu[selectedItemIndex].setFillColor(sf::Color::White);     //Changes selected text box to appropriate color
             selectedItemIndex = i;

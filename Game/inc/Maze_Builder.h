@@ -84,7 +84,7 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
 
     // smallest co-ordinate to largest co-ordinate for both x and y
     // all range parameters defined in Wall.h
-    bg = new Background_Map(&background, size, 0.0f, X_POS_RANGE, Y_NEG_RANGE, 1.0f);
+    bg = new Background_Map(&background, size, 2.0f * X_NEG_RANGE, 2.0f * X_POS_RANGE, 2.0f * Y_NEG_RANGE, 2.0f * Y_POS_RANGE);
 
     // Can add custom backgrounds HERE TODO
 
