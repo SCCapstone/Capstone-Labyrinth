@@ -22,6 +22,9 @@ private:
     // initializes options menu
     void initOptionsMenu(unsigned int width, unsigned int height);
 
+    //Executes proper command based on what selection is made
+    int itemSelected();
+
 // public attributes
 public:
     // default constructor
@@ -94,6 +97,20 @@ int OptionsMenu::update() {
     // while loop that scans for key strokes
     while(window->pollEvent(event)) {
         switch(event.type) {
+
+            //Mouse Events 
+        case sf::Event::MouseMoved:
+            menu->mouseUpdate(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
+            break;
+        case sf::Event::MouseButtonReleased:
+            //Switch for different mouse buttons, might be useful later
+            switch (event.mouseButton.button)
+        case sf::Mouse::Left:
+            menu->mouseUpdate(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
+            return itemSelected();
+            break;
+
+
         // if a key has been released
         case sf::Event::KeyReleased:
             switch(event.key.code) {
@@ -120,35 +137,7 @@ int OptionsMenu::update() {
 
             // the enter key was pressed
             case sf::Keyboard::Enter:
-                switch(menu->getSelection()) {
-                
-                case 0:
-                    //Sssssshhhh options soon
-                    break;
-
-                case 3:
-                    if (menu->getText(3)._Equal("Cheat Mode: Enabled")) {
-                        menu->setText(3, "Cheat Mode: Disabled");
-                        cheating = false;
-                    }
-                    else {
-                        menu->setText(3, "Cheat Mode: Enabled");
-                        cheating = true;
-                    }
-                    return 3;
-                    break;
-                    
-                case 4:
-                    //Exit to Main menu
-                    window->close();
-                    if (cheating)
-                        return 5;
-                    return 6;
-                    break;
-                    
-                default:
-                    break;
-                }
+                itemSelected();
                 break;
     
             default:      
@@ -166,6 +155,40 @@ int OptionsMenu::update() {
         }
     }
     return -1;
+}
+
+int OptionsMenu::itemSelected() {
+    switch (menu->getSelection()) {
+
+    case 0:
+        //Sssssshhhh options soon
+        return 0;
+        break;
+
+    case 3:
+        if (menu->getText(3)._Equal("Cheat Mode: Enabled")) {
+            menu->setText(3, "Cheat Mode: Disabled");
+            cheating = false;
+        }
+        else {
+            menu->setText(3, "Cheat Mode: Enabled");
+            cheating = true;
+        }
+        return 3;
+        break;
+
+    case 4:
+        //Exit to Main menu
+        window->close();
+        if (cheating)
+            return 5;
+        return 6;
+        break;
+
+    default:
+        return -1;
+        break;
+    }
 }
 
 // render function that draws buttons and background, displays them

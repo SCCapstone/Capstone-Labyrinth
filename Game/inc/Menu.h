@@ -46,6 +46,10 @@ public:
     void MoveUp();
     void MoveDown();
 
+    //Mouse Functions
+    void mouseUpdate(sf::Vector2i mousePos);                 //Updates if the mouse has moved
+    void mouseSelect(sf::Vector2i mousePos, sf::Mouse::Button);                 //Called to select an item after mouse left clicks
+
     // accessors
     int getSelection() { return selectedItemIndex; }
     std::string getText(int selection) { return textMenu[selection].getString(); }
@@ -172,6 +176,24 @@ void Menu::MoveDown() {
         textMenu[selectedItemIndex].setFillColor(sf::Color::Red);
     }
 }
+
+//Updates selection after mouse moves
+void Menu::mouseUpdate(sf::Vector2i mousePos) {
+    sf::Vector2f floatMousePos = sf::Vector2f(mousePos);
+    for (unsigned int i = 0; i < buttons.size(); i++) {
+        if (buttons[i].getGlobalBounds().contains(floatMousePos)) {
+            textMenu[selectedItemIndex].setFillColor(sf::Color::White);     //Changes selected text box to appropriate color
+            selectedItemIndex = i;
+            textMenu[selectedItemIndex].setFillColor(sf::Color::Red);
+        }
+    }
+}
+
+////Called to select an item after mouse left clicks
+//void Menu::mouseSelect(sf::Vector2i mousePos, sf::Mouse::Button click) {   //Want the button pressed for future use
+//    mouseUpdate(mousePos);
+//
+//}
 
 // sets text at specified button index, centers both button and text
 void Menu::setText(int selection, std::string words) {
