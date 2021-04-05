@@ -10,7 +10,13 @@ The Capstone Labyrinth Game comes will all necessary libraries. No external requ
 
 We used the Visual Studio 19 IDE to compile and build our game. All information on how to build within Visual Studio 19 can be found in Microsoft's [documentation](https://docs.microsoft.com/en-us/visualstudio/ide/walkthrough-building-an-application?view=vs-2019#build-the-application).
 
-When pulling and building the source code, the Game.exe should build in the Game/ directory. If this is not the case, simply build the project, and place Game.exe in the Game/ directory.
+When pulling and building the source code, the Game.exe should build in the Game/ directory. If this is not the case, simply build the project, and place Game.exe in the Game/ directory.  
+
+Steps:  
+1. Download .zip and extract into place of your choosing
+2. Download Game.exe, and place in Game/ directory of extracted .zip file
+3. Windows will ask if you want to run .exe anyway, click "More Info", then "Run Anyway"  
+4. Enjoy!
 
 ## Running
 
