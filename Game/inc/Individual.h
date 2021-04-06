@@ -108,7 +108,10 @@ Individual::Individual(Texture* texture, Vector2u imageCount, Vector2f size, flo
       FoV.setOrigin(FoV.getSize() / 2.0f);
       FoV.setFillColor(sf::Color::Transparent);
       FoV.setOutlineThickness(1.0f);
-      FoV.setOutlineColor(sf::Color::Green);
+
+      // Can changfe to green for bounds testing
+      FoV.setOutlineColor(sf::Color::Transparent);
+
       FoV.setPosition(body.getPosition());
 
       // instantiating a new health bar

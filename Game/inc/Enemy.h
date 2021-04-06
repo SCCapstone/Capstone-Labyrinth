@@ -201,8 +201,8 @@ void Enemy::setRandPos(Vector2f initialC, Vector2f finalC) {
 
     body.setPosition(x_coord, y_coord);
 
-    // reset enemy's outline to red
-    FoV.setOutlineColor(sf::Color::Red);
+    // can set to red for bounds testing
+    FoV.setOutlineColor(sf::Color::Transparent);
 
     // ensure enemy's outline spawns with enemy
     FoV.setPosition(body.getPosition());
