@@ -19,20 +19,7 @@ bool runGame_Engine(bool inCheatMode) {
 // responsible for running main menu (and subsequently Game)
 bool runMainMenu() {
 	
-	//sf::Music music;
-	music.setPlayingOffSet(sf::seconds(3));
-	music.setVolume(20);
-	
-	if (!music.openFromFile("MainMusic.wav"))
 
-	{
-		std::cout << "ERROR" << std::endl;
-	}
-
-	sf::Music music;
-	music.setBuffer(buffer);
-	music.play();
-	
 	MainMenu mainMenu;
 	int mainMenuExitCode = -1;
 	while (mainMenu.running()) {
