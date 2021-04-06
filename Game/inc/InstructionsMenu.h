@@ -108,18 +108,43 @@ int InstructionsMenu::update() {
     // whule loop that scans for key strokes
     while (window->pollEvent(event)) {
         switch (event.type) {
-            // if a key has been released
-        case sf::Event::KeyReleased:
-            switch (event.key.code) {
+            
+            //Mouse Events
+            case sf::Event::MouseMoved:
+                menu->mouseUpdate(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
+                break;
 
-                // the enter key was pressed
-            case sf::Keyboard::Enter:
+            case sf::Event::MouseButtonReleased:
+                //Switch for different mouse buttons, might be useful later
+                switch (event.mouseButton.button)
+
+            case sf::Mouse::Left:
+                menu->mouseUpdate(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
                 switch (menu->getSelection()) {
 
                 case 0:
                     //Exit to Main menu
                     window->close();
                     return 0;
+                    break;
+
+                default:
+                    break;
+                }
+                break;
+
+            // if a key has been released
+            case sf::Event::KeyReleased:
+                switch (event.key.code) {
+
+            // the enter key was pressed
+            case sf::Keyboard::Enter:
+                switch (menu->getSelection()) {
+
+                case 0:
+                    //Exit to Main menu
+                    window->close();
+                    return 1;
                     break;
 
                 default:
