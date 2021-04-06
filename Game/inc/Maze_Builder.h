@@ -33,7 +33,11 @@ protected:
 
     // textures used for spawn chamber and background
     Texture brickwall_big;
+    Texture docks_wall;
+    Texture butcher_wall;
     Texture background;
+    Texture docks_background;
+    Texture butcher_background;
 
 public:
     // constructor
@@ -80,7 +84,11 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     // load wall and background texture from img/ directory
     // not in parameter so we have the freedom to have multiple textures for walls
     brickwall_big.loadFromFile("imgs/wall_texture.png");
-    background.loadFromFile("imgs/floorV2.png");
+    docks_wall.loadFromFile("imgs/docks_wallV1.png");
+    butcher_wall.loadFromFile("imgs/butchery_wallsV1.png");
+    background.loadFromFile("imgs/base_floorV2.png");
+    docks_background.loadFromFile("imgs/docks_floorV2.png");
+    butcher_background.loadFromFile("imgs/butchery_floorV1.png");
 
     // smallest co-ordinate to largest co-ordinate for both x and y
     // all range parameters defined in Wall.h
