@@ -3,7 +3,7 @@
 
 #include "../inc/Game_Engine.h"
 #include "../inc/MainMenu.h"
-//#include "../inc/Audio.hpp
+#include <SFML/Audio.hpp>
 
 // responsible for creating game and running it
 bool runGame_Engine(bool inCheatMode) {
