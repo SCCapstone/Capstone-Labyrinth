@@ -143,13 +143,25 @@ bool Maze_BossRoom::ColliderCheck(Collider other, float push) {
 }
 
 bool Maze_BossRoom::inWallStructure(Vector2f pos) {
+
+    bool in_space = false;
+
+    float x_coord = pos.x;
+    float y_coord = pos.y;
+
+    // ensure that enemies don't spawn within the bounds of the corners
+    if (x_coord <= comp3->getCenterWallCoords().x && x_coord >= comp2->getCenterWallCoords().x &&
+        y_coord >= comp3->getCenterWallCoords().y && y_coord <= comp4->getCenterWallCoords().y)
+        in_space = true;
+
     return comp1->inWallComponent(pos) ||
         comp2->inWallComponent(pos) ||
         comp3->inWallComponent(pos) ||
         comp4->inWallComponent(pos) ||
         comp5->inWallComponent(pos) ||
         comp6->inWallComponent(pos) ||
-        comp7->inWallComponent(pos);
+        comp7->inWallComponent(pos) ||
+        in_space;
 }
 
 
