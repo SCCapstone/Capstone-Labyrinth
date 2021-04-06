@@ -33,7 +33,7 @@ const static int totalEnemyAmount = 80;
 
 // default cheat mode view, gets set to 10 or 1 in init
 static int zoomOutFactor;                                           // factor to see more maze (can be boosted in cheat mode)
-int zoomValue = 20;
+int zoomValue = 5;
 
 const static int player_attVal = 10;                                    // factor for player attack value (can be boosted in cheat mode)
 const static int player_health = 200;                                   // how much health the player originally starts with (can be boosted in cheat mode)
