@@ -35,7 +35,7 @@
 
 
 
-#define punch_sound_filepath "Resources/imgs/punch.mp3"
+//#define punch_sound_filepath "Resources/imgs/punch.mp3"
 
 namespace sf
 {
