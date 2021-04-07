@@ -164,7 +164,7 @@ Maze_FourthQuadrant::Maze_FourthQuadrant(sf::Vector2f size) {
     this->CAILAS3_boss_room = nullptr;
 
     // load wall texture from img/ directory
-    brickwall_big.loadFromFile("imgs/wall_texture.png");
+    brickwall_big.loadFromFile("imgs/sewer.png");
 
     // corners
     CAILAS3_c1 = new Maze_Corner(&brickwall_big, size, Vector2f(-12.0f * scale, -16.0f * scale), true, false);
