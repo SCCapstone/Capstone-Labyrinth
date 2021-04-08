@@ -3,10 +3,11 @@
 
 #include "../inc/Game_Engine.h"
 #include "../inc/MainMenu.h"
-//#include "../inc/Audio.hpp
+#include <SFML/Audio.hpp>
 
 // responsible for creating game and running it
 bool runGame_Engine(bool inCheatMode) {
+
 	if (inCheatMode) std::cout << "-----GAME IN CHEAT MODE-----" << std::endl;
 	Game_Engine game(inCheatMode);
 	while (game.running()) {
@@ -18,23 +19,6 @@ bool runGame_Engine(bool inCheatMode) {
 
 // responsible for running main menu (and subsequently Game)
 bool runMainMenu() {
-	
-	/*
-	sf::Music music;
-	music.setPlayingOffSet(sf::seconds(3));
-	music.setVolume(20);
-	
-	if (!music.openFromFile("MainMusic.wav"))
-
-	{
-		std::cout << "ERROR" << std::endl;
-	}
-
-	sf::Music music;
-
-	music.setBuffer(buffer);
-	music.play();
-	*/
 	
 	MainMenu mainMenu;
 	int mainMenuExitCode = -1;
@@ -63,6 +47,14 @@ bool runMainMenu() {
 
 //Begin Main
 int main() {
+
+	// declare music here, have it play during menu and game
+	//music.play();
+
 	while (runMainMenu()) {};
+
+	// stop music
+	//music.stop();
+
 	return 0;
 }
