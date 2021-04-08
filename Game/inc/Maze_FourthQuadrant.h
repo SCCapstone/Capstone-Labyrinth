@@ -167,65 +167,65 @@ Maze_FourthQuadrant::Maze_FourthQuadrant(sf::Vector2f size) {
     sewer_wall.loadFromFile("imgs/sewer.png");
 
     // corners
-    CAILAS3_c1 = new Maze_Corner(&brickwall_big, size, Vector2f(-12.0f * scale, -16.0f * scale), true, false);
-    CAILAS3_c2 = new Maze_Corner(&brickwall_big, size, Vector2f(-3.0f * scale, -12.0f * scale), false, false);
-    CAILAS3_c3 = new Maze_Corner(&brickwall_big, size, Vector2f(-5.0f * scale, -7.0f * scale), true, true);
-    CAILAS3_c4 = new Maze_Corner(&brickwall_big, size, Vector2f(-7.0f * scale, -2.0f * scale), true, true);
-    CAILAS3_c5 = new Maze_Corner(&brickwall_big, size, Vector2f(-11.0f * scale, -2.0f * scale), false, true);
-    CAILAS3_c6 = new Maze_Corner(&brickwall_big, size, Vector2f(-23.0f * scale, -4.0f * scale), true, true);
-    CAILAS3_c7 = new Maze_Corner(&brickwall_big, size, Vector2f(-31.0f * scale, -3.0f * scale), true, false);
-    CAILAS3_c8 = new Maze_Corner(&brickwall_big, size, Vector2f(-31.0f * scale, 2.0f * scale), true, true);
-    CAILAS3_c9 = new Maze_Corner(&brickwall_big, size, Vector2f(-28.0f * scale, 6.0f * scale), true, true);
-    CAILAS3_c10 = new Maze_Corner(&brickwall_big, size, Vector2f(-23.0f * scale, 0.0f * scale), true, false);
-    CAILAS3_c11 = new Maze_Corner(&brickwall_big, size, Vector2f(-20.0f * scale, 0.0f * scale), false, false);
+    CAILAS3_c1 = new Maze_Corner(&sewer_wall, size, Vector2f(-12.0f * scale, -16.0f * scale), true, false);
+    CAILAS3_c2 = new Maze_Corner(&sewer_wall, size, Vector2f(-3.0f * scale, -12.0f * scale), false, false);
+    CAILAS3_c3 = new Maze_Corner(&sewer_wall, size, Vector2f(-5.0f * scale, -7.0f * scale), true, true);
+    CAILAS3_c4 = new Maze_Corner(&sewer_wall, size, Vector2f(-7.0f * scale, -2.0f * scale), true, true);
+    CAILAS3_c5 = new Maze_Corner(&sewer_wall, size, Vector2f(-11.0f * scale, -2.0f * scale), false, true);
+    CAILAS3_c6 = new Maze_Corner(&sewer_wall, size, Vector2f(-23.0f * scale, -4.0f * scale), true, true);
+    CAILAS3_c7 = new Maze_Corner(&sewer_wall, size, Vector2f(-31.0f * scale, -3.0f * scale), true, false);
+    CAILAS3_c8 = new Maze_Corner(&sewer_wall, size, Vector2f(-31.0f * scale, 2.0f * scale), true, true);
+    CAILAS3_c9 = new Maze_Corner(&sewer_wall, size, Vector2f(-28.0f * scale, 6.0f * scale), true, true);
+    CAILAS3_c10 = new Maze_Corner(&sewer_wall, size, Vector2f(-23.0f * scale, 0.0f * scale), true, false);
+    CAILAS3_c11 = new Maze_Corner(&sewer_wall, size, Vector2f(-20.0f * scale, 0.0f * scale), false, false);
 
     // four-way intersections
-    CAILAS3_fw1 = new Maze_FourWay(&brickwall_big, size, Vector2f(-14.0f * scale, -11.0f * scale));
+    CAILAS3_fw1 = new Maze_FourWay(&sewer_wall, size, Vector2f(-14.0f * scale, -11.0f * scale));
 
     // 3-wall length hallways
-    CAILAS3_hw1 = new Maze_Hallway(&brickwall_big, size, Vector2f(-23.0f * scale, -8.0f * scale), false);
-    CAILAS3_hw2 = new Maze_Hallway(&brickwall_big, size, Vector2f(-18.0f * scale, -8.0f * scale), false);
-    CAILAS3_hw3 = new Maze_Hallway(&brickwall_big, size, Vector2f(-18.0f * scale, -5.0f * scale), false);
+    CAILAS3_hw1 = new Maze_Hallway(&sewer_wall, size, Vector2f(-23.0f * scale, -8.0f * scale), false);
+    CAILAS3_hw2 = new Maze_Hallway(&sewer_wall, size, Vector2f(-18.0f * scale, -8.0f * scale), false);
+    CAILAS3_hw3 = new Maze_Hallway(&sewer_wall, size, Vector2f(-18.0f * scale, -5.0f * scale), false);
 
 
     // deadend
-    CAILAS3_de1 = new Maze_DeadEnd(&brickwall_big, size, Vector2f(-8.0f * scale, -18.0f * scale), false, false);
-    CAILAS3_de2 = new Maze_DeadEnd(&brickwall_big, size, Vector2f(-8.0f * scale, -14.0f * scale), true, true);
-    CAILAS3_de3 = new Maze_DeadEnd(&brickwall_big, size, Vector2f(-10.0f * scale, -11.0f * scale), true, true);
-    CAILAS3_de4 = new Maze_DeadEnd(&brickwall_big, size, Vector2f(-20.0f * scale, -16.0f * scale), true, true);
-    CAILAS3_de5 = new Maze_DeadEnd(&brickwall_big, size, Vector2f(-23.0f * scale, -14.0f * scale), true, true);
-    CAILAS3_de6 = new Maze_DeadEnd(&brickwall_big, size, Vector2f(-23.0f * scale, -11.0f * scale), false, false);
-    CAILAS3_de7 = new Maze_DeadEnd(&brickwall_big, size, Vector2f(-18.0f * scale, -11.0f * scale), true, true);
-    CAILAS3_de8 = new Maze_DeadEnd(&brickwall_big, size, Vector2f(-14.0f * scale, -6.0f * scale), true, true);
-    CAILAS3_de9 = new Maze_DeadEnd(&brickwall_big, size, Vector2f(-15.0f * scale, -2.0f * scale), true, true);
-    CAILAS3_de10 = new Maze_DeadEnd(&brickwall_big, size, Vector2f(-16.0f * scale, 1.0f * scale), false, false);
-    CAILAS3_de11 = new Maze_DeadEnd(&brickwall_big, size, Vector2f(-26.0f * scale, 1.0f * scale), true, false);
+    CAILAS3_de1 = new Maze_DeadEnd(&sewer_wall, size, Vector2f(-8.0f * scale, -18.0f * scale), false, false);
+    CAILAS3_de2 = new Maze_DeadEnd(&sewer_wall, size, Vector2f(-8.0f * scale, -14.0f * scale), true, true);
+    CAILAS3_de3 = new Maze_DeadEnd(&sewer_wall, size, Vector2f(-10.0f * scale, -11.0f * scale), true, true);
+    CAILAS3_de4 = new Maze_DeadEnd(&sewer_wall, size, Vector2f(-20.0f * scale, -16.0f * scale), true, true);
+    CAILAS3_de5 = new Maze_DeadEnd(&sewer_wall, size, Vector2f(-23.0f * scale, -14.0f * scale), true, true);
+    CAILAS3_de6 = new Maze_DeadEnd(&sewer_wall, size, Vector2f(-23.0f * scale, -11.0f * scale), false, false);
+    CAILAS3_de7 = new Maze_DeadEnd(&sewer_wall, size, Vector2f(-18.0f * scale, -11.0f * scale), true, true);
+    CAILAS3_de8 = new Maze_DeadEnd(&sewer_wall, size, Vector2f(-14.0f * scale, -6.0f * scale), true, true);
+    CAILAS3_de9 = new Maze_DeadEnd(&sewer_wall, size, Vector2f(-15.0f * scale, -2.0f * scale), true, true);
+    CAILAS3_de10 = new Maze_DeadEnd(&sewer_wall, size, Vector2f(-16.0f * scale, 1.0f * scale), false, false);
+    CAILAS3_de11 = new Maze_DeadEnd(&sewer_wall, size, Vector2f(-26.0f * scale, 1.0f * scale), true, false);
 
     // T-junction intersections
-    CAILAS3_tj1 = new Maze_TJunction(&brickwall_big, size, Vector2f(-16.0f * scale, -16.0f * scale), true, false);
-    CAILAS3_tj2 = new Maze_TJunction(&brickwall_big, size, Vector2f(-4.0f * scale, -16.0f * scale), true, false);
-    CAILAS3_tj3 = new Maze_TJunction(&brickwall_big, size, Vector2f(-10.0f * scale, -8.0f * scale), true, false);
-    CAILAS3_tj4 = new Maze_TJunction(&brickwall_big, size, Vector2f(-27.0f * scale, -4.0f * scale), false, true);
+    CAILAS3_tj1 = new Maze_TJunction(&sewer_wall, size, Vector2f(-16.0f * scale, -16.0f * scale), true, false);
+    CAILAS3_tj2 = new Maze_TJunction(&sewer_wall, size, Vector2f(-4.0f * scale, -16.0f * scale), true, false);
+    CAILAS3_tj3 = new Maze_TJunction(&sewer_wall, size, Vector2f(-10.0f * scale, -8.0f * scale), true, false);
+    CAILAS3_tj4 = new Maze_TJunction(&sewer_wall, size, Vector2f(-27.0f * scale, -4.0f * scale), false, true);
 
     // filler segments (used her to fill extra maze space within enemy spawn bounds that we dont want enemies to spawn in)
-    SAMS_fs1 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-28.0f * scale, 10.0f * scale), false);
-    SAMS_fs2 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-24.0f * scale, -17.0f * scale), true);
-    SAMS_fs3 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-28.0f * scale, 15.0f * scale), false);
-    SAMS_fs4 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-27.0f * scale, -17.0f * scale), true);
-    SAMS_fs5 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-27.0f * scale, -16.0f * scale), true);
-    SAMS_fs6 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-27.0f * scale, -12.0f * scale), true);
-    SAMS_fs7 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-24.0f * scale, -16.0f * scale), true);
-    SAMS_fs8 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-27.0f * scale, -13.0f * scale), true);
-    SAMS_fs9 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-27.0f * scale, -14.0f * scale), true);
-    SAMS_fs10 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-27.0f * scale, -15.0f * scale), true);
-    SAMS_fs11 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-28.0f * scale, 20.0f * scale), false);
-    SAMS_fs12 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-29.0f * scale, 10.0f * scale), false);
-    SAMS_fs13 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-29.0f * scale, 15.0f * scale), false);
-    SAMS_fs14 = new Maze_FiveBlockFiller(&brickwall_big, size, Vector2f(-29.0f * scale, 20.0f * scale), false);
+    SAMS_fs1 = new Maze_FiveBlockFiller(&sewer_wall, size, Vector2f(-28.0f * scale, 10.0f * scale), false);
+    SAMS_fs2 = new Maze_FiveBlockFiller(&sewer_wall, size, Vector2f(-24.0f * scale, -17.0f * scale), true);
+    SAMS_fs3 = new Maze_FiveBlockFiller(&sewer_wall, size, Vector2f(-28.0f * scale, 15.0f * scale), false);
+    SAMS_fs4 = new Maze_FiveBlockFiller(&sewer_wall, size, Vector2f(-27.0f * scale, -17.0f * scale), true);
+    SAMS_fs5 = new Maze_FiveBlockFiller(&sewer_wall, size, Vector2f(-27.0f * scale, -16.0f * scale), true);
+    SAMS_fs6 = new Maze_FiveBlockFiller(&sewer_wall, size, Vector2f(-27.0f * scale, -12.0f * scale), true);
+    SAMS_fs7 = new Maze_FiveBlockFiller(&sewer_wall, size, Vector2f(-24.0f * scale, -16.0f * scale), true);
+    SAMS_fs8 = new Maze_FiveBlockFiller(&sewer_wall, size, Vector2f(-27.0f * scale, -13.0f * scale), true);
+    SAMS_fs9 = new Maze_FiveBlockFiller(&sewer_wall, size, Vector2f(-27.0f * scale, -14.0f * scale), true);
+    SAMS_fs10 = new Maze_FiveBlockFiller(&sewer_wall, size, Vector2f(-27.0f * scale, -15.0f * scale), true);
+    SAMS_fs11 = new Maze_FiveBlockFiller(&sewer_wall, size, Vector2f(-28.0f * scale, 20.0f * scale), false);
+    SAMS_fs12 = new Maze_FiveBlockFiller(&sewer_wall, size, Vector2f(-29.0f * scale, 10.0f * scale), false);
+    SAMS_fs13 = new Maze_FiveBlockFiller(&sewer_wall, size, Vector2f(-29.0f * scale, 15.0f * scale), false);
+    SAMS_fs14 = new Maze_FiveBlockFiller(&sewer_wall, size, Vector2f(-29.0f * scale, 20.0f * scale), false);
 
     // creates room for maze section boss
     this->br_coords = Vector2f(-27.0f * scale, -9.0f * scale);
-    CAILAS3_boss_room = new Maze_BossRoom(&brickwall_big, size, br_coords, false, false);
+    CAILAS3_boss_room = new Maze_BossRoom(&sewer_wall, size, br_coords, false, false);
 }
 
 Maze_FourthQuadrant::~Maze_FourthQuadrant() { /* empty */ }
