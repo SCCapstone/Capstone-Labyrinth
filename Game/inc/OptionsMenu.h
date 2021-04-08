@@ -70,14 +70,14 @@ void OptionsMenu::initOptionsMenu(unsigned int width, unsigned int height) {
     videoMode.width = width;
 
     this->window = new sf::RenderWindow(videoMode, "Options Menu", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
-    this->menu = new Menu(videoMode.width, videoMode.height, 5);
+    this->menu = new Menu(videoMode.width, videoMode.height, 2);
 
     //Sets default perams for main menu Text
-    menu->setText(0, "Effects");
-    menu->setText(1, "Music");
-    menu->setText(2, "Graphics");
-    menu->setText(3, "Cheat Mode: Disabled");
-    menu->setText(4, "Exit");
+    //menu->setText(0, "Effects");
+    //menu->setText(1, "Music");
+    //menu->setText(2, "Graphics");
+    menu->setText(0, "Cheat Mode: Disabled");
+    menu->setText(1, "Exit");
 
     // load background texture
     if (!(backgroundTex.loadFromFile("imgs/options_background.png"))) {
@@ -161,23 +161,18 @@ int OptionsMenu::itemSelected() {
     switch (menu->getSelection()) {
 
     case 0:
-        //Sssssshhhh options soon
-        return 0;
-        break;
-
-    case 3:
-        if (menu->getText(3)._Equal("Cheat Mode: Enabled")) {
-            menu->setText(3, "Cheat Mode: Disabled");
+        if (menu->getText(0)._Equal("Cheat Mode: Enabled")) {
+            menu->setText(0, "Cheat Mode: Disabled");
             cheating = false;
         }
         else {
-            menu->setText(3, "Cheat Mode: Enabled");
+            menu->setText(0, "Cheat Mode: Enabled");
             cheating = true;
         }
         return 3;
         break;
 
-    case 4:
+    case 1:
         //Exit to Main menu
         window->close();
         if (cheating)
