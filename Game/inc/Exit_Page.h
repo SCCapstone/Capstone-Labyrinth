@@ -64,7 +64,7 @@ void Exit_Page::Render(RenderWindow& window, Vector2f coords) {
 
 void Exit_Page::setMsg(bool youLost) {
     if (youLost)
-        this->instructs.setString("YOU HAVE BEEN TAKEN\n\t\t\tBY THE MAZE");
+        this->instructs.setString("YOU HAVE BEEN TAKEN\n\t\t\tBY THE MAZE\n press Esc to return to Menu");
     else
         this->instructs.setString("YOU HAVE WON");
 }
