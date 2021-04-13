@@ -58,7 +58,7 @@ const static int SAM_QuadrantHeartAmt = 9;
 const static Vector2f SAM_enemySize = 1.5f * player_size;
 const static float SAM_minotaur_speed = 27.0f;                          // how fast minotaurs are
 const static int SAM_minotaur_health = 150;                             // how much health the minotaurs originally start with
-const static int SAM_minotaur_attVal = 20;                              // how much damage minotaurs can do
+const static int SAM_minotaur_attVal = 19;                              // how much damage minotaurs can do (made it an odd number for better percentages when calculating health)
 
 static int SAM_minotaur_amount = (int)totalEnemyAmount/4;               // how many minotaurs to spawn
 static int q2_enemy_amount = (int)totalEnemyAmount / 4;                 // how many minotaurs to spawn

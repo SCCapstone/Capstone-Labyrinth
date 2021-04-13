@@ -101,49 +101,13 @@ void Enemy::Update(float deltaTime, int rv) {
         else {}
     }
 
-    /* conditions for health bar
-    *   > 91%       = full bar [0]
-    *   90%  - 81%  = [1]
-    *   80%  - 71%  = [2]
-    *   70%  - 61%  = [3]
-    *   60%  - 51%  = [4]
-    *   50%  - 41%  = [5]
-    *   40%  - 31%  = [6]
-    *   30%  - 21%  = [7]
-    *   20%  - 11%  = [8]
-    *   10%  - 1%   = [9]
-    *   1% <        = [10]
-    */
-    float perc = getHealthPercent();
-    if (perc > 91.0)
-        hb_row = 0;
-    if (perc <= 90.0 && perc > 81.0)
-        hb_row = 1;
-    if (perc <= 80.0 && perc > 71.0)
-        hb_row = 2;
-    if (perc <= 70.0 && perc > 61.0)
-        hb_row = 3;
-    if (perc <= 60.0 && perc > 51.0)
-        hb_row = 4;
-    if (perc <= 50.0 && perc > 41.0)
-        hb_row = 5;
-    if (perc <= 40.0 && perc > 31.0)
-        hb_row = 6;
-    if (perc <= 30.0 && perc > 21.0)
-        hb_row = 7;
-    if (perc <= 20.0 && perc > 11.0)
-        hb_row = 8;
-    if (perc <= 10.0)
-        hb_row = 9;
-    else {/* intentionally empty */ }
-
    // update the animation
    animation.Update(row, deltaTime, faceRight, movingDown, movingUp);
-   // update health bar animation
-   hb->Update(hb_row, deltaTime);
 
    body.setTextureRect(animation.uvRect);   // update the character rectangle
-   hb->setTextureRectangle();               // update the health bar rectangle
+
+   // update the health bar's animation and rectangle
+   UpdateHealthBar(deltaTime);
 
    body.move(movement);     // move the character
    FoV.move(movement);      // move the characters field of vision
@@ -215,8 +179,8 @@ void Enemy::setRandPos(Vector2f initialC, Vector2f finalC) {
 void Enemy::setPos(Vector2f coords) {
     body.setPosition(coords);
 
-    // reset enemy's outline to red
-    FoV.setOutlineColor(sf::Color::Black);
+    // reset boss's outline to tranparent
+    FoV.setOutlineColor(sf::Color::Transparent);
 
     // ensure enemy's outline spawns with enemy
     FoV.setPosition(body.getPosition());
@@ -277,49 +241,13 @@ void Enemy::Chase(Player& player, float deltaTime) {
         else {}
     }
 
-    /* conditions for health bar
-    *   > 91%       = full bar [0]
-    *   90%  - 81%  = [1]
-    *   80%  - 71%  = [2]
-    *   70%  - 61%  = [3]
-    *   60%  - 51%  = [4]
-    *   50%  - 41%  = [5]
-    *   40%  - 31%  = [6]
-    *   30%  - 21%  = [7]
-    *   20%  - 11%  = [8]
-    *   10%  - 1%   = [9]
-    *   1% <        = [10]
-    */
-    float perc = getHealthPercent();
-    if (perc > 91.0)
-        hb_row = 0;
-    if (perc <= 90.0 && perc > 81.0)
-        hb_row = 1;
-    if (perc <= 80.0 && perc > 71.0)
-        hb_row = 2;
-    if (perc <= 70.0 && perc > 61.0)
-        hb_row = 3;
-    if (perc <= 60.0 && perc > 51.0)
-        hb_row = 4;
-    if (perc <= 50.0 && perc > 41.0)
-        hb_row = 5;
-    if (perc <= 40.0 && perc > 31.0)
-        hb_row = 6;
-    if (perc <= 30.0 && perc > 21.0)
-        hb_row = 7;
-    if (perc <= 20.0 && perc > 11.0)
-        hb_row = 8;
-    if (perc <= 10.0)
-        hb_row = 9;
-    else {/* intentionally empty */ }
-
     // update the animation
     animation.Update(row, deltaTime, faceRight, movingDown, movingUp);
-    // update health bar animation
-    hb->Update(hb_row, deltaTime);
-
+    
     body.setTextureRect(animation.uvRect);  // update the character rectangle
-    hb->setTextureRectangle();              // update the health bar rectangle
+   
+    // update the health bar's animation and rectangle
+    UpdateHealthBar(deltaTime);
 
     body.move(movement);    // move the character
     FoV.move(movement);     // move the characters field of vision
