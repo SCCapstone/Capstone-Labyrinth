@@ -115,8 +115,9 @@ Individual::Individual(Texture* texture, Vector2u imageCount, Vector2f size, flo
       FoV.setPosition(body.getPosition());
 
       // instantiating a new health bar
-      health_text.loadFromFile("imgs/healthBarv3.png");
-      hb = new HealthBar(&body, body.getSize(), &health_text, Vector2u(1, 10), switchTime, speed);
+      health_text.loadFromFile("imgs/healthBarv4.png");
+      // switchTime multiplied by a factor to smooth out animation of health decrement
+      hb = new HealthBar(&body, body.getSize(), &health_text, Vector2u(1, 20), switchTime*10.0f, speed);
 }
 
 Individual::~Individual(){ /* empty */ }
@@ -131,41 +132,73 @@ void Individual::Draw(RenderWindow& window) {
 }
 
 void Individual::UpdateHealthBar(float deltaTime) {
-    /* conditions for health bar
-    *   > 91%       = full bar [0]
-    *   90%  - 81%  = [1]
-    *   80%  - 71%  = [2]
-    *   70%  - 61%  = [3]
-    *   60%  - 51%  = [4]
-    *   50%  - 41%  = [5]
-    *   40%  - 31%  = [6]
-    *   30%  - 21%  = [7]
-    *   20%  - 11%  = [8]
-    *   10%  - 1%   = [9]
-    *   1% <        = [10]
-    */
     float perc = getHealthPercent();
-    if (perc > 91.0)
+
+    /* conditions for health bar (perc)
+    *   >= 95%              = full bar [0]
+    *   >= 90% and < 95%    = [1]
+    *   >= 85% and < 90%    = [2]
+    *   >= 80% and < 85%    = [3]
+    *   >= 75% and < 80%    = [4]
+    *   >= 70% and < 75%    = [5]
+    *   >= 65% and < 70%    = [6]
+    *   >= 60% and < 65%    = [7]
+    *   >= 55% and < 60%    = [8]
+    *   >= 50% and < 55%    = [9]
+    *   >= 45% and < 50%    = [10]
+    *   >= 40% and < 45%    = [11]
+    *   >= 35% and < 40%    = [12]
+    *   >= 30% and < 35%    = [13]
+    *   >= 25% and < 30%    = [14]
+    *   >= 20% and < 25%    = [15]
+    *   >= 15% and < 20%    = [16]
+    *   >= 10% and < 15%    = [17]
+    *   >= 5%  and < 10%    = [18]
+    *   >= 0%  and < 5%     = [19]
+    */
+
+    if (perc >= 95.0)
         hb_row = 0;
-    if (perc <= 90.0 && perc > 81.0)
+    if (perc >= 90.0 && perc < 95.0)
         hb_row = 1;
-    if (perc <= 80.0 && perc > 71.0)
+    if (perc >= 85.0 && perc < 90.0)
         hb_row = 2;
-    if (perc <= 70.0 && perc > 61.0)
+    if (perc >= 80.0 && perc < 85.0)
         hb_row = 3;
-    if (perc <= 60.0 && perc > 51.0)
+    if (perc >= 75.0 && perc < 80.0)
         hb_row = 4;
-    if (perc <= 50.0 && perc > 41.0)
+    if (perc >= 70.0 && perc < 75.0)
         hb_row = 5;
-    if (perc <= 40.0 && perc > 31.0)
+    if (perc >= 65.0 && perc < 70.0)
         hb_row = 6;
-    if (perc <= 30.0 && perc > 21.0)
+    if (perc >= 60.0 && perc < 65.0)
         hb_row = 7;
-    if (perc <= 20.0 && perc > 11.0)
+    if (perc >= 55.0 && perc < 60.0)
         hb_row = 8;
-    if (perc <= 10.0)
+    if (perc >= 50.0 && perc < 55.0)
         hb_row = 9;
-    else {/* intentionally empty */ }
+    if (perc >= 45.0 && perc < 50.0)
+        hb_row = 10;
+    if (perc >= 40.0 && perc < 45.0)
+        hb_row = 11;
+    if (perc >= 35.0 && perc < 40.0)
+        hb_row = 12;
+    if (perc >= 30.0 && perc < 35.0)
+        hb_row = 13;
+    if (perc >= 25.0 && perc < 30.0)
+        hb_row = 14;
+    if (perc >= 20.0 && perc < 25.0)
+        hb_row = 15;
+    if (perc >= 15.0 && perc < 20.0)
+        hb_row = 16;
+    if (perc >= 10.0 && perc < 15.0)
+        hb_row = 17;
+    if (perc >= 5.0 && perc < 10.0)
+        hb_row = 18;
+    if (perc >= 0.0 && perc < 5.0)
+        hb_row = 19;
+    else { /* intentionally empty */ }
+    
 
     // update health bar animation
     // health_anim.Update(hb_row, deltaTime, false, true, true);
