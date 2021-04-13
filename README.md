@@ -12,15 +12,15 @@ We used the Visual Studio 19 IDE to compile and build our game. All information 
 
 When pulling and building the source code, the Game.exe should build in the Game/ directory. If this is not the case, simply build the project, and place Game.exe in the Game/ directory.  
 
+The user should not have to build the project within Visual Studio 19, as the latest release will include the most recent release build. Please refer to the Setup portion for game execution.  
+
+## Running  
+
 Steps:  
 1. Download .zip and extract into place of your choosing
 2. Download Game.exe, and place in Game/ directory of extracted .zip file
 3. Windows will ask if you want to run .exe anyway, click "More Info", then "Run Anyway"  
 4. Enjoy!
-
-## Running
-
-Dowload the source code (.zip), navigate to the Game Folder, and run the Game.exe to play.
 
 ## Deployment
 
