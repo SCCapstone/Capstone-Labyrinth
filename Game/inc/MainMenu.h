@@ -258,22 +258,23 @@ void MainMenu::render() {
 
 // instantiates OptionsMenu object, runs options menu
 void MainMenu::runOptionsMenu() {
-    // creates new optiuons sub-menu
-    OptionsMenu options;
+    // creates new options sub-menu
+    OptionsMenu* options = new OptionsMenu(is_cheating);
 
     int cheat_mode = 0;
 
     // runs the options menu until exit condition
-    while(options.running())
+    while(options->running())
     {
-          cheat_mode = options.update();
-          options.render();
+          cheat_mode = options->update();
+          options->render();
     }
 
-    // 5 means cheating, 6 means not cheating
-    //std::cout << cheat_mode << std::endl;
-    is_cheating = options.getIsCheating();
-    //std::cout << options.getIsCheating() << std::endl;
+    // save cheat setting
+    is_cheating = options->getIsCheating();
+
+    // delete menu after we are done with it
+    delete options;
 }
 
 // instantiates OptionsMenu object, runs options menu

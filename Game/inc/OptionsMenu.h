@@ -16,7 +16,7 @@ private:
     sf::Texture backgroundTex;      // variable for the texture of our background
     sf::Sprite background;          // variable for the background
 
-    bool cheating;
+    bool cheating = false;
 
     
     // initializes options menu
@@ -28,7 +28,7 @@ private:
 // public attributes
 public:
     // default constructor
-    OptionsMenu();
+    OptionsMenu(bool is_cheating);
 
     // parameterized constructor
     OptionsMenu(unsigned int width, unsigned int height);
@@ -51,7 +51,8 @@ public:
 };
 
 // default constructor (calls initOptionsMenu function with default values)
-OptionsMenu::OptionsMenu() {
+OptionsMenu::OptionsMenu(bool is_cheating) {
+    this->cheating = is_cheating;
       initOptionsMenu(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 }
 
@@ -76,7 +77,10 @@ void OptionsMenu::initOptionsMenu(unsigned int width, unsigned int height) {
     //menu->setText(0, "Effects");
     //menu->setText(1, "Music");
     //menu->setText(2, "Graphics");
-    menu->setText(0, "Cheat Mode: Disabled");
+    if (cheating)
+        menu->setText(0, "Cheat Mode: Enabled");
+    else
+        menu->setText(0, "Cheat Mode: Disabled");
     menu->setText(1, "Exit");
 
     // load background texture
