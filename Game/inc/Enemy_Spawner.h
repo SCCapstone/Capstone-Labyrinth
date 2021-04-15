@@ -13,7 +13,7 @@ class Enemy_Spawner {
 private:
     int amount;
     int attackValue;
-    Vector2f size;
+    //Vector2f size;
     Vector2f x_bounds;
     Vector2f y_bounds;
 

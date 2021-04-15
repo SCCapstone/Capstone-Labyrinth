@@ -55,7 +55,7 @@ const static Vector2f q4_enemySpawnOrigin = Vector2f(-1.0f, 1.0f);
 
 // will use these as values for other enemy types, TODO add different attrributes for other enemies
 const static int SAM_QuadrantHeartAmt = 9;
-const static Vector2f SAM_enemySize = 1.5f * player_size;
+const static Vector2f SAM_enemySize = player_size;
 const static float SAM_minotaur_speed = 27.0f;                          // how fast minotaurs are
 const static int SAM_minotaur_health = 150;                             // how much health the minotaurs originally start with
 const static int SAM_minotaur_attVal = 19;                              // how much damage minotaurs can do (made it an odd number for better percentages when calculating health)
@@ -706,7 +706,7 @@ void Game_Engine::initEnemies() {
     this->boss_q4 = nullptr;
 
     // loading sprite sheet
-    min_texture.loadFromFile("imgs/minotaur.png");
+    min_texture.loadFromFile("imgs/minotaurv8.png");
 
     // testing condition
     if (genMAXEnemies) {
@@ -718,20 +718,20 @@ void Game_Engine::initEnemies() {
 
     // Initializing enemy spawners
     // spawn bounds must be exclusive (any free, non-wall space in bounds is viable spawn location)
-    minotaurs = new Enemy_Spawner(SAM_minotaur_amount, SAM_minotaur_attVal, SAM_enemySize, &min_texture, Vector2u(10, 5), 0.35f, SAM_minotaur_speed, SAM_minotaur_health, SAM_enemySpawnOrigin, SAM_SpawnLimit);
+    minotaurs = new Enemy_Spawner(SAM_minotaur_amount, SAM_minotaur_attVal, SAM_enemySize, &min_texture, Vector2u(10, 3), 0.35f, SAM_minotaur_speed, SAM_minotaur_health, SAM_enemySpawnOrigin, SAM_SpawnLimit);
     noEnemySpawnInWall(minotaurs, maze, SAM_enemySpawnOrigin, SAM_SpawnLimit, SAM_minotaur_amount);
 
-    enemies_q2 = new Enemy_Spawner(q2_enemy_amount, SAM_minotaur_attVal, SAM_enemySize, &min_texture, Vector2u(10, 5), 0.35f, SAM_minotaur_speed, SAM_minotaur_health, SAM_enemySpawnOrigin, Q2_SpawnLimit);
+    enemies_q2 = new Enemy_Spawner(q2_enemy_amount, SAM_minotaur_attVal, SAM_enemySize, &min_texture, Vector2u(10, 3), 0.35f, SAM_minotaur_speed, SAM_minotaur_health, SAM_enemySpawnOrigin, Q2_SpawnLimit);
     noEnemySpawnInWall(enemies_q2, maze, SAM_enemySpawnOrigin, Q2_SpawnLimit, q2_enemy_amount);
     
-    enemies_q3 = new Enemy_Spawner(q3_enemy_amount, SAM_minotaur_attVal, SAM_enemySize, &min_texture, Vector2u(10, 5), 0.35f, SAM_minotaur_speed, SAM_minotaur_health, SAM_enemySpawnOrigin, Q3_SpawnLimit);
+    enemies_q3 = new Enemy_Spawner(q3_enemy_amount, SAM_minotaur_attVal, SAM_enemySize, &min_texture, Vector2u(10, 3), 0.35f, SAM_minotaur_speed, SAM_minotaur_health, SAM_enemySpawnOrigin, Q3_SpawnLimit);
     noEnemySpawnInWall(enemies_q3, maze, SAM_enemySpawnOrigin, Q3_SpawnLimit, q3_enemy_amount);
 
-    enemies_q4 = new Enemy_Spawner(q4_enemy_amount, SAM_minotaur_attVal, SAM_enemySize, &min_texture, Vector2u(10, 5), 0.35f, SAM_minotaur_speed, SAM_minotaur_health, SAM_enemySpawnOrigin, Q4_SpawnLimit);
+    enemies_q4 = new Enemy_Spawner(q4_enemy_amount, SAM_minotaur_attVal, SAM_enemySize, &min_texture, Vector2u(10, 3), 0.35f, SAM_minotaur_speed, SAM_minotaur_health, SAM_enemySpawnOrigin, Q4_SpawnLimit);
     noEnemySpawnInWall(enemies_q4, maze, SAM_enemySpawnOrigin, Q4_SpawnLimit, q4_enemy_amount);
 
     // boss enemy for upper right quadrant
-    Minos = new Enemy(&min_texture, Vector2u(10, 5), 1.5f * SAM_enemySize,  0.35f, 0.75f * SAM_minotaur_speed, 2 * SAM_minotaur_health, int(1.5 * SAM_minotaur_attVal));
+    Minos = new Enemy(&min_texture, Vector2u(10, 3), 1.5f * SAM_enemySize,  0.35f, 0.75f * SAM_minotaur_speed, 2 * SAM_minotaur_health, int(1.5 * SAM_minotaur_attVal));
     Minos->setPos(maze->getFirstQuadBossCoords());
 
     // boss enemy for lower right quadrant
