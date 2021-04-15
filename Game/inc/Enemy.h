@@ -195,8 +195,8 @@ void Enemy::Chase(Player& player, float deltaTime) {
 
     Vector2f movement(0.0f, 0.0f);
 
-    float deltaX = playerPos.x - enemyPos.x;
-    float deltaY = playerPos.y - enemyPos.y;
+    float deltaX = (playerPos.x - enemyPos.x) * 10.0f;
+    float deltaY = (playerPos.y - enemyPos.y) * 10.0f;
 
     // movement speed is tripled for chasing effect
 
