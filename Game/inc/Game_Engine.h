@@ -33,7 +33,7 @@ const static int totalEnemyAmount = 80;
 
 // default cheat mode view, gets set to 10 or 1 in init
 static int zoomOutFactor;                                           // factor to see more maze (can be boosted in cheat mode)
-int zoomValue = 5;
+int zoomValue = 6;
 
 const static int player_attVal = 10;                                    // factor for player attack value (can be boosted in cheat mode)
 const static int player_health = 200;                                   // how much health the player originally starts with (can be boosted in cheat mode)
@@ -325,7 +325,7 @@ void Game_Engine::Update() {
         minotaurs->UpdateEnemyChase(*player, deltaTime);
 
         // if the player and an enemy collide, update attack and kill information (in enemy spawner)
-        minotaurs->UpdateEnemyContact(*player);
+        minotaurs->UpdateEnemyContact(*player, inCheatMode);
 
         playerCoords_copy = player->getIndividualPos();
 
@@ -345,7 +345,7 @@ void Game_Engine::Update() {
         enemies_q2->UpdateEnemyChase(*player, deltaTime);
 
         // if the player and an enemy collide, update attack and kill information (in enemy spawner)
-        enemies_q2->UpdateEnemyContact(*player);
+        enemies_q2->UpdateEnemyContact(*player, inCheatMode);
 
         playerCoords_copy = player->getIndividualPos();
 
@@ -365,7 +365,7 @@ void Game_Engine::Update() {
         enemies_q3->UpdateEnemyChase(*player, deltaTime);
 
         // if the player and an enemy collide, update attack and kill information (in enemy spawner)
-        enemies_q3->UpdateEnemyContact(*player);
+        enemies_q3->UpdateEnemyContact(*player, inCheatMode);
 
         playerCoords_copy = player->getIndividualPos();
 
@@ -385,7 +385,7 @@ void Game_Engine::Update() {
         enemies_q4->UpdateEnemyChase(*player, deltaTime);
 
         // if the player and an enemy collide, update attack and kill information (in enemy spawner)
-        enemies_q4->UpdateEnemyContact(*player);
+        enemies_q4->UpdateEnemyContact(*player, inCheatMode);
 
         playerCoords_copy = player->getIndividualPos();
 
@@ -731,19 +731,19 @@ void Game_Engine::initEnemies() {
     noEnemySpawnInWall(enemies_q4, maze, SAM_enemySpawnOrigin, Q4_SpawnLimit, q4_enemy_amount);
 
     // boss enemy for upper right quadrant
-    Minos = new Enemy(&min_texture, Vector2u(10, 3), 1.5f * SAM_enemySize,  0.35f, 0.75f * SAM_minotaur_speed, 2 * SAM_minotaur_health, int(1.5 * SAM_minotaur_attVal));
+    Minos = new Enemy(&min_texture, Vector2u(10, 3), SAM_enemySize,  0.35f, 0.75f * SAM_minotaur_speed, 2 * SAM_minotaur_health, int(1.5 * SAM_minotaur_attVal));
     Minos->setPos(maze->getFirstQuadBossCoords());
 
     // boss enemy for lower right quadrant
-    boss_q2 = new Enemy(&min_texture, Vector2u(10, 5), 1.5f * SAM_enemySize, 0.35f, 0.75f * SAM_minotaur_speed, 2 * SAM_minotaur_health, int(1.5 * SAM_minotaur_attVal));
+    boss_q2 = new Enemy(&min_texture, Vector2u(10, 3), SAM_enemySize, 0.35f, 0.75f * SAM_minotaur_speed, 2 * SAM_minotaur_health, int(1.5 * SAM_minotaur_attVal));
     boss_q2->setPos(maze->getSecondQuadBossCoords());
 
     // boss enemy for lower left quadrant
-    boss_q3 = new Enemy(&min_texture, Vector2u(10, 5), 1.5f * SAM_enemySize, 0.35f, 0.75f * SAM_minotaur_speed, 2 * SAM_minotaur_health, int(1.5 * SAM_minotaur_attVal));
+    boss_q3 = new Enemy(&min_texture, Vector2u(10, 3), SAM_enemySize, 0.35f, 0.75f * SAM_minotaur_speed, 2 * SAM_minotaur_health, int(1.5 * SAM_minotaur_attVal));
     boss_q3->setPos(maze->getThirdQuadBossCoords());
 
     // boss enemy for lower right quadrant
-    boss_q4 = new Enemy(&min_texture, Vector2u(10, 5), 1.5f * SAM_enemySize, 0.35f, 0.75f * SAM_minotaur_speed, 2 * SAM_minotaur_health, int(1.5 * SAM_minotaur_attVal));
+    boss_q4 = new Enemy(&min_texture, Vector2u(10, 3), SAM_enemySize, 0.35f, 0.75f * SAM_minotaur_speed, 2 * SAM_minotaur_health, int(1.5 * SAM_minotaur_attVal));
     boss_q4->setPos(maze->getFourthQuadBossCoords());
 }
 
