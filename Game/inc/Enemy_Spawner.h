@@ -41,7 +41,7 @@ public:
 
     void UpdateEnemyChase(Player& player, float deltaTime);
 
-    void UpdateEnemyContact(Player& player);
+    void UpdateEnemyContact(Player& player, bool invincible);
 
     void UpdateWallCollisions(Maze_Component* aWall, float push);
 
@@ -135,7 +135,7 @@ void Enemy_Spawner::UpdateEnemyChase(Player& player, float deltaTime) {
     }
 }
 
-void Enemy_Spawner::UpdateEnemyContact(Player& player) {
+void Enemy_Spawner::UpdateEnemyContact(Player& player, bool invincible) {
     for (int i = 0; i < (int) enemies.size(); i++) {
         // 0.5f to show that enemies and player have same force on each other
         if (player.ColliderCheck(getEnemy(i)->GetCollider(), 0.5f)) {
@@ -150,13 +150,15 @@ void Enemy_Spawner::UpdateEnemyContact(Player& player) {
                 break;
             }
 
-            // enemy attacking player
-            if (player.getTotalHealth() > getAttackValue()) {
-                getEnemy(i)->ConstantAttack(player);
-                break;
+            // enemy attacking playerb
+            if (invincible == false) {
+                if (player.getTotalHealth() > getAttackValue()) {
+                    getEnemy(i)->ConstantAttack(player);
+                    break;
+                }
+                else
+                    killPlayer = true;
             }
-            else
-                killPlayer = true;
             break;
         }
     }
