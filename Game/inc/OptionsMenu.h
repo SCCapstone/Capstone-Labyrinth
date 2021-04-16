@@ -32,6 +32,8 @@ public:
 
     // parameterized constructor
     OptionsMenu(unsigned int width, unsigned int height);
+    // constructor that will take in a window pointer
+    OptionsMenu(bool is_cheating, sf::RenderWindow* win);
 
     // destructor
     ~OptionsMenu();
@@ -61,17 +63,28 @@ OptionsMenu::OptionsMenu(unsigned int width, unsigned int height) {
       initOptionsMenu(width, height);
 }
 
+// constructor that takes a window pointer
+OptionsMenu::OptionsMenu(bool is_cheating, sf::RenderWindow* win) {
+    this->cheating = is_cheating;
+    this->window = win;
+    this->window->setTitle("Options Menu");
+    initOptionsMenu(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+}
+
 // destrcutor
 OptionsMenu::~OptionsMenu() { /* intentionally empty */ }
 
 // initializer function
 void OptionsMenu::initOptionsMenu(unsigned int width, unsigned int height) {
-    // set video mode width and height for window
-    videoMode.height = height;
-    videoMode.width = width;
+    // set video mode width and height for window if window is unspecified
+    if (window == NULL) {
+        videoMode.height = height;
+        videoMode.width = width;
 
-    this->window = new sf::RenderWindow(videoMode, "Options Menu", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
-    this->menu = new Menu(videoMode.width, videoMode.height, 2);
+        this->window = new sf::RenderWindow(videoMode, "Options Menu", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
+    }
+
+    this->menu = new Menu(this->window->getSize().x, this->window->getSize().y, 2);
 
     //Sets default perams for main menu Text
     //menu->setText(0, "Effects");
@@ -158,7 +171,7 @@ int OptionsMenu::update() {
             break;
         }
     }
-    return -1;
+    return 0;
 }
 
 int OptionsMenu::itemSelected() {
@@ -177,11 +190,8 @@ int OptionsMenu::itemSelected() {
         break;
 
     case 1:
-        //Exit to Main menu
-        window->close();
-        if (cheating)
-            return 5;
-        return 6;
+        //Go to Main menu
+        return -1;
         break;
 
     default:

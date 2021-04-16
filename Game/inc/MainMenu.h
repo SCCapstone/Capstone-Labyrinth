@@ -259,14 +259,12 @@ void MainMenu::render() {
 // instantiates OptionsMenu object, runs options menu
 void MainMenu::runOptionsMenu() {
     // creates new options sub-menu
-    OptionsMenu* options = new OptionsMenu(is_cheating);
-
-    int cheat_mode = 0;
+    OptionsMenu* options = new OptionsMenu(is_cheating, window);
 
     // runs the options menu until exit condition
-    while(options->running())
+
+    while(options->update() != -1)
     {
-          cheat_mode = options->update();
           options->render();
     }
 
@@ -275,19 +273,21 @@ void MainMenu::runOptionsMenu() {
 
     // delete menu after we are done with it
     delete options;
+
+    window->setTitle("Main Menu");
 }
 
 // instantiates OptionsMenu object, runs options menu
 void MainMenu::runInstructions() {
     // creates new optiuons sub-menu
-    InstructionsMenu instructions;
+    InstructionsMenu instructions(window);
 
     // runs the options menu until exit condition
-    while (instructions.running())
+    while (instructions.update() != -1)
     {
-        instructions.update();
         instructions.render();
     }
+    window->setTitle("Main Menu");
 }
 
 #endif //MAINMENU_H
