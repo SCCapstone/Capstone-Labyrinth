@@ -1,5 +1,8 @@
 # Capstone-Labyrinth  
-The Capstone Labyrinth is a desktop pixel-art game. You are placed in the center of the Labyrinth, with the objective of slaying the 4 monsterous bosses hidden in it's depths. But conquerors beware...you are not the only one who wanders the Labyrinth's halls. You can read our [Project Description](https://github.com/SCCapstone/Capstone-Labyrinth/wiki/Project-Description) for more information.
+The Capstone Labyrinth is a desktop pixel-art game. You are placed in the center of the Labyrinth, with the objective of slaying the 4 monsterous bosses hidden in it's depths. But conquerors beware...you are not the only one who wanders the Labyrinth's halls.  
+
+You can read our [Project Description](https://github.com/SCCapstone/Capstone-Labyrinth/wiki/Project-Description) for more information.  
+Project Repository: https://github.com/SCCapstone/Capstone-Labyrinth
 
 ## External Requirements
 
