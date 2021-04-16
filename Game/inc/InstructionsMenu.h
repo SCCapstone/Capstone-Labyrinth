@@ -27,6 +27,8 @@ private:
 public:
     // default constructor
     InstructionsMenu();
+    //Contructor with a window param
+    InstructionsMenu(sf::RenderWindow* win);
 
     // destructor
     ~InstructionsMenu();
@@ -46,6 +48,13 @@ public:
 // default constructor (calls initOptionsMenu function with default values)
 InstructionsMenu::InstructionsMenu() {
     initInstructions(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+}
+
+//Contructor with a window param
+InstructionsMenu::InstructionsMenu(sf::RenderWindow* win) {
+    this->window = win;
+    window->setTitle("Instructions");
+    initInstructions(this->window->getSize().x, this->window->getSize().y);
 }
 
 // destrcutor
@@ -72,7 +81,10 @@ void InstructionsMenu::initInstructions(unsigned int width, unsigned int height)
     videoMode.height = height;
     videoMode.width = width;
 
-    this->window = new sf::RenderWindow(videoMode, "Instructions", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
+    //Only if a window is not passed as a constructor Param
+    if (this->window == NULL) {
+        this->window = new sf::RenderWindow(videoMode, "Instructions", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
+    }
     this->menu = new Menu(videoMode.width, videoMode.height, 1);
 
     this->instructs.setFont(font);
@@ -124,8 +136,7 @@ int InstructionsMenu::update() {
 
                 case 0:
                     //Exit to Main menu
-                    window->close();
-                    return 0;
+                    return -1;
                     break;
 
                 default:
@@ -143,8 +154,7 @@ int InstructionsMenu::update() {
 
                 case 0:
                     //Exit to Main menu
-                    window->close();
-                    return 1;
+                    return -1;
                     break;
 
                 default:
@@ -166,7 +176,7 @@ int InstructionsMenu::update() {
             break;
         }
     }
-    return -1;
+    return 0;
 }
 
 // render function that draws buttons and background, displays them
