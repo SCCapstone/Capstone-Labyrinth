@@ -143,6 +143,9 @@ void Enemy_Spawner::UpdateEnemyContact(Player& player) {
             // player attacking enemy
             if (getEnemy(i)->getTotalHealth() > player.getAttackValue()) {
                 player.Attack(*getEnemy(i));
+                sf::SoundBuffer buffer;
+                    if(!buffer.loadFromFile("punch.mp3"))
+                        return -1;
             }
             else {
                 deleteEnemy(i);
