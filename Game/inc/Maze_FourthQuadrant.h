@@ -534,6 +534,7 @@ bool Maze_FourthQuadrant::inMazeWalls(Vector2f coords) {
         CAILAS3_tj2->inWallStructure(coords) ||
         CAILAS3_tj3->inWallStructure(coords) ||
         CAILAS3_tj4->inWallStructure(coords) ||
+        SAMS_fs1->inWallStructure(coords) ||
         SAMS_fs2->inWallStructure(coords) ||
         SAMS_fs3->inWallStructure(coords) ||
         SAMS_fs4->inWallStructure(coords) ||

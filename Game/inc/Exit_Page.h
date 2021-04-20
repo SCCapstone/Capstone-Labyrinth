@@ -66,7 +66,7 @@ void Exit_Page::setMsg(bool youLost) {
     if (youLost)
         this->instructs.setString("YOU HAVE BEEN TAKEN\n\t\t\tBY THE MAZE\n press Esc to return to Menu");
     else
-        this->instructs.setString("YOU HAVE WON");
+        this->instructs.setString("\t\tYOU HAVE WON\n press Esc to return to Menu");
 }
 
 

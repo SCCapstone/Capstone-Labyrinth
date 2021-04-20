@@ -65,6 +65,11 @@ static int q2_enemy_amount = (int)totalEnemyAmount / 4;                 // how m
 static int q3_enemy_amount = (int)totalEnemyAmount / 4;                 // how many minotaurs to spawn
 static int q4_enemy_amount = (int)totalEnemyAmount / 4;                 // how many minotaurs to spawn
 
+
+// variables for testing
+const bool test_win_msg = false;
+const bool test_loss_msg = false;
+
 class Game_Engine {
 // private attributes
 private:
@@ -419,16 +424,18 @@ void Game_Engine::Update() {
             }
 
             // enemy attacking player
-            if (player->getTotalHealth() > Minos->getAttackValue()) {
-                Minos->ConstantAttack(*player);
-            }
-            else {
-                playerCoords_copy = player->getIndividualPos();
-                player = nullptr;
-                delete player;
-                std::cout << "\nPlayer deleted" << std::endl;
-                playerDead = true;
-                exitpage->setLost(playerDead);
+            if (this->inCheatMode == false) {
+                if (player->getTotalHealth() > Minos->getAttackValue()) {
+                    Minos->ConstantAttack(*player);
+                }
+                else {
+                    playerCoords_copy = player->getIndividualPos();
+                    player = nullptr;
+                    delete player;
+                    std::cout << "\nPlayer deleted" << std::endl;
+                    playerDead = true;
+                    exitpage->setLost(playerDead);
+                }
             }
         }
     }
@@ -452,16 +459,18 @@ void Game_Engine::Update() {
             }
 
             // enemy attacking player
-            if (player->getTotalHealth() > boss_q2->getAttackValue()) {
-                boss_q2->ConstantAttack(*player);
-            }
-            else {
-                playerCoords_copy = player->getIndividualPos();
-                player = nullptr;
-                delete player;
-                std::cout << "\nPlayer deleted" << std::endl;
-                playerDead = true;
-                exitpage->setLost(playerDead);
+            if (this->inCheatMode == false) {
+                if (player->getTotalHealth() > boss_q2->getAttackValue()) {
+                    boss_q2->ConstantAttack(*player);
+                }
+                else {
+                    playerCoords_copy = player->getIndividualPos();
+                    player = nullptr;
+                    delete player;
+                    std::cout << "\nPlayer deleted" << std::endl;
+                    playerDead = true;
+                    exitpage->setLost(playerDead);
+                }
             }
         }
     }
@@ -485,16 +494,18 @@ void Game_Engine::Update() {
             }
 
             // enemy attacking player
-            if (player->getTotalHealth() > boss_q3->getAttackValue()) {
-                boss_q3->ConstantAttack(*player);
-            }
-            else {
-                playerCoords_copy = player->getIndividualPos();
-                player = nullptr;
-                delete player;
-                std::cout << "\nPlayer deleted" << std::endl;
-                playerDead = true;
-                exitpage->setLost(playerDead);
+            if (this->inCheatMode == false) {
+                if (player->getTotalHealth() > boss_q3->getAttackValue()) {
+                    boss_q3->ConstantAttack(*player);
+                }
+                else {
+                    playerCoords_copy = player->getIndividualPos();
+                    player = nullptr;
+                    delete player;
+                    std::cout << "\nPlayer deleted" << std::endl;
+                    playerDead = true;
+                    exitpage->setLost(playerDead);
+                }
             }
         }
     }
@@ -518,16 +529,18 @@ void Game_Engine::Update() {
             }
 
             // enemy attacking player
-            if (player->getTotalHealth() > boss_q4->getAttackValue()) {
-                boss_q4->ConstantAttack(*player);
-            }
-            else {
-                playerCoords_copy = player->getIndividualPos();
-                player = nullptr;
-                delete player;
-                std::cout << "\nPlayer deleted" << std::endl;
-                playerDead = true;
-                exitpage->setLost(playerDead);
+            if (this->inCheatMode == false) {
+                if (player->getTotalHealth() > boss_q4->getAttackValue()) {
+                    boss_q4->ConstantAttack(*player);
+                }
+                else {
+                    playerCoords_copy = player->getIndividualPos();
+                    player = nullptr;
+                    delete player;
+                    std::cout << "\nPlayer deleted" << std::endl;
+                    playerDead = true;
+                    exitpage->setLost(playerDead);
+                }
             }
         }
     }
@@ -608,7 +621,20 @@ void Game_Engine::Render() {
         exitpage->Render(*window, playerCoords_copy);
     }
 
+    // draws loss message
     if (!exists(player)) {
+        exitpage->Render(*window, playerCoords_copy);
+    }
+
+    // testing win message
+    if (test_win_msg) {
+        exitpage->setLost(false);
+        exitpage->Render(*window, playerCoords_copy);
+    }
+
+    // testing loss message
+    if (test_loss_msg) {
+        exitpage->setLost(true);
         exitpage->Render(*window, playerCoords_copy);
     }
 
