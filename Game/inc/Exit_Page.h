@@ -14,6 +14,9 @@ private:
 
     bool lost;
 
+    std::string loss_msg = "YOU HAVE BEEN TAKEN\n\t\t\tBY THE MAZE\n press Esc to return to Menu";
+    std::string win_msg = "\t\tYOU HAVE WON\n press Esc to return to Menu";
+
     // public attributes
 public:
     // default constructor
@@ -31,7 +34,9 @@ public:
 
     void setMsg(bool lost);
 
-    void setTextSize();
+    std::string getLossMsg() {return loss_msg; }
+    std::string getWinMsg() { return win_msg;  }
+    bool getLossCond() { return this->lost;  }
 };
 
 // default constructor
@@ -64,9 +69,9 @@ void Exit_Page::Render(RenderWindow& window, Vector2f coords) {
 
 void Exit_Page::setMsg(bool youLost) {
     if (youLost)
-        this->instructs.setString("YOU HAVE BEEN TAKEN\n\t\t\tBY THE MAZE\n press Esc to return to Menu");
+        this->instructs.setString(loss_msg);
     else
-        this->instructs.setString("\t\tYOU HAVE WON\n press Esc to return to Menu");
+        this->instructs.setString(win_msg);
 }
 
 
