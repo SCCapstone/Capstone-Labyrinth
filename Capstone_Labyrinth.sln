@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Library", "Library\Library.vcxproj", "{4B604ED0-B7E1-486D-B5AB-4BD6DEB320ED}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Unit_Tests", "Unit_Tests\Unit_Tests.vcxproj", "{3D1BE5EB-6039-4D3F-9735-7812EE002D91}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{4B604ED0-B7E1-486D-B5AB-4BD6DEB320ED}.Release|x64.Build.0 = Release|x64
 		{4B604ED0-B7E1-486D-B5AB-4BD6DEB320ED}.Release|x86.ActiveCfg = Release|Win32
 		{4B604ED0-B7E1-486D-B5AB-4BD6DEB320ED}.Release|x86.Build.0 = Release|Win32
+		{3D1BE5EB-6039-4D3F-9735-7812EE002D91}.Debug|x64.ActiveCfg = Debug|x64
+		{3D1BE5EB-6039-4D3F-9735-7812EE002D91}.Debug|x64.Build.0 = Debug|x64
+		{3D1BE5EB-6039-4D3F-9735-7812EE002D91}.Debug|x86.ActiveCfg = Debug|Win32
+		{3D1BE5EB-6039-4D3F-9735-7812EE002D91}.Debug|x86.Build.0 = Debug|Win32
+		{3D1BE5EB-6039-4D3F-9735-7812EE002D91}.Release|x64.ActiveCfg = Release|x64
+		{3D1BE5EB-6039-4D3F-9735-7812EE002D91}.Release|x64.Build.0 = Release|x64
+		{3D1BE5EB-6039-4D3F-9735-7812EE002D91}.Release|x86.ActiveCfg = Release|Win32
+		{3D1BE5EB-6039-4D3F-9735-7812EE002D91}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

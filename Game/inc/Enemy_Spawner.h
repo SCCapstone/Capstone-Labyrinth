@@ -73,7 +73,10 @@ public:
  */
 Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Vector2f size, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health, Vector2f x_bounds, Vector2f y_bounds) {
     
-    this->amount = us_amount;
+    if (us_amount <= 0)
+        this->amount = 0;
+    else
+        this->amount = us_amount;
 
     this->attackValue = attVal;
     this->killPlayer = false;
