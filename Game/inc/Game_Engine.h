@@ -162,6 +162,7 @@ public:
     // accessor, returns true if window is still open
     const bool running() const { return window->isOpen(); }
     const bool isPlayerDead() const { return playerDead; }
+    bool isGameCheating() { return inCheatMode;  }
 };
 
 /* Public Functions in order:
@@ -684,6 +685,7 @@ void Game_Engine::initPlayer() {
 
     // if in cheat mode, double player health and attack value
     if (inCheatMode) {
+        // doesn't particularily matter, as player doesn't take damage in cheat mode anyhow
         int player_health_dub = player_health * 2;
         int player_attVal_dub = player_attVal * 2;
         player = new Player(&base_movement, Vector2u(12, 4), player_size, 0.05f, player_speed, player_health_dub, player_attVal_dub);
