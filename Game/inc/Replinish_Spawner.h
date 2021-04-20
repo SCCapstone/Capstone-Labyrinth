@@ -60,7 +60,11 @@ public:
  */
 Replinish_Spawner::Replinish_Spawner(int us_amount, Vector2f size, Texture* texture, Vector2u imageCount, float switchTime, Vector2f x_bounds, Vector2f y_bounds) {
 
-    this->amount = us_amount;
+    if (us_amount <= 0)
+        this->amount = 0;
+    else
+        this->amount = us_amount;
+
     this->size = size;
 
     this->x_bounds = x_bounds;

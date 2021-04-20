@@ -54,7 +54,7 @@ const static Vector2f q4_enemySpawnOrigin = Vector2f(-1.0f, 1.0f);
 */
 
 // will use these as values for other enemy types, TODO add different attrributes for other enemies
-const static int SAM_QuadrantHeartAmt = 9;
+const static int SAM_QuadrantHeartAmt = 10;
 const static Vector2f SAM_enemySize = player_size;
 const static float SAM_minotaur_speed = 27.0f;                          // how fast minotaurs are
 const static int SAM_minotaur_health = 150;                             // how much health the minotaurs originally start with
