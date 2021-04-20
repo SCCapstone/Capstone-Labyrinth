@@ -47,6 +47,13 @@ bool runMainMenu() {
 
 //Begin Main
 int main() {
+	sf::SoundBuffer soundBuffer;
+	sf::Sound sound;
+
+	if(!soundBuffer.loadFromFile("punch.wav"))
+		std::cout << "ERROR" << std::endl;
+
+	sound.setBuffer(soundBuffer);
 	while (runMainMenu()) {};
 	return 0;
 }
