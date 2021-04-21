@@ -35,8 +35,6 @@
 
 
 
-//#define punch_sound_filepath "Resources/imgs/punch.mp3"
-
 namespace sf
 {
 class SoundBuffer;
