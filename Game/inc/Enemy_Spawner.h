@@ -4,6 +4,7 @@
 #ifndef ENEMY_SPAWNER_H
 #define ENEMY_SPAWNER_H
 
+#include "SFML/Audio.hpp"
 #include "Enemy.h"
 #include "Maze_Component.h"
 #include <ctime>
@@ -13,7 +14,7 @@ class Enemy_Spawner {
 private:
     int amount;
     int attackValue;
-    Vector2f size;
+    //Vector2f size;
     Vector2f x_bounds;
     Vector2f y_bounds;
 
@@ -22,9 +23,15 @@ private:
 
     // vector of enemy pointer objects
     std::vector<Enemy*> enemies;
-    
+
+    // variables for sound when enemy is killed
     sf::SoundBuffer enemy_death;
     sf::Sound death;
+
+    sf::SoundBuffer attack_sound;
+    sf::Sound attack;
+
+    
 
     void deleteEnemy(int index);
 
@@ -44,7 +51,7 @@ public:
 
     void UpdateEnemyChase(Player& player, float deltaTime);
 
-    void UpdateEnemyContact(Player& player);
+    void UpdateEnemyContact(Player& player, bool invincible);
 
     void UpdateWallCollisions(Maze_Component* aWall, float push);
 
@@ -76,18 +83,26 @@ public:
  */
 Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Vector2f size, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health, Vector2f x_bounds, Vector2f y_bounds) {
     
-    this->amount = us_amount;
+    if (us_amount <= 0)
+        this->amount = 0;
+    else
+        this->amount = us_amount;
 
     this->attackValue = attVal;
     this->killPlayer = false;
 
     this->x_bounds = x_bounds;
     this->y_bounds = y_bounds;
-    
+
+    // load attack sound
     if (!enemy_death.loadFromFile("imgs/death.wav")) {
-        std::cout << "Error: sound not found" << std::endl;
+        std::cout << "Failed to load sound from file" << std::endl;
     }
     death.setBuffer(enemy_death);
+    if (!attack_sound.loadFromFile("imgs/Game_imgs_punch.wav")) {
+        std::cout << "Failed to load sound from file" << std::endl;
+    }
+    attack.setBuffer(attack_sound);
 
     Populate(texture, imageCount, size, switchTime, speed, attVal, health, x_bounds, y_bounds); 
 }
@@ -143,7 +158,7 @@ void Enemy_Spawner::UpdateEnemyChase(Player& player, float deltaTime) {
     }
 }
 
-void Enemy_Spawner::UpdateEnemyContact(Player& player) {
+void Enemy_Spawner::UpdateEnemyContact(Player& player, bool invincible) {
     for (int i = 0; i < (int) enemies.size(); i++) {
         // 0.5f to show that enemies and player have same force on each other
         if (player.ColliderCheck(getEnemy(i)->GetCollider(), 0.5f)) {
@@ -151,24 +166,25 @@ void Enemy_Spawner::UpdateEnemyContact(Player& player) {
             // player attacking enemy
             if (getEnemy(i)->getTotalHealth() > player.getAttackValue()) {
                 player.Attack(*getEnemy(i));
-                sf::SoundBuffer buffer;
-                    if(!buffer.loadFromFile("punch.mp3"))
-                        return -1;
             }
             else {
                 deleteEnemy(i);
+                // death sound
                 death.play();
                 std::cout << "\nEnemy deleted: " << std::endl;
                 break;
             }
 
-            // enemy attacking player
-            if (player.getTotalHealth() > getAttackValue()) {
-                getEnemy(i)->ConstantAttack(player);
-                break;
+            // enemy attacking playerb
+            if (invincible == false) {
+                if (player.getTotalHealth() > getAttackValue()) {
+                    getEnemy(i)->ConstantAttack(player);
+                    attack.play();
+                    break;
+                }
+                else
+                    killPlayer = true;
             }
-            else
-                killPlayer = true;
             break;
         }
     }
