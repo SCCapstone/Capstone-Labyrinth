@@ -19,6 +19,8 @@ private:
     // vector of enemy pointer objects
     std::vector<Background_Tile*> tiles;
 
+    Vector2f size;
+
     // public attributes
 public:
     // Constructor
@@ -31,12 +33,17 @@ public:
     void Draw(RenderWindow& window);
 
     int getTileAmount() { return this->tile_amount;  }
+    Vector2f getSizeFactor() { return size; }
+    float getXTilesAmount() { return x_amt; }
+    float getYTilesAmount() { return y_amt; }
 };
 
-Background_Map::Background_Map(Texture* texture, Vector2f size, float x_posSTART, float x_posEND, float y_posSTART, float y_posEND) {
+Background_Map::Background_Map(Texture* texture, Vector2f aSize, float x_posSTART, float x_posEND, float y_posSTART, float y_posEND) {
     this->x_amt = abs(x_posSTART - x_posEND);
     this->y_amt = abs(y_posSTART - y_posEND);
     tile_amount = 0;
+
+    this->size = aSize;
 
     for (float i = y_posSTART; i < y_posEND; i += 1.0f) {
         for (float j = x_posSTART; j < x_posEND; j += 1.0f) {
