@@ -30,15 +30,15 @@ N/A
 
 ## Testing
 
-N/A
+All the tests for our project can be located in the [Unit_Tests](https://github.com/SCCapstone/Capstone-Labyrinth/tree/master/Unit_Tests) directory
 
 ## Testing Technology
 
-N/A
+To run the unit tests designed for our game, you will need Visual Studios 19. We implemented the "Native Unit Test Project", which uses the native Microsoft CppUnitTest framework designed for use on Windows.
 
 ## Running Tests
 
-N/A
+Create a local copy of our project, build it by clicking "Build Solution" from the Build tab in the toolbar (Release x86), and then navigate to the Test tab in the toolbar. Click on "Test Explorer", and then "Run All Tests" (a double green arrow icon). This will display the status and time it took to run each test.
 
 ## Authors
 
