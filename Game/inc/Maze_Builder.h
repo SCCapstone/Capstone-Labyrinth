@@ -40,9 +40,11 @@ protected:
     Texture butcher_background;
     Texture sewer_wall;
 
+    Vector2f mazeSizeFactor;
+
 public:
     // constructor
-    Maze_Builder(sf::Vector2f size);
+    Maze_Builder(sf::Vector2f factor);
 
     // destructor
     ~Maze_Builder();
@@ -69,6 +71,11 @@ public:
     Vector2f getSecondQuadBossCoords() { return scnd_Quad->getBossRoomCoords(); }
     Vector2f getThirdQuadBossCoords() { return thrd_Quad->getBossRoomCoords(); }
     Vector2f getFourthQuadBossCoords() { return frth_Quad->getBossRoomCoords(); }
+
+    Vector2f getFirstQuadSizeFactor() { return Sams_Quad->getQuadrantScale(); }
+    Vector2f getSecondQuadSizeFactor() { return scnd_Quad->getQuadrantScale(); }
+    Vector2f getThirdQuadSizeFactor() { return thrd_Quad->getQuadrantScale(); }
+    Vector2f getFourthQuadSizeFactor() { return frth_Quad->getQuadrantScale(); }
 };
 
 Maze_Builder::Maze_Builder(sf::Vector2f size) {
@@ -92,20 +99,22 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     butcher_background.loadFromFile("imgs/butchery_floorV1.png");
     sewer_wall.loadFromFile("imgs/sewer.png");
 
+    this->mazeSizeFactor = size;
+
     // smallest co-ordinate to largest co-ordinate for both x and y
     // all range parameters defined in Wall.h
-    bg = new Background_Map(&background, size, 2.0f * X_NEG_RANGE, 2.0f * X_POS_RANGE, 2.0f * Y_NEG_RANGE, 2.0f * Y_POS_RANGE);
+    bg = new Background_Map(&background, mazeSizeFactor, 2.0f * X_NEG_RANGE, 2.0f * X_POS_RANGE, 2.0f * Y_NEG_RANGE, 2.0f * Y_POS_RANGE);
 
     // Can add custom backgrounds HERE TODO
 
     // position is assumed to be centered at 0.0f, 0.0f, creates starting chamber
-    spawnChamber = new Maze_SpawnChamber(&brickwall_big, size, Vector2f(0.0f * scale, 0.0f * scale));
+    spawnChamber = new Maze_SpawnChamber(&brickwall_big, mazeSizeFactor, Vector2f(0.0f * scale, 0.0f * scale));
 
     // position is assumed to be centered at 0.0f, 0.0f, creates upper right quadrant
-    Sams_Quad = new Maze_FirstQuadrant(size);
-    scnd_Quad = new Maze_SecondQuadrant(size);
-    thrd_Quad = new Maze_ThirdQuadrant(size);
-    frth_Quad = new Maze_FourthQuadrant(size);
+    Sams_Quad = new Maze_FirstQuadrant(mazeSizeFactor);
+    scnd_Quad = new Maze_SecondQuadrant(mazeSizeFactor);
+    thrd_Quad = new Maze_ThirdQuadrant(mazeSizeFactor);
+    frth_Quad = new Maze_FourthQuadrant(mazeSizeFactor);
 }
 
 Maze_Builder::~Maze_Builder() { /* empty */ }

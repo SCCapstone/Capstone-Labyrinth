@@ -81,6 +81,8 @@ protected:
     // textures used for wall and background
     Texture brickwall_big;
 
+    Vector2f sizeFactor;
+
 public:
     // constructor
     Maze_FirstQuadrant(sf::Vector2f size);
@@ -104,6 +106,7 @@ public:
     bool inMazeWalls(Vector2f coords);
 
     Vector2f getBossRoomCoords() { return br_coords; }
+    Vector2f getQuadrantScale() { return sizeFactor; }
 };
 
 Maze_FirstQuadrant::Maze_FirstQuadrant(sf::Vector2f size) {
@@ -162,6 +165,8 @@ Maze_FirstQuadrant::Maze_FirstQuadrant(sf::Vector2f size) {
     // load wall texture from img/ directory
     // not in parameter so we have the freedom to have multiple textures for walls
     brickwall_big.loadFromFile("imgs/wall_texture.png");
+
+    this->sizeFactor = size;
 
     // corners
     SAMS_c1 = new Maze_Corner(&brickwall_big, size, Vector2f(0.0f * scale, -11.0f * scale), true, false);

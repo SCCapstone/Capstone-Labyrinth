@@ -93,6 +93,8 @@ protected:
     Texture butcher_wall;
     Texture butcher_background;
 
+    Vector2f sizeFactor;
+
 public:
     // constructor
     Maze_ThirdQuadrant(sf::Vector2f size);
@@ -116,6 +118,7 @@ public:
     bool inMazeWalls(Vector2f coords);
 
     Vector2f getBossRoomCoords() { return br_coords; }
+    Vector2f getQuadrantScale() { return sizeFactor; }
 };
 
 Maze_ThirdQuadrant::Maze_ThirdQuadrant(sf::Vector2f size) {
@@ -183,6 +186,8 @@ Maze_ThirdQuadrant::Maze_ThirdQuadrant(sf::Vector2f size) {
     // load wall texture from img/ directory
     butcher_wall.loadFromFile("imgs/butchery_wallsV1.png");
     butcher_background.loadFromFile("imgs/butchery_floorV1.png");
+
+    this->sizeFactor = size;
 
     // corners
     CAILAS2_c1 = new Maze_Corner(&butcher_wall, size, Vector2f(-9.0f * scale, 2.0f * scale), true, false);

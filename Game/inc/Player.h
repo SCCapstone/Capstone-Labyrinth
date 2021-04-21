@@ -32,7 +32,10 @@ Player::Player(Texture* texture, Vector2u imageCount, Vector2f size, float switc
         Individual(texture, imageCount, size, switchTime, speed) {
    this->player_attackTimer.restart();
 
-   this->base_attackVal = attVal;
+   if (attVal > 0)
+       this->base_attackVal = attVal;
+   else
+       this->base_attackVal = 10;
 
    // this is in milliseconds (player attacks every second)
    this->player_attackTimerMax = 150;
@@ -42,8 +45,14 @@ Player::Player(Texture* texture, Vector2u imageCount, Vector2f size, float switc
    FoV.setPosition(body.getPosition());
    hb->setPos(sf::Vector2f(body.getPosition().x, body.getPosition().y - (3.0f * body.getSize().y / 4.0f)));
 
-   setTotalHealth(health);
-   setOriginalHealth(health);
+   if (health > 0) {
+       setTotalHealth(health);
+       setOriginalHealth(health);
+   }
+   else {
+       setTotalHealth(150);
+       setOriginalHealth(150);
+   }
 }
 
 Player::~Player() {/* empty */}
