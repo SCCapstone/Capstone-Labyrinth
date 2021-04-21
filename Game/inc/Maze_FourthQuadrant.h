@@ -84,6 +84,8 @@ protected:
     // textures used for wall and background
     Texture sewer_wall;
 
+    Vector2f sizeFactor;
+
 public:
     // constructor
     Maze_FourthQuadrant(sf::Vector2f size);
@@ -107,6 +109,7 @@ public:
     bool inMazeWalls(Vector2f coords);
 
     Vector2f getBossRoomCoords() { return br_coords; }
+    Vector2f getQuadrantScale() { return sizeFactor; }
 };
 
 Maze_FourthQuadrant::Maze_FourthQuadrant(sf::Vector2f size) {
@@ -165,6 +168,8 @@ Maze_FourthQuadrant::Maze_FourthQuadrant(sf::Vector2f size) {
 
     // load wall texture from img/ directory
     sewer_wall.loadFromFile("imgs/sewer.png");
+    
+    this->sizeFactor = size;
 
     // corners
     CAILAS3_c1 = new Maze_Corner(&sewer_wall, size, Vector2f(-12.0f * scale, -16.0f * scale), true, false);

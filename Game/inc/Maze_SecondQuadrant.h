@@ -82,6 +82,8 @@ protected:
     Texture docks_wall;
     Texture docks_background;
 
+    Vector2f sizeFactor;
+
 public:
     // constructor
     Maze_SecondQuadrant(sf::Vector2f size);
@@ -105,6 +107,7 @@ public:
     bool inMazeWalls(Vector2f coords);
 
     Vector2f getBossRoomCoords() { return br_coords; }
+    Vector2f getQuadrantScale() { return sizeFactor; }
 };
 
 Maze_SecondQuadrant::Maze_SecondQuadrant(sf::Vector2f size) {
@@ -161,6 +164,8 @@ Maze_SecondQuadrant::Maze_SecondQuadrant(sf::Vector2f size) {
     // load wall texture from img/ directory
     docks_wall.loadFromFile("imgs/docks_wallV1.png");
     docks_background.loadFromFile("imgs/docks_floorV2.png");
+
+    this->sizeFactor = size;
 
     // corners
     CAILAS_c1 = new Maze_Corner(&docks_wall, size, Vector2f(0.0f * scale, 7.0f * scale), true, true);

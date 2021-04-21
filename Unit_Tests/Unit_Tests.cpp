@@ -119,5 +119,62 @@ namespace UnitTests
 
 			en_2 = nullptr;
 		}
+
+		// tests to ensure player is properly intialized, even if given invalid values
+		TEST_METHOD(TestPlayerStatistics) {
+			Texture texture;
+
+			Vector2f size = Vector2f(100.0f, 150.0f);
+			float speed = 27.0f;
+			int health = 150;
+			int attack_val = 19;
+
+			// design valid enemy
+			Player* play_1 = new Player(&texture, Vector2u(10, 3), size, 0.35f, speed, health, attack_val);
+
+			// check size, speed, health, and attack value for correct initialization
+			Assert::AreEqual(size.x, play_1->getSize().x);
+			Assert::AreEqual(size.y, play_1->getSize().y);
+			Assert::AreEqual(speed, play_1->getSpeed());
+			Assert::AreEqual(health, play_1->getOrignalHealth());
+			Assert::AreEqual(attack_val, play_1->getAttackValue());
+
+			play_1 = nullptr;
+
+			Vector2f bad_size = Vector2f(-100.0f, -150.0f);
+			float bad_speed = -27.0f;
+			int bad_health = -150;
+			int bad_attack_val = -19;
+
+			// design invalid enemy
+			Player* play_2 = new Player(&texture, Vector2u(10, 3), bad_size, 0.35f, bad_speed, bad_health, bad_attack_val);
+
+			// check size, speed, health, and attack value for correct initialization
+			Assert::AreNotEqual(bad_size.x, play_2->getSize().x);
+			Assert::AreNotEqual(bad_size.y, play_2->getSize().y);
+			Assert::AreNotEqual(bad_speed, play_2->getSpeed());
+			Assert::AreNotEqual(bad_health, play_2->getOrignalHealth());
+			Assert::AreNotEqual(bad_attack_val, play_2->getAttackValue());
+
+			play_2 = nullptr;
+		}
+		
+		// test to ensure all quadrants get intialized with the same scale
+		TEST_METHOD(TestMazeQuadrantSizeFactor) {
+			Vector2f scale = Vector2f(250.0f, 250.0f);
+			
+			// create new maze object
+			Maze_Builder* maze = new Maze_Builder(scale);
+
+			// ensure all quadrants have been initialized with the same scale
+			Assert::AreEqual(scale.x, maze->getFirstQuadSizeFactor().x);
+			Assert::AreEqual(scale.y, maze->getFirstQuadSizeFactor().y);
+			Assert::AreEqual(scale.x, maze->getSecondQuadSizeFactor().x);
+			Assert::AreEqual(scale.y, maze->getSecondQuadSizeFactor().y);
+			Assert::AreEqual(scale.x, maze->getThirdQuadSizeFactor().x);
+			Assert::AreEqual(scale.y, maze->getThirdQuadSizeFactor().y);
+			Assert::AreEqual(scale.x, maze->getFourthQuadSizeFactor().x);
+			Assert::AreEqual(scale.y, maze->getFourthQuadSizeFactor().y);
+		}
 	};
 }
