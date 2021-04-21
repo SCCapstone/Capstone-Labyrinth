@@ -36,19 +36,27 @@ public:
 
     void commitAttack(Individual& other);
 
-    
 };
 
 Enemy::Enemy(Texture* texture, Vector2u imageCount, Vector2f size, float switchTime, float speed, int health, int attVal) :
         Individual(texture, imageCount, size, switchTime, speed) {
     this->enemy_attackTimer.restart();
 
-    this->base_attackVal = attVal;
+    if (attVal > 0)
+        this->base_attackVal = attVal;
+    else
+        this->base_attackVal = 10;
 
     // this is in milliseconds (enemy attacks every 3 seconds)
     this->enemy_attackTimerMax = 1000;
-    setTotalHealth(health);
-    setOriginalHealth(health);
+    if (health > 0) {
+        setTotalHealth(health);
+        setOriginalHealth(health);
+    }
+    else {
+        setTotalHealth(150);
+        setOriginalHealth(150);
+    }
 }
 
 Enemy::~Enemy() { /* empty */ }

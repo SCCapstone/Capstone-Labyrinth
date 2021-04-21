@@ -80,15 +80,21 @@ public:
    sf::FloatRect GetGlobalIndividualBounds() { return body.getGlobalBounds(); }
    Collider GetCollider() { return Collider(body, FoV, hb->getHealthRect()); }
 
+   Vector2f getSize() { return this->size; }
+   float getSpeed() { return this->speed; }
+
    // mutators
    void setTotalHealth(int val) { this->totalHealth = val; }
    void setOriginalHealth(int val) { this->orig_health = val; }
 };
 
-Individual::Individual(Texture* texture, Vector2u imageCount, Vector2f size, float switchTime, float speed) :
+Individual::Individual(Texture* texture, Vector2u imageCount, Vector2f aSize, float switchTime, float aSpeed) :
    animation(texture, imageCount, switchTime) {
-
-      this->speed = speed;
+    
+      if (aSpeed <= 0)
+          this->speed = 10.0f;
+      else
+          this->speed = aSpeed;
 
       // default row is 0
       row = 0;
@@ -96,6 +102,12 @@ Individual::Individual(Texture* texture, Vector2u imageCount, Vector2f size, flo
       faceRight = true;
       movingDown = false;
       movingUp = false;
+
+      // ensure size is valid
+      if (aSize.x <= 0 || aSize.y <= 0)
+          this->size = Vector2f(100.0f, 150.0f);
+      else
+          this->size = aSize;
 
       body.setSize(size);
       body.setOrigin(body.getSize() / 2.0f);

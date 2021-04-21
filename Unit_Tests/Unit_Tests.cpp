@@ -48,6 +48,7 @@ namespace UnitTests
 			reps_2 = nullptr;
 		}
 
+		// tests to ensure that the proper messages are set given a winning or losing condition
 		TEST_METHOD(TestWinLossMessage) {
 			std::string lossMsg = "YOU HAVE BEEN TAKEN\n\t\t\tBY THE MAZE\n press Esc to return to Menu"; \
 			std::string winMsg = "\t\tYOU HAVE WON\n press Esc to return to Menu";
@@ -78,6 +79,45 @@ namespace UnitTests
 
 			ep_2 = nullptr;
 			
+		}
+
+		// tests to ensure enemies are properly intialized, even if given invalid values
+		TEST_METHOD(TestEnemyStatistics) {
+			Texture texture;
+
+			Vector2f size = Vector2f(100.0f, 150.0f);
+			float speed = 27.0f;
+			int health = 150;
+			int attack_val = 19;
+
+			// design valid enemy
+			Enemy* en_1 = new Enemy(&texture, Vector2u(10, 3), size, 0.35f, speed, health, attack_val);
+
+			// check size, speed, health, and attack value for correct initialization
+			Assert::AreEqual(size.x, en_1->getSize().x);
+			Assert::AreEqual(size.y, en_1->getSize().y);
+			Assert::AreEqual(speed, en_1->getSpeed());
+			Assert::AreEqual(health, en_1->getOrignalHealth());
+			Assert::AreEqual(attack_val, en_1->getAttackValue());
+
+			en_1 = nullptr;
+
+			Vector2f bad_size = Vector2f(-100.0f, -150.0f);
+			float bad_speed = -27.0f;
+			int bad_health = -150;
+			int bad_attack_val = -19;
+
+			// design invalid enemy
+			Enemy* en_2 = new Enemy(&texture, Vector2u(10, 3), bad_size, 0.35f, bad_speed, bad_health, bad_attack_val);
+
+			// check size, speed, health, and attack value for correct initialization
+			Assert::AreNotEqual(bad_size.x, en_2->getSize().x);
+			Assert::AreNotEqual(bad_size.y, en_2->getSize().y);
+			Assert::AreNotEqual(bad_speed, en_2->getSpeed());
+			Assert::AreNotEqual(bad_health, en_2->getOrignalHealth());
+			Assert::AreNotEqual(bad_attack_val, en_2->getAttackValue());
+
+			en_2 = nullptr;
 		}
 	};
 }
