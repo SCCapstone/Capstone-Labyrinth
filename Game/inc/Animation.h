@@ -48,6 +48,10 @@ public:
      * TODO add bool up and bool down (maybe?)
     */
     void Update(int row, float deltaTime, bool faceRight, bool down, bool up);
+
+    // acessor
+    Vector2u getImageCount() { return imageCount; }
+    float getSwitchTime() { return switchTime; }
 };
 
 Animation::Animation(Texture* texture, Vector2u imageCount, float switchTime) {

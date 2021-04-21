@@ -2,6 +2,7 @@
 #include "CppUnitTest.h"
 
 #include "../Game/inc/Game_Engine.h"
+#include "../Game/inc/MainMenu.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -27,11 +28,13 @@ namespace UnitTests
 			Assert::AreEqual(10000, enemies_1->getAmount());
 
 			enemies_1 = nullptr;
+			delete enemies_1;
 
 			Enemy_Spawner* enemies_2 = new Enemy_Spawner(-1, 10, Vector2f(100.0f, 150.0f), &texture, Vector2u(10, 3), 0.35f, 27.0f, 150, Vector2f(0.0f, 0.0f), Vector2f(15.0f, -19.0f));
 			Assert::AreEqual(0, enemies_2->getAmount());
 
 			enemies_2 = nullptr;
+			delete enemies_2;
 		}
 
 		// tests the replinish item spawner with edge-case amounts (item count will not exceed 20 at worst, and will never be negative)
@@ -41,11 +44,13 @@ namespace UnitTests
 			Assert::AreEqual(10000, reps_1->getAmount());
 
 			reps_1 = nullptr;
+			delete reps_1;
 
 			Enemy_Spawner* reps_2 = new Enemy_Spawner(-1, 10, Vector2f(100.0f, 150.0f), &texture, Vector2u(10, 3), 0.35f, 27.0f, 150, Vector2f(0.0f, 0.0f), Vector2f(15.0f, -19.0f));
 			Assert::AreEqual(0, reps_2->getAmount());
 
 			reps_2 = nullptr;
+			delete reps_2;
 		}
 
 		// tests to ensure that the proper messages are set given a winning or losing condition
@@ -65,6 +70,7 @@ namespace UnitTests
 				Assert::AreEqual(true, false);
 
 			ep_1 = nullptr;
+			delete ep_1;
 
 			// create new exit page for losing
 			Exit_Page* ep_2 = new Exit_Page(10.0f);
@@ -78,7 +84,7 @@ namespace UnitTests
 				Assert::AreEqual(true, false);
 
 			ep_2 = nullptr;
-			
+			delete ep_2;
 		}
 
 		// tests to ensure enemies are properly intialized, even if given invalid values
@@ -101,6 +107,7 @@ namespace UnitTests
 			Assert::AreEqual(attack_val, en_1->getAttackValue());
 
 			en_1 = nullptr;
+			delete en_1;
 
 			Vector2f bad_size = Vector2f(-100.0f, -150.0f);
 			float bad_speed = -27.0f;
@@ -118,6 +125,7 @@ namespace UnitTests
 			Assert::AreNotEqual(bad_attack_val, en_2->getAttackValue());
 
 			en_2 = nullptr;
+			delete en_2;
 		}
 
 		// tests to ensure player is properly intialized, even if given invalid values
@@ -140,6 +148,7 @@ namespace UnitTests
 			Assert::AreEqual(attack_val, play_1->getAttackValue());
 
 			play_1 = nullptr;
+			delete play_1;
 
 			Vector2f bad_size = Vector2f(-100.0f, -150.0f);
 			float bad_speed = -27.0f;
@@ -157,6 +166,7 @@ namespace UnitTests
 			Assert::AreNotEqual(bad_attack_val, play_2->getAttackValue());
 
 			play_2 = nullptr;
+			delete play_2;
 		}
 		
 		// test to ensure all quadrants get intialized with the same scale
@@ -175,6 +185,22 @@ namespace UnitTests
 			Assert::AreEqual(scale.y, maze->getThirdQuadSizeFactor().y);
 			Assert::AreEqual(scale.x, maze->getFourthQuadSizeFactor().x);
 			Assert::AreEqual(scale.y, maze->getFourthQuadSizeFactor().y);
+
+			maze = nullptr;
+			delete maze;
+		}
+
+		// test to ensure the animations are loaded properly into the animation class
+		TEST_METHOD(TestAnimation) {
+			Texture texture;
+			Animation* ani = new Animation(&texture, Vector2u(10, 3), 0.35f);
+
+			Assert::AreEqual(10, (int)ani->getImageCount().x);
+			Assert::AreEqual(3, (int)ani->getImageCount().y);
+			Assert::AreEqual(0.35f, ani->getSwitchTime());
+
+			ani = nullptr;
+			delete ani;
 		}
 	};
 }
