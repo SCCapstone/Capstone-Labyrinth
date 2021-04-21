@@ -3,17 +3,20 @@
 
 #include "../inc/Game_Engine.h"
 #include "../inc/MainMenu.h"
-#include <SFML/Audio.hpp>
 
 // responsible for creating game and running it
 bool runGame_Engine(bool inCheatMode) {
 
-	if (inCheatMode) std::cout << "-----GAME IN CHEAT MODE-----" << std::endl;
+	if (inCheatMode) std::cout << "-----GAME IN CHEAT MODE-----" << std::endl;	
+
 	Game_Engine game(inCheatMode);
 	while (game.running()) {
 		game.Update();
 		game.Render();
 	}
+
+	// end music
+
 	return true; //Default code placeholder to exit to Main Menu
 }
 
@@ -48,13 +51,11 @@ bool runMainMenu() {
 //Begin Main
 int main() {
 
-	// declare music here, have it play during menu and game
-	//music.play();
+	
 
 	while (runMainMenu()) {};
 
-	// stop music
-	//music.stop();
+	
 
 	return 0;
 }
