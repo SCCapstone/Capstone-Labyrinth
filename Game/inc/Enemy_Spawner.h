@@ -4,6 +4,7 @@
 #ifndef ENEMY_SPAWNER_H
 #define ENEMY_SPAWNER_H
 
+#include "SFML/Audio.hpp"
 #include "Enemy.h"
 #include "Maze_Component.h"
 #include <ctime>
@@ -22,6 +23,10 @@ private:
 
     // vector of enemy pointer objects
     std::vector<Enemy*> enemies;
+
+    // variables for sound when enemy is killed
+    sf::SoundBuffer sound_buffer;
+    sf::Sound sound;
 
     void deleteEnemy(int index);
 
@@ -83,6 +88,12 @@ Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Vector2f size, Texture* 
 
     this->x_bounds = x_bounds;
     this->y_bounds = y_bounds;
+
+    // load attack sound
+    if (!sound_buffer.loadFromFile("imgs/Game_imgs_punch.wav")) {
+        std::cout << "Failed to load sound from file" << std::endl;
+    }
+    sound.setBuffer(sound_buffer);
 
     Populate(texture, imageCount, size, switchTime, speed, attVal, health, x_bounds, y_bounds); 
 }
@@ -149,6 +160,8 @@ void Enemy_Spawner::UpdateEnemyContact(Player& player, bool invincible) {
             }
             else {
                 deleteEnemy(i);
+                // death sound
+                sound.play();
                 std::cout << "\nEnemy deleted: " << std::endl;
                 break;
             }
