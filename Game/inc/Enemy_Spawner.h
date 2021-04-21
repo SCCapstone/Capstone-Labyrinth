@@ -22,6 +22,9 @@ private:
 
     // vector of enemy pointer objects
     std::vector<Enemy*> enemies;
+    
+    sf::SoundBuffer enemy_death;
+    sf::Sound death;
 
     void deleteEnemy(int index);
 
@@ -80,6 +83,11 @@ Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Vector2f size, Texture* 
 
     this->x_bounds = x_bounds;
     this->y_bounds = y_bounds;
+    
+    if (!enemy_death.loadFromFile("imgs/death.wav")) {
+        std::cout << "Error: sound not found" << std::endl;
+    }
+    death.setBuffer(enemy_death);
 
     Populate(texture, imageCount, size, switchTime, speed, attVal, health, x_bounds, y_bounds); 
 }
@@ -149,6 +157,7 @@ void Enemy_Spawner::UpdateEnemyContact(Player& player) {
             }
             else {
                 deleteEnemy(i);
+                death.play();
                 std::cout << "\nEnemy deleted: " << std::endl;
                 break;
             }
