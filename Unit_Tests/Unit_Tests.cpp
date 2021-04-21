@@ -202,5 +202,42 @@ namespace UnitTests
 			ani = nullptr;
 			delete ani;
 		}
+
+		// test to ensure the map is set correctly given parameters (tile count, size)
+		TEST_METHOD(TestBackgroundTileMap) {
+			Texture texture;
+			Vector2f size = Vector2f(250.0f, 250.0f);
+			float x_bounds = 2.0f;
+			float y_bounds = 2.0f;
+
+			Background_Map* bgm = new Background_Map(&texture, size, 0.0f, x_bounds, 0.0f, y_bounds);
+
+			Assert::AreEqual((int)(x_bounds*y_bounds), bgm->getTileAmount());
+			Assert::AreEqual(size.x, bgm->getSizeFactor().x);
+			Assert::AreEqual(size.y, bgm->getSizeFactor().y);
+			Assert::AreEqual(x_bounds, bgm->getXTilesAmount());
+			Assert::AreEqual(y_bounds, bgm->getYTilesAmount());
+
+			bgm = nullptr;
+			delete bgm;
+		}
+
+		// tests to ensures that the healthbar is properly intialized given a player rectangle
+		TEST_METHOD(TestHealthBar) {
+			RectangleShape* body = new RectangleShape(Vector2f(100.0f, 150.0f));
+			Texture texture;
+			HealthBar* hb = new HealthBar(body, body->getSize(), &texture, Vector2u(1, 20), 0.35f, 10.0f);
+
+			// health bar is adjusted to aesthetically fit the player better
+			Assert::AreNotEqual(body->getSize().x, hb->getHealthBarXDim());
+			Assert::AreNotEqual(body->getSize().y, hb->getHealthBarYDim());
+
+			Assert::AreEqual(10.0f, hb->getSpeed());
+
+			body = nullptr;
+			delete body;
+			hb = nullptr;
+			delete hb;
+		}
 	};
 }

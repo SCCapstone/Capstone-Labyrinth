@@ -48,6 +48,9 @@ public:
     void setPos(Vector2f position);
 
     RectangleShape& getHealthRect() { return healthbar; }
+    float getHealthBarXDim() { return healthbar.getSize().x; }
+    float getHealthBarYDim() { return healthbar.getSize().y; }
+    float getSpeed() { return this->speed; }
 };
 
 HealthBar::HealthBar(RectangleShape* body, Vector2f dimensions, Texture* texture, Vector2u imageCount, float switchTime, float speed) :
