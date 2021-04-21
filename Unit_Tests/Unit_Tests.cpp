@@ -13,7 +13,7 @@ namespace UnitTests
 	public:
 		
 		// tests the entire game engine to ensure the cheat mode status gets set correctly
-		TEST_METHOD(TestCheatModeStatus) {			
+		TEST_METHOD(TestCheatModeStatus) {
 			Game_Engine ge_1(true);
 			Assert::AreEqual(true, ge_1.isGameCheating());
 
@@ -56,14 +56,14 @@ namespace UnitTests
 		// tests to ensure that the proper messages are set given a winning or losing condition
 		TEST_METHOD(TestWinLossMessage) {
 			std::string lossMsg = "YOU HAVE BEEN TAKEN\n\t\t\tBY THE MAZE\n press Esc to return to Menu"; \
-			std::string winMsg = "\t\tYOU HAVE WON\n press Esc to return to Menu";
+				std::string winMsg = "\t\tYOU HAVE WON\n press Esc to return to Menu";
 
 			// create new exit page for winning
 			Exit_Page* ep_1 = new Exit_Page(10.0f);
 			ep_1->setLost(false);
-			
+
 			Assert::AreEqual(false, ep_1->getLossCond());
-			
+
 			if (winMsg.compare(ep_1->getWinMsg()) == 0)
 				Assert::AreEqual(true, true);
 			else
@@ -168,11 +168,11 @@ namespace UnitTests
 			play_2 = nullptr;
 			delete play_2;
 		}
-		
+
 		// test to ensure all quadrants get intialized with the same scale
 		TEST_METHOD(TestMazeQuadrantSizeFactor) {
 			Vector2f scale = Vector2f(250.0f, 250.0f);
-			
+
 			// create new maze object
 			Maze_Builder* maze = new Maze_Builder(scale);
 
@@ -212,7 +212,7 @@ namespace UnitTests
 
 			Background_Map* bgm = new Background_Map(&texture, size, 0.0f, x_bounds, 0.0f, y_bounds);
 
-			Assert::AreEqual((int)(x_bounds*y_bounds), bgm->getTileAmount());
+			Assert::AreEqual((int)(x_bounds * y_bounds), bgm->getTileAmount());
 			Assert::AreEqual(size.x, bgm->getSizeFactor().x);
 			Assert::AreEqual(size.y, bgm->getSizeFactor().y);
 			Assert::AreEqual(x_bounds, bgm->getXTilesAmount());
