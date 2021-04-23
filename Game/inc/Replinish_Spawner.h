@@ -18,6 +18,9 @@ private:
     // vector of enemy pointer objects
     std::vector<Health_Replinish*> hearts;
 
+    sf::SoundBuffer health_up;
+    sf::Sound heal;
+
     void deleteHeart(int index);
 
     // public attributes
@@ -70,6 +73,11 @@ Replinish_Spawner::Replinish_Spawner(int us_amount, Vector2f size, Texture* text
     this->x_bounds = x_bounds;
     this->y_bounds = y_bounds;
 
+    if (!health_up.loadFromFile("imgs/health.wav")) {
+        std::cout << "Failed to load sound from file" << std::endl;
+    }
+    heal.setBuffer(health_up);
+
     Populate(texture, imageCount, switchTime, x_bounds, y_bounds);
 }
 
@@ -111,6 +119,7 @@ void Replinish_Spawner::UpdatePlayerContact(Player& player) {
     for (int i = 0; i < amount; i++) {
         if (getHeart(i)->Replinish(&player)) {
             deleteHeart(i);
+            heal.play();
             std::cout << "Health refilled to max (" << player.getTotalHealth() << ") from (" << play_dmgd_health << ")" << std::endl;
         }
     }
