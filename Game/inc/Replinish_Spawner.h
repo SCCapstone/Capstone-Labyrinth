@@ -120,6 +120,8 @@ void Replinish_Spawner::UpdatePlayerContact(Player& player) {
         if (getHeart(i)->Replinish(&player)) {
             deleteHeart(i);
             heal.play();
+            heal.setVolume(75.f);
+
             std::cout << "Health refilled to max (" << player.getTotalHealth() << ") from (" << play_dmgd_health << ")" << std::endl;
         }
     }
