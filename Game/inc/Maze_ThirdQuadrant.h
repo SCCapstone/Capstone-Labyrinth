@@ -184,7 +184,7 @@ Maze_ThirdQuadrant::Maze_ThirdQuadrant(sf::Vector2f size) {
     this->CAILAS2_boss_room = nullptr;
 
     // load wall texture from img/ directory
-    butcher_wall.loadFromFile("imgs/butchery_wallsV1.png");
+    butcher_wall.loadFromFile("imgs/butchery_wallsV3.png");
     butcher_background.loadFromFile("imgs/butchery_floorV1.png");
 
     this->sizeFactor = size;
