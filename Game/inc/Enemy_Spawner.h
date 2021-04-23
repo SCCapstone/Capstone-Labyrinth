@@ -171,6 +171,8 @@ void Enemy_Spawner::UpdateEnemyContact(Player& player, bool invincible) {
                 deleteEnemy(i);
                 // death sound
                 death.play();
+                death.setVolume(75.f);
+
                 std::cout << "\nEnemy deleted: " << std::endl;
                 break;
             }
@@ -180,6 +182,7 @@ void Enemy_Spawner::UpdateEnemyContact(Player& player, bool invincible) {
                 if (player.getTotalHealth() > getAttackValue()) {
                     getEnemy(i)->ConstantAttack(player);
                     attack.play();
+                    attack.setVolume(65.f);
                     break;
                 }
                 else
