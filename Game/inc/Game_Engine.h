@@ -673,7 +673,7 @@ void Game_Engine::initPlayer() {
     this->player = nullptr;
 
     // loading sprite sheet
-    base_movement.loadFromFile("imgs/player-animations-total.png");
+    base_movement.loadFromFile("imgs/animation-totalV2.png");
 
     /* Initializing player
      * &base_movement:      reference to texture

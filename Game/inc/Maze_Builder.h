@@ -34,7 +34,11 @@ protected:
     Background_Map* docks_bg2;
     Background_Map* docks_bg3;
     Background_Map* docks_bg4;
+    Background_Map* docks_bg5;
     Background_Map* butcher_bg;
+    Background_Map* butcher_bg2;
+    Background_Map* butcher_bg3;
+    Background_Map* butcher_bg4;
 
     // textures used for spawn chamber and background
     Texture brickwall_big;
@@ -95,7 +99,11 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     this->docks_bg2 = nullptr;
     this->docks_bg3 = nullptr;
     this->docks_bg4 = nullptr;
+    this->docks_bg5 = nullptr;
     this->butcher_bg = nullptr;
+    this->butcher_bg2 = nullptr;
+    this->butcher_bg3 = nullptr;
+    this->butcher_bg4 = nullptr;
 
     // scale defined in Wall_Component class
 
@@ -103,7 +111,7 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     // not in parameter so we have the freedom to have multiple textures for walls
     brickwall_big.loadFromFile("imgs/wall_texture.png");
     docks_wall.loadFromFile("imgs/docks_wallV1.png");
-    butcher_wall.loadFromFile("imgs/butchery_wallsV1.png");
+    butcher_wall.loadFromFile("imgs/butchery_wallsV3.png");
     background.loadFromFile("imgs/base_floorV2.png");
     docks_background.loadFromFile("imgs/docks_floorV2.png");
     butcher_background.loadFromFile("imgs/butchery_floorV1.png");
@@ -114,13 +122,17 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     // smallest co-ordinate to largest co-ordinate for both x and y
     // all range parameters defined in Wall.h
     bg = new Background_Map(&background, mazeSizeFactor, 2.0f * X_NEG_RANGE, 2.0f * X_POS_RANGE, 2.0f * Y_NEG_RANGE, 2.0f * Y_POS_RANGE);
-
+                                                             
     // Can add custom backgrounds HERE TODO
     docks_bg = new Background_Map(&docks_background, mazeSizeFactor, -1, 25, 5, 25);
     docks_bg2 = new Background_Map(&docks_background, mazeSizeFactor, -4, -1, 9, 22);
     docks_bg3 = new Background_Map(&docks_background, mazeSizeFactor, -6, -3, 13, 15);
     docks_bg4 = new Background_Map(&docks_background, mazeSizeFactor, 13, 17, 25, 28);
-    butcher_bg = new Background_Map(&butcher_background, mazeSizeFactor, 0, -30, 0, 30);
+    docks_bg5 = new Background_Map(&docks_background, mazeSizeFactor, 1, 4, 22, 25);
+    butcher_bg = new Background_Map(&butcher_background, mazeSizeFactor, -26, -4, 5, 32);
+    butcher_bg2 = new Background_Map(&butcher_background, mazeSizeFactor, -25, -4, 2, 5);
+    butcher_bg3 = new Background_Map(&butcher_background, mazeSizeFactor, -4, 5, 22, 30);
+    butcher_bg4 = new Background_Map(&butcher_background, mazeSizeFactor, -5, -1, 4, 9);
 
     // position is assumed to be centered at 0.0f, 0.0f, creates starting chamber
     spawnChamber = new Maze_SpawnChamber(&brickwall_big, mazeSizeFactor, Vector2f(0.0f * scale, 0.0f * scale));
@@ -166,9 +178,13 @@ void Maze_Builder::Draw(sf::RenderWindow& window) {
     bg->Draw(window);
     docks_bg->Draw(window);
     docks_bg2->Draw(window);
-    docks_bg3->Draw(window);
     docks_bg4->Draw(window);
     butcher_bg->Draw(window);
+    butcher_bg2->Draw(window);
+    docks_bg3->Draw(window);
+    butcher_bg3->Draw(window);
+    butcher_bg4->Draw(window);
+    docks_bg5->Draw(window);
 
     // draws all walls
     spawnChamber->Draw(window);

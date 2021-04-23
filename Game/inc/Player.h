@@ -101,6 +101,24 @@ void Player::Update(float deltaTime) {
       else {/* intentionally empty */}
    }
 
+   if (Keyboard::isKeyPressed(Keyboard::Space)) {
+       if (row == 0) {
+           row = 5;
+       }
+       else if (row == 1 || row == 4) {
+           row = 6;
+       }
+       else if (row == 3) {
+           row = 8;
+       }
+       //else if (row == 3 && faceRight == true) {
+       //    row = 7;
+       //}
+       //else if (row == 3 && faceRight == false) {
+       //    row = 8;
+       //}
+   }
+
       
 
    // update the animation
@@ -122,18 +140,6 @@ void Player::Update(float deltaTime) {
 void Player::Attack(Individual& other) {
    if (getAttackTimer()) {
        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-           if (row == 0) {
-               row = 5;
-           }
-           else if (row == 1 || row == 4) {
-               row = 6;
-           } 
-           else if (row == 3 && faceRight == true) {
-               row = 7;
-           } 
-           else if (row == 3 && faceRight == false) {
-               row = 8;
-           }
            if (other.getTotalHealth() > getAttackValue()) {
                commitAttack(other);
            }
