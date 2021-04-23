@@ -30,6 +30,11 @@ protected:
 
     // create tile map for background scene
     Background_Map* bg;
+    Background_Map* docks_bg;
+    Background_Map* docks_bg2;
+    Background_Map* docks_bg3;
+    Background_Map* docks_bg4;
+    Background_Map* butcher_bg;
 
     // textures used for spawn chamber and background
     Texture brickwall_big;
@@ -86,6 +91,11 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     this->thrd_Quad = nullptr;
     this->frth_Quad = nullptr;
     this->bg = nullptr;
+    this->docks_bg = nullptr;
+    this->docks_bg2 = nullptr;
+    this->docks_bg3 = nullptr;
+    this->docks_bg4 = nullptr;
+    this->butcher_bg = nullptr;
 
     // scale defined in Wall_Component class
 
@@ -106,6 +116,11 @@ Maze_Builder::Maze_Builder(sf::Vector2f size) {
     bg = new Background_Map(&background, mazeSizeFactor, 2.0f * X_NEG_RANGE, 2.0f * X_POS_RANGE, 2.0f * Y_NEG_RANGE, 2.0f * Y_POS_RANGE);
 
     // Can add custom backgrounds HERE TODO
+    docks_bg = new Background_Map(&docks_background, mazeSizeFactor, -1, 25, 5, 25);
+    docks_bg2 = new Background_Map(&docks_background, mazeSizeFactor, -4, -1, 9, 22);
+    docks_bg3 = new Background_Map(&docks_background, mazeSizeFactor, -6, -3, 13, 15);
+    docks_bg4 = new Background_Map(&docks_background, mazeSizeFactor, 13, 17, 25, 28);
+    butcher_bg = new Background_Map(&butcher_background, mazeSizeFactor, 0, -30, 0, 30);
 
     // position is assumed to be centered at 0.0f, 0.0f, creates starting chamber
     spawnChamber = new Maze_SpawnChamber(&brickwall_big, mazeSizeFactor, Vector2f(0.0f * scale, 0.0f * scale));
@@ -149,6 +164,11 @@ void Maze_Builder::MazeContactUpdate_Enemies(Enemy_Spawner* enemies, float push)
 void Maze_Builder::Draw(sf::RenderWindow& window) {
     // draw background first, so it gets drawn over
     bg->Draw(window);
+    docks_bg->Draw(window);
+    docks_bg2->Draw(window);
+    docks_bg3->Draw(window);
+    docks_bg4->Draw(window);
+    butcher_bg->Draw(window);
 
     // draws all walls
     spawnChamber->Draw(window);
