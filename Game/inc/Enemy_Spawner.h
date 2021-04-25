@@ -10,7 +10,7 @@
 #include <ctime>
 
 class Enemy_Spawner {
-// private attributes
+    // private attributes
 private:
     int amount;
     int attackValue;
@@ -25,12 +25,17 @@ private:
     std::vector<Enemy*> enemies;
 
     // variables for sound when enemy is killed
-    sf::SoundBuffer sound_buffer;
-    sf::Sound sound;
+    sf::SoundBuffer enemy_death;
+    sf::Sound death;
+
+    sf::SoundBuffer attack_sound;
+    sf::Sound attack;
+
+
 
     void deleteEnemy(int index);
 
-// public attributes
+    // public attributes
 public:
     Enemy_Spawner(int us_amount, int attVal, Vector2f size, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health, Vector2f x_bounds, Vector2f y_bounds);
 
@@ -77,7 +82,7 @@ public:
  * deleteEnemy:             erases enemy at given index
  */
 Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Vector2f size, Texture* texture, Vector2u imageCount, float switchTime, float speed, int health, Vector2f x_bounds, Vector2f y_bounds) {
-    
+
     if (us_amount <= 0)
         this->amount = 0;
     else
@@ -90,22 +95,26 @@ Enemy_Spawner::Enemy_Spawner(int us_amount, int attVal, Vector2f size, Texture* 
     this->y_bounds = y_bounds;
 
     // load attack sound
-    if (!sound_buffer.loadFromFile("imgs/Game_imgs_punch.wav")) {
+    if (!enemy_death.loadFromFile("imgs/death.wav")) {
         std::cout << "Failed to load sound from file" << std::endl;
     }
-    sound.setBuffer(sound_buffer);
+    death.setBuffer(enemy_death);
+    if (!attack_sound.loadFromFile("imgs/punch.wav")) {
+        std::cout << "Failed to load sound from file" << std::endl;
+    }
+    attack.setBuffer(attack_sound);
 
-    Populate(texture, imageCount, size, switchTime, speed, attVal, health, x_bounds, y_bounds); 
+    Populate(texture, imageCount, size, switchTime, speed, attVal, health, x_bounds, y_bounds);
 }
 
 Enemy_Spawner::~Enemy_Spawner() {
     enemies.clear();
-    delete &enemies;
+    delete& enemies;
 }
 
 void Enemy_Spawner::Update(float deltaTime) {
     // this srand seed needs to be here for random walk
-    srand((unsigned) time(0));
+    srand((unsigned)time(0));
     for (int i = 0; i < amount; i++) {
         int rv = rand() % 5 + 1;
         enemies.at(i)->Update(deltaTime, rv);
@@ -134,14 +143,14 @@ void Enemy_Spawner::Spawn(RenderWindow& window) {
 }
 
 void Enemy_Spawner::UpdateHealthBarContact(Player& player) {
-    for (int i = 0; i < (int) enemies.size(); i++) {
+    for (int i = 0; i < (int)enemies.size(); i++) {
         // 0.0f to show that healthbar is not hard contact
         player.HealthBarColliderCheck(enemies.at(i)->GetCollider(), 0.0f);
     }
 }
 
 void Enemy_Spawner::UpdateEnemyChase(Player& player, float deltaTime) {
-    for (int i = 0; i < (int) enemies.size(); i++) {
+    for (int i = 0; i < (int)enemies.size(); i++) {
         // 0.0f to show that field of view is not hard contact
         if (player.VisionColliderCheck(enemies.at(i)->GetCollider(), 0.0f)) {
             enemies.at(i)->Chase(player, deltaTime);
@@ -150,7 +159,7 @@ void Enemy_Spawner::UpdateEnemyChase(Player& player, float deltaTime) {
 }
 
 void Enemy_Spawner::UpdateEnemyContact(Player& player, bool invincible) {
-    for (int i = 0; i < (int) enemies.size(); i++) {
+    for (int i = 0; i < (int)enemies.size(); i++) {
         // 0.5f to show that enemies and player have same force on each other
         if (player.ColliderCheck(getEnemy(i)->GetCollider(), 0.5f)) {
 
@@ -161,7 +170,9 @@ void Enemy_Spawner::UpdateEnemyContact(Player& player, bool invincible) {
             else {
                 deleteEnemy(i);
                 // death sound
-                sound.play();
+                death.play();
+                death.setVolume(75.f);
+
                 std::cout << "\nEnemy deleted: " << std::endl;
                 break;
             }
@@ -170,6 +181,8 @@ void Enemy_Spawner::UpdateEnemyContact(Player& player, bool invincible) {
             if (invincible == false) {
                 if (player.getTotalHealth() > getAttackValue()) {
                     getEnemy(i)->ConstantAttack(player);
+                    attack.play();
+                    attack.setVolume(65.f);
                     break;
                 }
                 else
@@ -187,8 +200,8 @@ void Enemy_Spawner::UpdateWallCollisions(Maze_Component* aWall, float push) {
 }
 
 void Enemy_Spawner::deleteEnemy(int ind) {
-    enemies.erase(enemies.begin()+ind);
-    this->amount -= 1; 
+    enemies.erase(enemies.begin() + ind);
+    this->amount -= 1;
 }
 
 #endif // ENEMY_SPAWNER_H

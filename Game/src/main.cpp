@@ -23,11 +23,21 @@ bool runGame_Engine(bool inCheatMode) {
 // responsible for running main menu (and subsequently Game)
 bool runMainMenu() {
 	
+	sf::SoundBuffer music_song;
+	sf::Sound music;
+	if (!music_song.loadFromFile("imgs/music.wav")) {
+		std::cout << "Failed to load sound from file" << std::endl;
+	}
+	music.setBuffer(music_song);
+	
 	MainMenu mainMenu;
 	int mainMenuExitCode = -1;
 	while (mainMenu.running()) {
 		mainMenuExitCode = mainMenu.update();
 		mainMenu.render();
+		music.play();
+		music.setLoop(true);
+		music.setVolume(10.f);
 	}
 	switch (mainMenuExitCode) //Will return what to run
 	{

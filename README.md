@@ -30,7 +30,7 @@ N/A
 
 ## Testing
 
-All the tests for our project can be located in the [Unit_Tests](https://github.com/SCCapstone/Capstone-Labyrinth/tree/master/Unit_Tests) directory
+All the tests for our project can be located in the [Unit_Tests](https://github.com/SCCapstone/Capstone-Labyrinth/tree/master/Unit_Tests) directory, within the Unit_Tests.cpp file
 
 ## Testing Technology
 

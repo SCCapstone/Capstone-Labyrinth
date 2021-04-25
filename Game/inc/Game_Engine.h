@@ -673,7 +673,7 @@ void Game_Engine::initPlayer() {
     this->player = nullptr;
 
     // loading sprite sheet
-    base_movement.loadFromFile("imgs/running_updated.png");
+    base_movement.loadFromFile("imgs/animation-totalV2.png");
 
     /* Initializing player
      * &base_movement:      reference to texture
@@ -688,10 +688,10 @@ void Game_Engine::initPlayer() {
         // doesn't particularily matter, as player doesn't take damage in cheat mode anyhow
         int player_health_dub = player_health * 2;
         int player_attVal_dub = player_attVal * 2;
-        player = new Player(&base_movement, Vector2u(12, 4), player_size, 0.05f, player_speed, player_health_dub, player_attVal_dub);
+        player = new Player(&base_movement, Vector2u(4, 9), player_size, 0.15f, player_speed * 3, player_health_dub, player_attVal_dub);
     }
     else {
-        player = new Player(&base_movement, Vector2u(12, 4), player_size, 0.05f, player_speed, player_health, player_attVal);
+        player = new Player(&base_movement, Vector2u(4, 9), player_size, 0.15f, player_speed, player_health, player_attVal);
     }
 
     std::cout << "[1] Initialized Player" << std::endl;
