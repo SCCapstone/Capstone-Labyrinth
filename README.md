@@ -60,6 +60,7 @@ Samuel Dunny: sdunny@email.sc.edu (843-330-1257)
   
 ## Demo Video  
 https://youtu.be/FQSQk3SW7WM
+[![Demo Video](https://youtu.be/FQSQk3SW7WM/0.jpg)](https://youtu.be/FQSQk3SW7WM)
 
 ## Play Testing Feedback
 " I like the game it’s difficult but fair, however I found a handful of bugs, some enemies just dissapear and then reappear out of nowhere and that killed me twice, and then I found out that you can just hold down the space bar and it just keeps attacking I feel like there should be like a .5 second cool down on player attacks just so that you can’t just hold down space bar and keep going, also I wish there were more options such as being able to play with WASD instead of direction arrows because that’s what’s natural for most PC gamers in general. But I like it it gives me binding of Isaac vibes" - Nick Harman
